@@ -1,0 +1,39 @@
+FROM quay.io/eurolinux/eurolinux-9:latest
+
+LABEL VERSION=1.0 \
+      ARCH=AMD64 \
+      DESCRIPTION="A production grade performance tuned redis docker image created by Opstree Solutions"
+
+RUN set -eux; \
+    yum install -y redis; \
+	redis-cli --version; \
+	redis-server --version
+
+COPY redis.conf /etc/redis/redis.conf
+
+COPY entrypoint.sh /usr/bin/entrypoint.sh
+
+COPY setupMasterSlave.sh /usr/bin/setupMasterSlave.sh
+
+COPY healthcheck.sh /usr/bin/healthcheck.sh
+
+RUN chown 998:0 /usr/bin/entrypoint.sh /usr/bin/setupMasterSlave.sh /usr/bin/healthcheck.sh /etc/redis/redis.conf
+
+RUN chmod 750 /usr/bin/entrypoint.sh /usr/bin/setupMasterSlave.sh /usr/bin/healthcheck.sh /etc/redis/redis.conf
+
+RUN mkdir /data && \
+    mkdir /node-conf && \
+    chown -R 998:0 /data && \
+    chown -R 998:0 /node-conf && \
+    chmod -R g+rw /data && \
+    chmod -R g+rw /node-conf
+
+VOLUME ["/data"]
+
+WORKDIR /data
+
+EXPOSE 6379
+
+USER 998
+
+CMD ["/usr/bin/entrypoint.sh"]

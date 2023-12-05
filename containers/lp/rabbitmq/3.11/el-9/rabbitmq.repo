@@ -1,0 +1,7 @@
+[rabbitmq]
+name = RabbitMQ repository
+baseurl=https://repo.eurolinux.local/repo/eurolinux/9/stagging/RabbitMQ/x86_64/os/
+enabled=1
+gpgcheck=0
+skip_if_unavailable=True
+sslverify=0

@@ -1,0 +1,39 @@
+FROM quay.io/eurolinux/eurolinux-9:latest
+
+LABEL org.opencontainers.image.base.name="docker.io/eurolinux/eurolinux-9:latest" \
+      org.opencontainers.image.description="Application packaged by Linux Polska" \
+      org.opencontainers.image.title="rabbitmq" \
+      org.opencontainers.image.vendor="Linux Polska" \
+      org.opencontainers.image.version="3.12.0"
+
+ENV LANG=C.UTF-8 LANGUAGE=C.UTF-8 LC_ALL=C.UTF-8
+
+COPY rabbitmq.repo /etc/yum.repos.d/rabbitmq.repo
+# COPY entrypoint.sh /usr/bin/entrypoint.sh
+
+RUN yum install -y rabbitmq-server.x86_64 hostname
+
+RUN set -eux; \
+    /usr/sbin/rabbitmq-plugins enable --offline rabbitmq_prometheus; \
+    /usr/sbin/rabbitmq-plugins enable --offline rabbitmq_management
+
+# RUN chown 997:0 /usr/bin/entrypoint.sh
+# RUN chmod 750 /usr/bin/entrypoint.sh
+
+# Add RabbitMQ to PATH, send all logs to TTY
+ENV PATH=/usr/sbin:$PATH \
+    RABBITMQ_LOGS=-
+
+# set home so that any `--user` knows where to put the erlang cookie
+ENV RABBITMQ_DATA_DIR=/var/lib/rabbitmq
+# Hint that the data (a.k.a. home dir) dir should be separate volume
+VOLUME $RABBITMQ_DATA_DIR
+
+USER 997 
+# grupa:995 ???
+
+EXPOSE 4369 5671 5672 15691 15692 25672 15671 15672
+
+# ENTRYPOINT ["/usr/bin/entrypoint.sh"]
+CMD ["rabbitmq-server"]
+# CMD ["/usr/bin/sleep", "1d"]
