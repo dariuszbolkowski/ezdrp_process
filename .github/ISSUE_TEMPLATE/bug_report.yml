@@ -8,7 +8,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thank you for reporting an issue. Before you open the bug report please review our README guide guide:
+        Thank you for reporting an issue. Before you open the bug report please review our README guide:
           - [README](https://github.com/linuxpolska/ezd-rp/blob/main/README.md)
 
         Please fill in as much of the following form as you're able.
