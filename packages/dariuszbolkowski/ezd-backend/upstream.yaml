@@ -1,6 +1,6 @@
-HelmRepo: https://linuxpolska.github.io/ezd-rp
+HelmRepo: https://dariuszbolkowski.github.io/ezdrp_process
 HelmChart: ezd-backend
-Vendor: Linux Polska
+Vendor: dariuszbolkowski
 DisplayName: LP Backend for EZD RP 
 ChartMetadata:
   kubeVersion: '>=1.19-0'
