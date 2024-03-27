@@ -8,7 +8,7 @@ entries:
       catalog.cattle.io/release-name: ezd-backend
     apiVersion: v2
     appVersion: 1.2024-19.7
-    created: "2024-03-27T10:18:10.082713875+01:00"
+    created: "2024-03-27T11:04:13.957202234+01:00"
     description: Services necessary to run EZD RP app
     digest: e0dd6d4f61862d096ae34f26ca8d0873a15dd83263a751c59ed45563fd1d1c73
     home: https://linuxpolska.com
@@ -32,7 +32,7 @@ entries:
       catalog.cattle.io/release-name: ezd-backend
     apiVersion: v2
     appVersion: 1.2024-19.4
-    created: "2024-03-27T10:18:10.078267141+01:00"
+    created: "2024-03-27T11:04:13.953017273+01:00"
     dependencies:
     - condition: global.mongodb.deploy
       name: mongodb
@@ -61,7 +61,7 @@ entries:
       catalog.cattle.io/release-name: ezd-backend
     apiVersion: v2
     appVersion: 1.2023-17
-    created: "2024-03-27T10:18:10.044932479+01:00"
+    created: "2024-03-27T11:04:13.922090865+01:00"
     dependencies:
     - condition: global.mongodb.deploy
       name: mongodb
@@ -90,7 +90,7 @@ entries:
       catalog.cattle.io/release-name: ezd-backend
     apiVersion: v2
     appVersion: 1.2023-16
-    created: "2024-03-27T10:18:10.021871312+01:00"
+    created: "2024-03-27T11:04:13.904531102+01:00"
     dependencies:
     - condition: global.mongodb.deploy
       name: mongodb
@@ -119,7 +119,7 @@ entries:
       catalog.cattle.io/release-name: ezd-backend
     apiVersion: v2
     appVersion: 1.2023-16
-    created: "2024-03-27T10:18:09.992789469+01:00"
+    created: "2024-03-27T11:04:13.88955904+01:00"
     dependencies:
     - condition: global.mongodb.deploy
       name: mongodb
@@ -151,7 +151,7 @@ entries:
       catalog.cattle.io/release-name: ezd-crd
     apiVersion: v2
     appVersion: 1.2024-19.7
-    created: "2024-03-27T10:18:10.344185571+01:00"
+    created: "2024-03-27T11:04:14.121684437+01:00"
     dependencies:
     - condition: global.rabbitmq.deploy
       name: rabbitmq-operator
@@ -193,7 +193,7 @@ entries:
       catalog.cattle.io/release-name: ezd-crd
     apiVersion: v2
     appVersion: 1.2024-19.4
-    created: "2024-03-27T10:18:10.29103893+01:00"
+    created: "2024-03-27T11:04:14.08043606+01:00"
     dependencies:
     - condition: global.rabbitmq.deploy
       name: rabbitmq-operator
@@ -235,7 +235,7 @@ entries:
       catalog.cattle.io/release-name: ezd-crd
     apiVersion: v2
     appVersion: 1.2023-17
-    created: "2024-03-27T10:18:10.24497387+01:00"
+    created: "2024-03-27T11:04:14.055261538+01:00"
     dependencies:
     - condition: global.rabbitmq.deploy
       name: rabbitmq-operator
@@ -277,7 +277,7 @@ entries:
       catalog.cattle.io/release-name: ezd-crd
     apiVersion: v2
     appVersion: 1.2023-16
-    created: "2024-03-27T10:18:10.214416174+01:00"
+    created: "2024-03-27T11:04:14.027347774+01:00"
     dependencies:
     - condition: global.rabbitmq.deploy
       name: rabbitmq-operator
@@ -319,7 +319,7 @@ entries:
       catalog.cattle.io/release-name: ezd-crd
     apiVersion: v2
     appVersion: 1.2023-16
-    created: "2024-03-27T10:18:10.149838311+01:00"
+    created: "2024-03-27T11:04:13.993822736+01:00"
     dependencies:
     - condition: global.rabbitmq.deploy
       name: rabbitmq-operator
@@ -354,4 +354,4 @@ entries:
     urls:
     - ezd-crd/ezd-crd-1.0.0.tgz
     version: 1.0.0
-generated: "2024-03-27T10:18:09.957214321+01:00"
+generated: "2024-03-27T11:04:13.86527561+01:00"
