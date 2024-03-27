@@ -1,6 +1,18 @@
 categories:
 - database
 questions:
+- variable: ezd-crd_namespace
+  default: default
+  description: "namespace for crd"
+  type: string
+  context:
+     component: ezd-crd
+- variable: ezd-backend_namespace
+  default: ezd-rp
+  description: "namespace for crd"
+  type: string
+  context:
+     component: ezd-backend  
 - variable: global.rabbitmq.deploy
   default: "true"
   label: Deploy RabbitMQ
