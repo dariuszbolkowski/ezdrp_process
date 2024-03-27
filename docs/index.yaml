@@ -21,7 +21,7 @@ entries:
       name: Linux Polska
     name: ezd-backend
     sources:
-    - https://github.com/linuxpolska/ezd-rp.git
+    - https://github.com/dariuszbolkowski/ezdrp_process.git
     type: application
     urls:
     - ezd-backend/ezd-backend-1.4.1.tgz
@@ -65,7 +65,7 @@ entries:
       name: Linux Polska
     name: ezd-crd
     sources:
-    - https://github.com/linuxpolska/ezd-rp.git
+    - https://github.com/dariuszbolkowski/ezdrp_process.git
     type: application
     urls:
     - ezd-crd/ezd-crd-1.4.1.tgz
