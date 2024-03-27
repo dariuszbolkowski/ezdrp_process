@@ -1,90 +1,66 @@
-<!-- markdownlint-disable-next-line -->
-[![CD Pipeline](https://github.com/linuxpolska/ezd-rp/actions/workflows/)](https://github.com/linuxpolska/ezd-rp/actions/workflows/pages/pages-build-deployment)
 
-# The LP Package for EZD RP application!
 
-Set of applications, provided by [Linux Polska](https://linuxpolska.com), ready to launch on Kubernetes using [Kubernetes Helm](https://github.com/helm/helm)..
+
+
+# What is LP-EZD?
+
+
+Our package contains set of necessary services which allow  to lunch EZD-RP application developed by NASK on Kubernetes using [Helm](https://github.com/helm/helm).
+
+<h1 align="center" style="border-bottom: none">
+    <a href="https://linuxpolska.com/pl/" target="_blank"><img alt="Longhorn" width="200px" src="https://github.com/linuxpolska/ezd-rp/blob/release/1.0.0/docs/LinuxPolska-icon.png""></a>
+</h1>
 
 
 
 ## Table of content
-
-- [Code of conduct](CODE_OF_CONDUCT.md)
-- [License](LICENSE)
+- [Before you begin](PREREQUISITES.md)
+- [Installation](INSTALLATION.md)
+- [GUI Installation](INSTALLATION_GUI.md)
 - [Troubleshooting](TROUBLESHOOTING.md)
-- [Quickstart](quickstart.md)
 
 
 ## Getting Started
 
-
-The best way to get started is with the ["Quickstart"](quickstart.md)
+The best way to get started is with the  ["Before you begin"](PREREQUISITES.md), ["Installation"](INSTALLATION.md) and ["GUI Installation"](INSTALLATION_GUI.md)
 section in the documentation.
-
-
-## TL;DR
-
-```bash
-helm repo add linuxpolska https://qwiatu-linuxpolska.github.io/ezd/
-helm repo update
-helm upgrade --install ezd-crd -n default linuxpolska/ezd-crd --wait=true
-helm upgrade --install --create-namespace ezd-backend -n ezdrp linuxpolska/ezd-backend --wait=true
-```
-
-## Before you begin
-
-### Prerequisites
-
-- Kubernetes 1.19+
-- Helm 3.2.0+
-- PV provisioner support in the underlying infrastructure
-
-### Setup a Kubernetes Cluster
-
-The quickest way to setup a Kubernetes cluster to install LP Charts is following the "Get Started" guides for the different services:
-
-- [Get Started with LP Charts using RKE2 Kubernetes](https://docs.rke2.io/install/quickstart)
-
-For setting up Kubernetes on other cloud platforms or bare-metal servers refer to the Kubernetes [getting started guide](https://kubernetes.io/docs/getting-started-guides/).
-
-### Install Helm
- 
-Helm is a tool for managing Kubernetes charts. Charts are packages of pre-configured Kubernetes resources.
-
-To install Helm, refer to the [Helm install guide](https://github.com/helm/helm#install) and ensure that the `helm` binary is in the `PATH` of your shell.
-
-### Using Helm
-
-Once you have installed the Helm client, you can deploy a LP Helm Chart into a Kubernetes cluster.
-
-Please refer to the [Quick Start guide](https://helm.sh/docs/intro/quickstart/) if you wish to get running in just a few commands, otherwise the [Using Helm Guide](https://helm.sh/docs/intro/using_helm/) provides detailed instructions on how to use the Helm client to manage packages on your Kubernetes cluster.
-
-Useful Helm Client Commands:
-
-- Install a chart: `helm install my-release linuxpolska/<chart>`
-- Upgrade your application: `helm upgrade my-release linuxpolska/<chart>`
-
-### PV Provisioner
-
-The quickest way to setup CSI is go to [CSI page](https://kubernetes-csi.github.io/docs/drivers.html) 
 
 
 ## Package versioning
 
-In this repository, all packages specify the `version` field in the `package.yaml`. The charts follow this versioning X.Y.P 
-X.Y.Z is the upstream chart's major.minor.patch.
-
-The X.Y.P versioning scheme roughly corresponds to the following rules (with exceptions):
-- **Major Version**: represents the minor version these charts are being released to.
-- **Minor Version**: represents a release line of a given chart within a minor version. Functionality in a backward compatible manner
-- **Patch Version**: represents a patch to a given release line of a chart within a minor version. Make backward compatible bug fixes
+Versioning for charts:
 
 
-## Communications
+Example versioning `1.2.3`:
 
-- [Github Discussions](https://github.com/linuxpolska/ezd-rp/discussions)
+* `1.` - adding new functionality for instance: new chelm chart with minio, postfix server, change mongodb chart on totally different
+* `2.` - update version of helm chart for instance from mongodb 4.x to 7.x, modify content of helm charts
+* `3.` - change default values in helm chart, for instance tag version, default parameters in existing release of charts
 
-## Resources
 
-- [Website](https://linuxpolska.com)
+Image versioning
 
+Example versioning `0.15.0-el-9-r1`:
+
+* `0.15.0` - version of rpm package use in solution or any number if you build main service from sources during container build
+* `el-9` - version of image uses in section FROM (containerfile). For instance `FROM  quay.io/eurolinux/eurolinux-9:latest`
+* `r1` - changes in dockerfile 
+
+
+## Releases
+| Release   | Chart Version   | First Stable Version | Status         | Release Notes                                                  |  Tested with NASK Ezdrp application     | Active Maintenance |
+|-----------|-----------------|----------------------|----------------|----------------------------------------------------------------|-----------------------------------------|-------------------|
+| **1.0.0***| 1.0.0           | 1.0.0                | Stable         | [🔗] (https://github.com/linuxpolska/ezd-rp/releases/tag/1.0.0)| Chart up to 1.15.84 and Application version up to 1.2023-15 |                   |
+| **1.1.1***| 1.1.1           | 1.0.0                | Stable         | [🔗] (https://github.com/linuxpolska/ezd-rp/releases/tag/1.1.1)| Chart up to 1.15.84 and Application version up to 1.2023-15 |                   |
+| **1.2.1***| 1.2.1           | 1.0.0                | Stable         | [🔗] (https://github.com/linuxpolska/ezd-rp/releases/tag/1.2.1)| Chart up to 1.15.84 and Application version up to 1.2023-15 |                   |
+| **1.3.1***| 1.3.1           | 1.0.0                | Stable         | [🔗] (https://github.com/linuxpolska/ezd-rp/releases/tag/1.3.1)| Chart up to 19.4.15 and Application version up to 1.2024-19.4 |                  |
+| **1.4.1***| 1.4.1           | 1.0.0                | Stable         | [🔗] (https://github.com/linuxpolska/ezd-rp/releases/tag/1.4.1)| Chart up to 19.7.15 and Application version up to 1.2024-19.7 |               ✅         |
+## Contact
+
+Please use the following to reach members of the community:
+
+
+- GitHub:  If you have any questions start a [discussion](https://github.com/linuxpolska/ezd-rp/discussions) or if you want make changes open an [issue](https://github.com/linuxpolska/ezd-rp//issues)  
+- Web Page: If you need commercial support [contact with us](https://linuxpolska.com/pl/kontakt/)
+
+We are supporting polish and english language.
