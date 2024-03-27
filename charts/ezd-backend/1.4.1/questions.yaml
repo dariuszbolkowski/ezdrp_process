@@ -1,13 +1,13 @@
 categories:
 - database
 questions:
-- variable: ezd-crd_namespace
+- variable: ezd-crd.namespace
   default: default
   description: "namespace for crd"
   type: string
   context:
      component: ezd-crd
-- variable: ezd-backend_namespace
+- variable: ezd-backend.namespace
   default: ezd-rp
   description: "namespace for crd"
   type: string
