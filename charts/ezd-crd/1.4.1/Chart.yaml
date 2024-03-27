@@ -1,6 +1,6 @@
 annotations:
   catalog.cattle.io/display-name: CRDs for LP Backend
-  catalog.cattle.io/namespace: ezd-rp
+  catalog.cattle.io/namespace: default
   catalog.cattle.io/os: linux
   catalog.cattle.io/release-name: ezd-crd
   catalog.cattle.io/hidden: "true"
