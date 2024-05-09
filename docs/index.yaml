@@ -9,7 +9,7 @@ entries:
       catalog.cattle.io/release-name: ezd-backend
     apiVersion: v2
     appVersion: 1.2024-19.7
-    created: "2024-03-27T14:24:29.780380696+01:00"
+    created: "2024-05-09T15:31:35.697043253+02:00"
     description: Services necessary to run EZD RP app
     digest: e889436fceace468b990d394759e86c8e2996979b2a46502e95f0c78cfc692d8
     home: https://linuxpolska.com
@@ -36,7 +36,7 @@ entries:
       catalog.cattle.io/release-name: ezd-crd
     apiVersion: v2
     appVersion: 1.2024-19.7
-    created: "2024-03-27T14:24:29.842097927+01:00"
+    created: "2024-05-09T15:31:35.723432723+02:00"
     dependencies:
     - condition: global.rabbitmq.deploy
       name: rabbitmq-operator
@@ -71,4 +71,97 @@ entries:
     urls:
     - ezd-crd/ezd-crd-1.4.1.tgz
     version: 1.4.1
-generated: "2024-03-27T14:24:29.776665244+01:00"
+  monitoring-stack-app:
+  - annotations:
+      catalog.cattle.io/auto-install: monitoring-stack-crd=match
+      catalog.cattle.io/display-name: Charts for monitoring provided by LP
+      catalog.cattle.io/os: linux
+      catalog.cattle.io/release-name: monitoring-stack-app
+    apiVersion: v2
+    appVersion: 1.2024-1.0.0
+    created: "2024-05-09T15:31:35.784698513+02:00"
+    dependencies:
+    - condition: global.elastic.enabled
+      name: elastic
+      repository: https://github.com/SourceMation/charts
+      version: 1.1.0
+    - condition: global.istiod.enabled
+      name: istiod
+      repository: https://istio-release.storage.googleapis.com/charts
+      version: 1.21.1
+    - condition: global.jaeger.enabled
+      name: jaeger
+      repository: https://jaegertracing.github.io/helm-charts
+      version: 3.0.6
+    description: Set of charts for monitoring
+    digest: 9190447bc8b0745fb584974fdf6a84a97887bfc6cb80b86f145c63ec02492b97
+    home: https://linuxpolska.com
+    icon: https://linuxpolska.com/logo/LinuxPolska-icon.png
+    keywords:
+    - elastic
+    - kibana
+    - prometheus
+    - istio
+    - jaeger
+    kubeVersion: '>=1.19.0-0'
+    maintainers:
+    - email: biuro@linuxpolska.com
+      name: Linux Polska
+    name: monitoring-stack-app
+    sources:
+    - https://github.com/SourceMation/charts.git
+    type: application
+    urls:
+    - monitoring-stack-app/monitoring-stack-app-1.0.0.tgz
+    version: 1.0.0
+  monitoring-stack-crd:
+  - annotations:
+      catalog.cattle.io/display-name: CRDs for LP monitoring
+      catalog.cattle.io/hidden: "true"
+      catalog.cattle.io/namespace: default
+      catalog.cattle.io/os: linux
+      catalog.cattle.io/release-name: monitoring-stack-crd
+    apiVersion: v2
+    appVersion: 1.2024-1.0.0
+    created: "2024-05-09T15:31:35.833257498+02:00"
+    dependencies:
+    - condition: global.eck-operator-crds.enabled
+      name: eck-operator-crds
+      repository: https://helm.elastic.co
+      version: 2.12.1
+    - condition: global.eck-operator.enabled
+      name: eck-operator
+      repository: https://helm.elastic.co
+      version: 2.12.1
+    - condition: global.base.enabled
+      name: base
+      repository: https://istio-release.storage.googleapis.com/charts
+      version: 1.21.2
+    - condition: global.jaeger-operator.enabled
+      name: jaeger-operator
+      repository: https://jaegertracing.github.io/helm-charts
+      version: 2.53.0
+    - condition: global.rancher-monitoring-crd.enabled
+      name: rancher-monitoring-crd
+      repository: https://charts.rancher.io
+      version: 103.0.3+up45.31.1
+    description: Set of operators and CRDs for LP monitoring
+    digest: a7425c77dc0f371b8bf7b379b1211c04bd2d354524d3d70533be5e5c1b9e5241
+    home: https://linuxpolska.com
+    icon: https://linuxpolska.com/logo/LinuxPolska-icon.png
+    keywords:
+    - elastic
+    - kibana
+    - jaeger
+    kubeVersion: '>=1.19.0-0'
+    maintainers:
+    - email: biuro@linuxpolska.com
+      name: Linux Polska
+    name: monitoring-stack-crd
+    sources:
+    - https://sourcemation.github.io/charts/
+    type: application
+    urls:
+    - monitoring-stack-crd/monitoring-stack-crd-1.0.0.tgz
+    version: 1.0.0
+generated: "2024-05-09T15:31:35.69457904+02:00"
