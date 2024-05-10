@@ -11,22 +11,22 @@ questions:
     type: string
     group: "Elastic"
     required: true
-  - variable: eckPackageRegistry.params.ingress.hostname
+  - variable: elastic.eckPackageRegistry.params.ingress.hostname
     label: Elastic Package Registry Ingress
     type: string
     group: "Elastic"
     required: true
-  - variable: eckKibana.params.ingress.hostname
+  - variable: elastic.eckKibana.params.ingress.hostname
     label: Elastic Kibana Ingress
     type: string
     group: "Elastic"
     required: true
-  - variable: eckApm.params.ingress.hostname
+  - variable: elastic.eckApm.params.ingress.hostname
     label: Elastic Apm Ingress
     type: string
     group: "Elastic"
     required: true
-  - variable: eckFleet.params.ingress.hostname
+  - variable: elastic.eckFleet.params.ingress.hostname
     label: Elastic Fleet Ingress
     type: string
     group: "Elastic"
@@ -38,7 +38,7 @@ questions:
   group: "Components"
   show_subquestion_if: true
   subquestions:
-  - variable: meshConfig.defaultConfig.tracing.zipkin.address
+  - variable: istiod.meshConfig.defaultConfig.tracing.zipkin.address
     label: Istiod Zipkin Address
     type: string
     group: "Istiod"
@@ -50,7 +50,7 @@ questions:
   group: "Components"
   show_subquestion_if: true
   subquestions:
-  - variable: query.ingress.hosts[0]
+  - variable: jaeger.query.ingress.hosts[0]
     label: Jaeger Ingress
     type: string
     group: "Jaeger"
