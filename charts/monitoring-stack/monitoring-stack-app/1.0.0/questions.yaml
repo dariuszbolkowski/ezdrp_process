@@ -36,11 +36,25 @@ questions:
   label: Deploy Istiod
   type: boolean
   group: "Components"
+  show_subquestion_if: true
+  subquestions:
+  - variable: meshConfig.defaultConfig.tracing.zipkin.address
+    label: Istiod Zipkin Address
+    type: string
+    group: "Istiod"
+    required: true
 - variable: global.jaeger.enabled
   default: "true"
   label: Deploy Jaeger
   type: boolean
   group: "Components"
+  show_subquestion_if: true
+  subquestions:
+  - variable: query.ingress.hosts[0]
+    label: Jaeger Ingress
+    type: string
+    group: "Jaeger"
+    required: true
 - variable: global.rancher-monitoring.enabled
   default: "false"
   label: Deploy Prometheus Stack
