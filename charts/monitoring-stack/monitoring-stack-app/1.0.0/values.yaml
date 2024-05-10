@@ -8,6 +8,34 @@ global:
   rancher-monitoring:
     enabled: false
 
+elastic:
+  eckElasticsearch:
+    params:
+      ingress:
+        hostname: ""
+      storageclass: ""
+
+  eckPackageRegistry:
+    params:
+      ingress:
+        hostname: ""
+
+  eckKibana:
+    params:
+      ingress:
+        hostname: ""
+
+  eckApm:
+    params:
+      ingress:
+        hostname: ""
+
+  eckFleet:
+    params:
+      ingress:
+        hostname: ""
+
+
 
 jaeger:
   agent:
@@ -35,3 +63,5 @@ istiod:
     defaultConfig:
       tracing:
         sampling: 99
+      zipkin:
+        address: ""
