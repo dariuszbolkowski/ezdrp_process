@@ -9,7 +9,7 @@ entries:
       catalog.cattle.io/release-name: ezd-backend
     apiVersion: v2
     appVersion: 1.2024-19.7
-    created: "2024-05-13T07:43:34.474446591+02:00"
+    created: "2024-05-13T07:46:51.758300776+02:00"
     description: Services necessary to run EZD RP app
     digest: e889436fceace468b990d394759e86c8e2996979b2a46502e95f0c78cfc692d8
     home: https://linuxpolska.com
@@ -36,7 +36,7 @@ entries:
       catalog.cattle.io/release-name: ezd-crd
     apiVersion: v2
     appVersion: 1.2024-19.7
-    created: "2024-05-13T07:43:34.50224801+02:00"
+    created: "2024-05-13T07:46:51.785293284+02:00"
     dependencies:
     - condition: global.rabbitmq.deploy
       name: rabbitmq-operator
@@ -79,7 +79,7 @@ entries:
       catalog.cattle.io/release-name: monitoring-stack-app
     apiVersion: v2
     appVersion: 1.2024-1.0.0
-    created: "2024-05-13T07:43:34.536941002+02:00"
+    created: "2024-05-13T07:46:51.824742825+02:00"
     dependencies:
     - condition: global.elastic.enabled
       name: elastic
@@ -94,7 +94,7 @@ entries:
       repository: https://jaegertracing.github.io/helm-charts
       version: 3.0.6
     description: Set of charts for monitoring
-    digest: 2522e0c142ab0c208cf0f86c9888b5a7b0918309129fc3f67e739c3ae2aa4c23
+    digest: 380c5761902ddf9880968b93702dc48780694f28e84d2db9bff19a13b8c7e7b0
     home: https://linuxpolska.com
     icon: https://linuxpolska.com/logo/LinuxPolska-icon.png
     keywords:
@@ -123,7 +123,7 @@ entries:
       catalog.cattle.io/release-name: monitoring-stack-crd
     apiVersion: v2
     appVersion: 1.2024-1.0.0
-    created: "2024-05-13T07:43:34.567597248+02:00"
+    created: "2024-05-13T07:46:51.854199847+02:00"
     dependencies:
     - condition: global.eck-operator-crds.enabled
       name: eck-operator-crds
@@ -164,4 +164,4 @@ entries:
     urls:
     - monitoring-stack-crd/monitoring-stack-crd-1.0.0.tgz
     version: 1.0.0
-generated: "2024-05-13T07:43:34.471887964+02:00"
+generated: "2024-05-13T07:46:51.755722115+02:00"
