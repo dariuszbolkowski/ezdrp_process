@@ -9,7 +9,7 @@ entries:
       catalog.cattle.io/release-name: ezd-backend
     apiVersion: v2
     appVersion: 1.2024-19.7
-    created: "2024-06-19T15:10:08.882918966+02:00"
+    created: "2024-06-19T15:29:09.998515894+02:00"
     description: Services necessary to run EZD RP app
     digest: e889436fceace468b990d394759e86c8e2996979b2a46502e95f0c78cfc692d8
     home: https://linuxpolska.com
@@ -36,7 +36,7 @@ entries:
       catalog.cattle.io/release-name: ezd-crd
     apiVersion: v2
     appVersion: 1.2024-19.7
-    created: "2024-06-19T15:10:08.92162172+02:00"
+    created: "2024-06-19T15:29:10.031169993+02:00"
     dependencies:
     - condition: global.rabbitmq.deploy
       name: rabbitmq-operator
@@ -79,7 +79,7 @@ entries:
       catalog.cattle.io/release-name: monitoring-stack-app
     apiVersion: v2
     appVersion: 1.2024-1.0.0
-    created: "2024-06-19T15:10:08.979892666+02:00"
+    created: "2024-06-19T15:29:10.075841786+02:00"
     dependencies:
     - condition: global.elastic.enabled
       name: elastic
@@ -94,7 +94,7 @@ entries:
       repository: https://jaegertracing.github.io/helm-charts
       version: 3.0.6
     description: Set of charts for monitoring
-    digest: 3504101d07b4bd12fa35f0982ac25e30bcb655e3b0f1bf0f358018b11bc5802a
+    digest: 970e48530741f1fbbe013d141fa69129c4cc263b100a2ffc2f401f556e6b8946
     home: https://linuxpolska.com
     icon: https://linuxpolska.com/logo/LinuxPolska-icon.png
     keywords:
@@ -122,7 +122,7 @@ entries:
       catalog.cattle.io/release-name: monitoring-stack-crd
     apiVersion: v2
     appVersion: 1.2024-1.0.0
-    created: "2024-06-19T15:10:09.009337709+02:00"
+    created: "2024-06-19T15:29:10.096453318+02:00"
     dependencies:
     - condition: global.eck-operator-crds.enabled
       name: eck-operator-crds
@@ -141,7 +141,7 @@ entries:
       repository: https://jaegertracing.github.io/helm-charts
       version: 2.53.0
     description: Set of operators and CRDs for LP monitoring
-    digest: 914a7eb2d23e59015a0fb159210b6d14070333fc32df2227493ccbb8c471137e
+    digest: 8e8fddc913d38221eebe4f459eb086a09f4f6ced7781cf046946f5f4048a10d4
     home: https://linuxpolska.com
     icon: https://linuxpolska.com/logo/LinuxPolska-icon.png
     keywords:
@@ -159,4 +159,4 @@ entries:
     urls:
     - monitoring-stack-crd/monitoring-stack-crd-1.0.0.tgz
     version: 1.0.0
-generated: "2024-06-19T15:10:08.881151735+02:00"
+generated: "2024-06-19T15:29:09.995554275+02:00"
