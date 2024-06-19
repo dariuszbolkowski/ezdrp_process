@@ -5,8 +5,6 @@ global:
     enabled: true
   jaeger:
     enabled: true
-  rancher-monitoring:
-    enabled: false
 
 
 jaeger:

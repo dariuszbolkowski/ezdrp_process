@@ -55,7 +55,7 @@ questions:
   group: "Components"
   show_subquestion_if: true
   subquestions:
-  - variable: jaeger.query.ingress.hosts
+  - variable: query.ingress.hosts
     label: Jaeger Ingress
     type: string
     group: "Jaeger"
