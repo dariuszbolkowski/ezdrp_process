@@ -43,7 +43,7 @@ questions:
     type: string
     group: "Istiod"
     required: true 
-  - variable: global.meshConfig.defaultConfig.tracing.zipkin.address
+  - variable: istiod.meshConfig.defaultConfig.tracing.zipkin.address
     label: Istiod Zipkin Address
     type: string
     group: "Istiod"
@@ -55,8 +55,8 @@ questions:
   group: "Components"
   show_subquestion_if: true
   subquestions:
-  - variable: global.query.ingress.hosts[0]
+  - variable: jaeger.query.ingress.hosts
     label: Jaeger Ingress
-    type: string
+    type: hostname
     group: "Jaeger"
     required: true
