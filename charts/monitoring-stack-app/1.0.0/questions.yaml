@@ -44,7 +44,7 @@ questions:
     group: "Istiod"
     required: true 
   - variable: global.istiod.meshConfig.defaultConfig.tracing.zipkin.address
-    label: Istiod Zipkin Address: address:9411
+    label: "Istiod Zipkin Address: address:9411"
     type: string
     group: "Istiod"
     required: true
