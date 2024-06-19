@@ -7,8 +7,3 @@ global:
     enabled: true
   jaeger-operator:
     enabled: true
-
-
-global:
-  base:
-    istioNamespace: ""
