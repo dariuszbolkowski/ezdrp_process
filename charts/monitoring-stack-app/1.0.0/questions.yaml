@@ -55,9 +55,9 @@ questions:
   group: "Components"
   show_subquestion_if: true
   subquestions:
-  - variable: global.jaeger.query.ingress.hosts[0]
+  - variable: global.jaeger.query.ingress.hosts
     label: Jaeger Ingress
-    type: hostname
+    type: enum
     group: "Jaeger"
     required: true
   - variable: global.jaeger.agent.extraEnv.name
