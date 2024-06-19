@@ -7,7 +7,7 @@ defaults:
     imagePullSecrets: []
 
     # Used to locate istiod.
-    #    istioNamespace: istio-system
+    istioNamespace: istio-system
 
     istiod:
       enableAnalysis: false
