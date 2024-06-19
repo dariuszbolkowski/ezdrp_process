@@ -42,7 +42,7 @@ questions:
     label: Namespace where istio is installed
     type: string
     group: "Istiod"
-    required: true
+    required: true 
   - variable: istiod.meshConfig.defaultConfig.tracing.zipkin.address
     label: Istiod Zipkin Address
     type: string
@@ -60,8 +60,3 @@ questions:
     type: string
     group: "Jaeger"
     required: true
-- variable: global.rancher-monitoring.enabled
-  default: "false"
-  label: Deploy Prometheus Stack
-  type: boolean
-  group: "Components"

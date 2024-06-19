@@ -9,7 +9,7 @@ entries:
       catalog.cattle.io/release-name: ezd-backend
     apiVersion: v2
     appVersion: 1.2024-19.7
-    created: "2024-05-13T07:58:18.595335657+02:00"
+    created: "2024-06-19T08:34:41.198185397+02:00"
     description: Services necessary to run EZD RP app
     digest: e889436fceace468b990d394759e86c8e2996979b2a46502e95f0c78cfc692d8
     home: https://linuxpolska.com
@@ -36,7 +36,7 @@ entries:
       catalog.cattle.io/release-name: ezd-crd
     apiVersion: v2
     appVersion: 1.2024-19.7
-    created: "2024-05-13T07:58:18.627035897+02:00"
+    created: "2024-06-19T08:34:41.211010747+02:00"
     dependencies:
     - condition: global.rabbitmq.deploy
       name: rabbitmq-operator
@@ -74,12 +74,12 @@ entries:
   monitoring-stack-app:
   - annotations:
       catalog.cattle.io/auto-install: monitoring-stack-crd=match
-      catalog.cattle.io/display-name: Charts for monitoring provided by LP
+      catalog.cattle.io/display-name: Monitoring Stack
       catalog.cattle.io/os: linux
       catalog.cattle.io/release-name: monitoring-stack-app
     apiVersion: v2
     appVersion: 1.2024-1.0.0
-    created: "2024-05-13T07:58:18.667895796+02:00"
+    created: "2024-06-19T08:34:41.225900944+02:00"
     dependencies:
     - condition: global.elastic.enabled
       name: elastic
@@ -94,13 +94,12 @@ entries:
       repository: https://jaegertracing.github.io/helm-charts
       version: 3.0.6
     description: Set of charts for monitoring
-    digest: e160ce27d4bd72da7ff8d0cbdcc538e93f1a8f1c47106233a115c7a817d18d4c
+    digest: 848491af8ec4951250a8c99770b2f758e81eb674514d2011f466727bf094a4b0
     home: https://linuxpolska.com
     icon: https://linuxpolska.com/logo/LinuxPolska-icon.png
     keywords:
     - elastic
     - kibana
-    - prometheus
     - istio
     - jaeger
     kubeVersion: '>=1.19.0-0'
@@ -116,14 +115,14 @@ entries:
     version: 1.0.0
   monitoring-stack-crd:
   - annotations:
-      catalog.cattle.io/display-name: CRDs for LP monitoring
+      catalog.cattle.io/display-name: Monitoring Stack
       catalog.cattle.io/hidden: "true"
       catalog.cattle.io/namespace: default
       catalog.cattle.io/os: linux
       catalog.cattle.io/release-name: monitoring-stack-crd
     apiVersion: v2
     appVersion: 1.2024-1.0.0
-    created: "2024-05-13T07:58:18.695948095+02:00"
+    created: "2024-06-19T08:34:41.240917659+02:00"
     dependencies:
     - condition: global.eck-operator-crds.enabled
       name: eck-operator-crds
@@ -141,12 +140,8 @@ entries:
       name: jaeger-operator
       repository: https://jaegertracing.github.io/helm-charts
       version: 2.53.0
-    - condition: global.rancher-monitoring-crd.enabled
-      name: rancher-monitoring-crd
-      repository: https://charts.rancher.io
-      version: 103.0.3+up45.31.1
     description: Set of operators and CRDs for LP monitoring
-    digest: a7425c77dc0f371b8bf7b379b1211c04bd2d354524d3d70533be5e5c1b9e5241
+    digest: 5622add8c783594f07f8b88699d94db03827480d6551442e9c645f893e79c661
     home: https://linuxpolska.com
     icon: https://linuxpolska.com/logo/LinuxPolska-icon.png
     keywords:
@@ -164,4 +159,4 @@ entries:
     urls:
     - monitoring-stack-crd/monitoring-stack-crd-1.0.0.tgz
     version: 1.0.0
-generated: "2024-05-13T07:58:18.592711294+02:00"
+generated: "2024-06-19T08:34:41.197334501+02:00"

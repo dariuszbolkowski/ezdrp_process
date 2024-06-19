@@ -1,6 +1,3 @@
-<!--- app-name: monitoring-stack-app -->
-# Monitoring Stack Helm Chart
-
 # Useful links / Przydatne linki
 - https://istio.io
 - https://www.jaegertracing.io
