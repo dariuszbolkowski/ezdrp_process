@@ -8,6 +8,8 @@ global:
 
 
 jaeger:
+  networkPolicy:
+    enabled: false
   agent:
     service:
       type: ClusterIP
