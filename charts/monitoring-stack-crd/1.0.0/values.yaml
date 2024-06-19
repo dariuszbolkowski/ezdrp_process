@@ -5,7 +5,10 @@ global:
     enabled: true
   base:
     enabled: true
-  rancher-monitoring-crd:
-    enabled: false
   jaeger-operator:
     enabled: true
+
+
+global:
+  base:
+    istioNamespace: ""
