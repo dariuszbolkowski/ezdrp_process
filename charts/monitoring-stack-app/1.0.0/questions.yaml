@@ -55,18 +55,18 @@ questions:
   group: "Components"
   show_subquestion_if: true
   subquestions:
-  - variable: global.jaeger.query.ingress.hosts.[0]
+  - variable: global.jaeger.query.ingress.hosts[0]
     label: Jaeger Ingress
-    type: string
+    type: hostname
     group: "Jaeger"
     required: true
-  - variable: global.jaeger.agent.extraEnv.[0].name
+  - variable: global.jaeger.agent.extraEnv.name
     default: "REPORTER_GRPC_HOST_PORT"
     label: Name extra env
     type: string
     group: "Jaeger"
     required: true
-  - variable: global.jaeger.agent.extraEnv[0].value
+  - variable: global.jaeger.agent.extraEnv.value
     default: "address.namespace.svc.cluster.local:14250 address is same as Zipkin address"
     label: Give value for extraEnv
     type: string
