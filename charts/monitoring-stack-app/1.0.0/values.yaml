@@ -1,6 +1,6 @@
 global:
   elastic:
-    enabled: false
+    enabled: true
   istiod:
     enabled: true
   jaeger:
