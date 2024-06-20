@@ -1,5 +1,3 @@
-{{- if .Values.global.jaeger.enabled }}
----
 apiVersion: v1
 kind: configMap
 metadata:
