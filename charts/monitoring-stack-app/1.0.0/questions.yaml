@@ -63,7 +63,8 @@ questions:
   - variable: jaeger.agent.extraEnv
     label: Name extra variable address is same as zipkin address
     type: array
-    required: true
+    required: false
+    description: "Add extra variable for agent"
     group: "Jaeger"
     subquestions:
       - variable: jaeger.agent.extraEnv.name
