@@ -62,16 +62,21 @@ questions:
     required: true
   - variable: jaeger.agent.extraEnv
     label: Name extra variable address is same as zipkin address
-    type: array
-    required: false
-    description: "Add extra variable for agent"
     group: "Jaeger"
-    subquestions:
-      - variable: jaeger.agent.extraEnv.name
-        type: string
-        label: "Name: REPORTER_GRPC_HOST_PORT"
-        required: true
-      - variable: jaeger.agent.extraEnv.value
-        type: string
-        required: true
-        label: "value: address.namespace.svc.cluster.local:14250"
+    schema:
+      type: list
+      default: []
+      items:
+        - variable: jaeger.agent.extraEnv
+          label: "Extra environment variable"
+          schema:
+            type: dict
+            attrs:
+              - variable: jaeger.agent.extraEnv.name
+                label: "Name: REPORTER_GRPC_HOST_PORT"
+                schema:
+                  type: string
+              - variable: jaeger.agent.extraEnv.value
+                label: "value: address.namespace.svc.cluster.local:14250"
+                schema:
+                  type: string
