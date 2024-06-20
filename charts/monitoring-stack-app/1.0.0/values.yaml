@@ -10,9 +10,6 @@ global:
 
 jaeger:
   agent:
-    extraEnv:
-      - name: []
-        value: []
     service:
       type: ClusterIP
       zipkinThriftPort: 5775
