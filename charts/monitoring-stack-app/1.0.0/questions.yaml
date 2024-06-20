@@ -49,7 +49,7 @@ questions:
     group: "Istiod"
     required: true
 - variable: global.jaeger.enabled
-  default: "true"
+  default: "false"
   label: Deploy Jaeger
   type: boolean
   group: "Components"
