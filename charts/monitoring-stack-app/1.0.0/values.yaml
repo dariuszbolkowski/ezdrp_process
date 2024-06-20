@@ -2,9 +2,9 @@ global:
   elastic:
     enabled: true
   istiod:
-    enabled: true
+    enabled: false
   jaeger:
-    enabled: true
+    enabled: false
 
 
 
