@@ -43,7 +43,7 @@ questions:
     type: string
     group: "Istiod"
     required: true 
-  - variable: global.istiod.meshConfig.defaultConfig.tracing.zipkin.address
+  - variable: istiod.meshConfig.defaultConfig.tracing.zipkin.address
     label: "Istiod Zipkin Address: address.namespace.svc.cluster.local:9411"
     type: string
     group: "Istiod"
@@ -55,18 +55,18 @@ questions:
   group: "Components"
   show_subquestion_if: true
   subquestions:
-  - variable: global.jaeger.query.ingress.hosts 
+  - variable: jaeger.query.ingress.host 
     label: Jaeger Ingress
     type: multiline
     group: "Jaeger"
     required: true
-  - variable: global.jaeger.agent.extraEnv.name
+  - variable: jaeger.agent.extraEnv.name
     default: "REPORTER_GRPC_HOST_PORT"
     label: Name extra variable
     type: string
     group: "Jaeger"
     required: true
-  - variable: global.jaeger.agent.extraEnv.value
+  - variable: jaeger.agent.extraEnv.value
     label: "Provide value for extra variable: address.namespace.svc.cluster.local:14250 (address is same as zipkin address)" 
     type: string
     group: "Jaeger"
