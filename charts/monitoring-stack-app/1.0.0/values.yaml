@@ -31,8 +31,7 @@ global:
         port: 16686
       ingress:
         enabled: true
-        hosts: |
-          - {{ .Values.global.jaeger.query.ingress.hosts }}
+        hosts: ""
 
   istiod:
     meshConfig:
