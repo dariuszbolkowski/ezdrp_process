@@ -31,7 +31,7 @@ global:
         port: 16686
       ingress:
         enabled: true
-  
+        hosts: [] 
   istiod:
     meshConfig:
       enableTracing: true
