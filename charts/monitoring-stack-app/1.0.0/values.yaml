@@ -31,7 +31,9 @@ global:
         port: 16686
       ingress:
         enabled: true
-        hosts: [] 
+        hosts: |
+          - {{ .Values.global.jaeger.query.ingress.hosts }}
+
   istiod:
     meshConfig:
       enableTracing: true
