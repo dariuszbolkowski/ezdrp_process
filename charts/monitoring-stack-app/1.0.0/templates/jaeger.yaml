@@ -4,6 +4,6 @@ metadata:
   name: hosts-config
 data:
   hosts: |-
-    {{- range .Values.global.jaegger.querry.ingress.hosts }}
+    {{- range .Values.global.jaeger.query.ingress.hosts }}
     - {{ . }}
     {{- end }}
