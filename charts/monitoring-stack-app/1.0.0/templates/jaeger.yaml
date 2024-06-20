@@ -8,4 +8,4 @@ data:
   hosts: |-
     {{- range .Values.global.jaegger.querry.ingress.hosts }}
     - {{ . }}
-    {{ end }}
+    {{- end }}
