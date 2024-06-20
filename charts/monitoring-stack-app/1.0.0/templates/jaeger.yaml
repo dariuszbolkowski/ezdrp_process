@@ -10,7 +10,7 @@ spec:
         paths:
           - backend:
               service:
-                name: monitoring-app-jaeger-query
+                name: monitoring-stack-app-jaeger-query
                 port:
                   number: 80
             path: /
