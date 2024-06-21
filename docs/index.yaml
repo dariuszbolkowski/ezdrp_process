@@ -9,7 +9,7 @@ entries:
       catalog.cattle.io/release-name: ezd-backend
     apiVersion: v2
     appVersion: 1.2024-19.7
-    created: "2024-06-21T10:04:55.049536126+02:00"
+    created: "2024-06-21T10:17:21.361131311+02:00"
     description: Services necessary to run EZD RP app
     digest: e889436fceace468b990d394759e86c8e2996979b2a46502e95f0c78cfc692d8
     home: https://linuxpolska.com
@@ -36,7 +36,7 @@ entries:
       catalog.cattle.io/release-name: ezd-crd
     apiVersion: v2
     appVersion: 1.2024-19.7
-    created: "2024-06-21T10:04:55.080571071+02:00"
+    created: "2024-06-21T10:17:21.389125641+02:00"
     dependencies:
     - condition: global.rabbitmq.deploy
       name: rabbitmq-operator
@@ -79,7 +79,7 @@ entries:
       catalog.cattle.io/release-name: monitoring-stack-app
     apiVersion: v2
     appVersion: 1.2024-1.0.0
-    created: "2024-06-21T10:04:55.122757867+02:00"
+    created: "2024-06-21T10:17:21.435187535+02:00"
     dependencies:
     - condition: global.elastic.enabled
       name: elastic
@@ -122,7 +122,7 @@ entries:
       catalog.cattle.io/release-name: monitoring-stack-crd
     apiVersion: v2
     appVersion: 1.2024-1.0.0
-    created: "2024-06-21T10:04:55.144434098+02:00"
+    created: "2024-06-21T10:17:21.453362083+02:00"
     dependencies:
     - condition: global.eck-operator-crds.enabled
       name: eck-operator-crds
@@ -167,7 +167,7 @@ entries:
       catalog.cattle.io/release-name: security-stack-crd
     apiVersion: v2
     appVersion: 1.2024-1.0.0
-    created: "2024-06-21T10:04:55.203677486+02:00"
+    created: "2024-06-21T10:17:21.510731324+02:00"
     dependencies:
     - alias: neuvector-crds
       condition: global.neuvector-crd.enabled
@@ -222,7 +222,7 @@ entries:
       catalog.cattle.io/release-name: security-stack-app
     apiVersion: v2
     appVersion: 1.2024-1.0.0
-    created: "2024-06-21T10:04:55.186864686+02:00"
+    created: "2024-06-21T10:17:21.488686699+02:00"
     dependencies:
     - condition: global.conjur-oss.enabled
       name: conjur-oss
@@ -253,7 +253,7 @@ entries:
       repository: https://neuvector.github.io/neuvector-helm/
       version: 2.7.3
     description: Set of charts for security
-    digest: 318a74401ac0363e0fc5f4fa3142379c11e049851a6654f6409cf1302b3d6d0c
+    digest: 22d0c3eabb15de416bb68ae4c91157ac262024efde3bddd5c8182053c42673ce
     home: https://linuxpolska.com
     icon: https://linuxpolska.com/logo/LinuxPolska-icon.png
     keywords:
@@ -283,7 +283,7 @@ entries:
       catalog.cattle.io/release-name: security-stack-crd
     apiVersion: v2
     appVersion: 1.2024-1.0.0
-    created: "2024-06-21T10:04:55.225778234+02:00"
+    created: "2024-06-21T10:17:21.529335266+02:00"
     dependencies:
     - alias: neuvector-crds
       condition: global.neuvector-crd.enabled
@@ -330,4 +330,4 @@ entries:
     urls:
     - security-stack-crd/security-stack-crd-1.0.0.tgz
     version: 1.0.0
-generated: "2024-06-21T10:04:55.046805895+02:00"
+generated: "2024-06-21T10:17:21.359358498+02:00"

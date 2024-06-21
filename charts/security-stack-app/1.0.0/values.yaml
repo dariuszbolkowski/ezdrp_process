@@ -48,6 +48,5 @@ external-secrets:
     securityContext: []
   installCRDs: true
 sealed-secrets:
-  server:
-    ingress:
-      enabled: true
+  ingress:
+    enabled: true
