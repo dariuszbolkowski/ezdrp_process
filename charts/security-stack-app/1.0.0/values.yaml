@@ -17,6 +17,9 @@ global:
 
 conjur-oss:
   dataKey: ""
+  service:
+    external:
+      enabled: false
 kyverno:
   test:
     securityContext: []
