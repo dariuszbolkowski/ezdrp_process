@@ -15,15 +15,15 @@ image:
   flavour: ""
 
 # -- If set, install and upgrade CRDs through helm chart.
-installCRDs: false
+installCRDs: true
 
 crds:
   # -- If true, create CRDs for Cluster External Secret.
-  createClusterExternalSecret: true
+  createClusterExternalSecret: false
   # -- If true, create CRDs for Cluster Secret Store.
-  createClusterSecretStore: true
+  createClusterSecretStore: false
   # -- If true, create CRDs for Push Secret.
-  createPushSecret: true
+  createPushSecret: false
   annotations: {}
   conversion:
     enabled: true
