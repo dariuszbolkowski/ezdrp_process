@@ -46,7 +46,6 @@ external-secrets:
     securityContext: []
   certController:
     securityContext: []
-  installCRDs: true
 sealed-secrets:
   ingress:
     enabled: true
