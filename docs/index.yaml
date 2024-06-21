@@ -9,7 +9,7 @@ entries:
       catalog.cattle.io/release-name: ezd-backend
     apiVersion: v2
     appVersion: 1.2024-19.7
-    created: "2024-06-20T17:37:19.953272685+02:00"
+    created: "2024-06-21T07:21:25.770125211+02:00"
     description: Services necessary to run EZD RP app
     digest: e889436fceace468b990d394759e86c8e2996979b2a46502e95f0c78cfc692d8
     home: https://linuxpolska.com
@@ -36,7 +36,7 @@ entries:
       catalog.cattle.io/release-name: ezd-crd
     apiVersion: v2
     appVersion: 1.2024-19.7
-    created: "2024-06-20T17:37:19.979750752+02:00"
+    created: "2024-06-21T07:21:25.804862004+02:00"
     dependencies:
     - condition: global.rabbitmq.deploy
       name: rabbitmq-operator
@@ -79,7 +79,7 @@ entries:
       catalog.cattle.io/release-name: monitoring-stack-app
     apiVersion: v2
     appVersion: 1.2024-1.0.0
-    created: "2024-06-20T17:37:20.020015621+02:00"
+    created: "2024-06-21T07:21:25.854325962+02:00"
     dependencies:
     - condition: global.elastic.enabled
       name: elastic
@@ -122,7 +122,7 @@ entries:
       catalog.cattle.io/release-name: monitoring-stack-crd
     apiVersion: v2
     appVersion: 1.2024-1.0.0
-    created: "2024-06-20T17:37:20.038684336+02:00"
+    created: "2024-06-21T07:21:25.874180344+02:00"
     dependencies:
     - condition: global.eck-operator-crds.enabled
       name: eck-operator-crds
@@ -159,4 +159,119 @@ entries:
     urls:
     - monitoring-stack-crd/monitoring-stack-crd-1.0.0.tgz
     version: 1.0.0
-generated: "2024-06-20T17:37:19.950903515+02:00"
+  - annotations:
+      catalog.cattle.io/display-name: CRDs for Security Stack
+      catalog.cattle.io/hidden: "true"
+      catalog.cattle.io/namespace: default
+      catalog.cattle.io/os: linux
+      catalog.cattle.io/release-name: security-stack-crd
+    apiVersion: v2
+    appVersion: 1.2024-1.0.0
+    created: "2024-06-21T07:21:25.940110132+02:00"
+    dependencies:
+    - alias: neuvector-crds
+      condition: global.neuvector-crd.enabled
+      name: crd
+      repository: https://neuvector.github.io/neuvector-helm/
+      version: 2.7.3
+    - condition: global.kubearmor-operator.enabled
+      name: kubearmor-operator
+      repository: https://kubearmor.github.io/charts
+      version: v1.3.2
+    - condition: global.kubewarden-crds.enabled
+      name: kubewarden-crds
+      repository: https://charts.kubewarden.io
+      version: 1.5.0
+    - condition: global.kubewarden-controller.enabled
+      name: kubewarden-controller
+      repository: https://charts.kubewarden.io
+      version: 2.0.8
+    - condition: global.cert-manager-crd.enabled
+      name: cert-manager-crd
+      repository: charts/cert-manager
+      version: 1.14.4
+    - condition: global.cert-manager.enabled
+      name: cert-manager
+      repository: charts/cert-manager
+      version: 1.14.4
+    description: Set of operators and CRDs for LP security
+    digest: 27fba940c755526e39c4bc4068be2868d1dfd3dfb00e38d2fa373793b5e041fd
+    home: https://linuxpolska.com
+    icon: https://linuxpolska.com/logo/LinuxPolska-icon.png
+    keywords:
+    - neuevector
+    - kubewarden
+    - kubearmor
+    - cert-manager
+    kubeVersion: '>=1.19.0-0'
+    maintainers:
+    - email: biuro@linuxpolska.com
+      name: Linux Polska
+    name: monitoring-stack-crd
+    sources:
+    - https://sourcemation.github.io/charts/
+    type: application
+    urls:
+    - security-stack-crd/monitoring-stack-crd-1.0.0.tgz
+    version: 1.0.0
+  security-stack-app:
+  - annotations:
+      catalog.cattle.io/auto-install: security-stack-crd=match
+      catalog.cattle.io/display-name: Security Stack
+      catalog.cattle.io/os: linux
+      catalog.cattle.io/release-name: security-stack-app
+    apiVersion: v2
+    appVersion: 1.2024-1.0.0
+    created: "2024-06-21T07:21:25.91824736+02:00"
+    dependencies:
+    - condition: global.conjur-oss.enabled
+      name: conjur-oss
+      repository: ""
+      version: 1.1.0
+    - condition: global.sealed-secrets.enabled
+      name: sealed-secrets
+      repository: https://bitnami-labs.github.io/sealed-secrets
+      version: 2.15.2
+    - condition: global.external-secrets.enabled
+      name: external-secrets
+      repository: https://charts.external-secrets.io
+      version: 0.9.13
+    - condition: global.kyverno.enabled
+      name: kyverno
+      repository: https://kyverno.github.io/kyverno/
+      version: 3.0.7
+    - condition: global.kubearmor.enabled
+      name: kubearmor
+      repository: https://kubearmor.github.io/charts
+      version: v1.3.2
+    - condition: global.kubewarden-defaults.enabled
+      name: kubewarden-defaults
+      repository: https://charts.kubewarden.io
+      version: 2.0.0
+    - condition: global.core.enabled
+      name: core
+      repository: https://neuvector.github.io/neuvector-helm/
+      version: 2.7.3
+    description: Set of charts for security
+    digest: 03b9d96acb00e009928e85a26cee6a2c0ac38d2629fa9532d3390aab381280c8
+    home: https://linuxpolska.com
+    icon: https://linuxpolska.com/logo/LinuxPolska-icon.png
+    keywords:
+    - conjur-oss
+    - external-secrets
+    - kyverno
+    - kubearmor
+    - kubewarden
+    - neuvector
+    kubeVersion: '>=1.19.0-0'
+    maintainers:
+    - email: biuro@linuxpolska.com
+      name: Linux Polska
+    name: security-stack-app
+    sources:
+    - https://github.com/SourceMation/charts.git
+    type: application
+    urls:
+    - security-stack-app/security-stack-app-1.0.0.tgz
+    version: 1.0.0
+generated: "2024-06-21T07:21:25.767363966+02:00"
