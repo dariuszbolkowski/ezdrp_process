@@ -16,7 +16,7 @@ global:
     enabled: true
 
 conjur-oss:
-  dataKey: "docker run --rm cyberark/conjur data-key generate"
+  dataKey: ""
 kyverno:
   test:
     securityContext: []
