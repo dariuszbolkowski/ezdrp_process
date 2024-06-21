@@ -1,7 +1,7 @@
 
 global:
   neuvector-crds:
-    enabled: false 
+    enabled: true 
   kubearmor-operator:
     enabled: false
   kubewarden-crds:

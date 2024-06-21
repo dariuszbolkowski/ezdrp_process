@@ -51,4 +51,6 @@ sealed-secrets:
   server:
     ingress:
       enabled: true
-
+neuvector:
+  crdwebhook:
+  enabled: false
