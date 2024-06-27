@@ -1,5 +1,11 @@
 Congratulations ! You installed application {{ .Chart.Name }} sucessfully.
 
+
+Database configuration:
+                          Select database type: POSTGRESQL
+                  External DB connectionstring: Host={{ include "global.postgresqlConfig.fullname" . }}-rw;Port=5432;Database=ezdrp;Username={{ default ( "postgres" ) }};Password='{{ include "ezd-backend.password" .Values.global.postgresqlConfig.auth.admPassword }}'
+
+
 To learn more about the release, try:
 
   $ helm status {{ .Release.Name }}
