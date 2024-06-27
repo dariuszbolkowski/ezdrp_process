@@ -1,0 +1,20 @@
+{{- if .Values.filerepository.active }}
+    {{- if .Values.filerepository.persistence.ezdpuwmigration.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.filerepository.moduleName }}-storage-puw
+spec:
+  accessModes:
+    - {{ .Values.filerepository.persistence.ezdpuwmigration.accessMode }}
+  resources:
+    requests:
+      storage: {{ .Values.filerepository.persistence.ezdpuwmigration.size }}Gi
+  storageClassName: {{ .Values.filerepository.persistence.ezdpuwmigration.storageClass }}
+status:
+  accessModes:
+    - {{ .Values.filerepository.persistence.ezdpuwmigration.accessMode }}
+  capacity:
+    storage: {{ .Values.filerepository.persistence.ezdpuwmigration.size }}Gi
+    {{- end }}
+{{- end }}

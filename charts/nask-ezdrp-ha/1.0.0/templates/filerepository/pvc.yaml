@@ -1,0 +1,22 @@
+{{- if .Values.storage.enabled }}
+  {{- if .Values.filerepository.active }}
+    {{- if eq .Values.filerepository.persistence.filerepoStorageType "S1" }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.filerepository.moduleName }}-storage
+spec:
+  accessModes:
+    - {{ .Values.filerepository.persistence.accessMode }}
+  resources:
+    requests:
+      storage: {{ .Values.filerepository.persistence.size }}Gi
+  storageClassName: {{ .Values.filerepository.persistence.storageClass }}
+status:
+  accessModes:
+    - {{ .Values.filerepository.persistence.accessMode }}
+  capacity:
+    storage: {{ .Values.filerepository.persistence.size }}Gi
+    {{- end }}
+  {{- end }}
+{{- end }}

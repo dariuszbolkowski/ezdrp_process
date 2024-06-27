@@ -1,0 +1,18 @@
+{{- if .Values.btm.active }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.btm.moduleName }}
+  labels:
+    run: {{ .Values.btm.moduleName }}
+spec:
+  type: {{ .Values.btm.service.type }}
+  ports:
+    - name: {{ .Values.btm.moduleName }}
+      port: {{ .Values.btm.port }}
+      targetPort: {{ .Values.btm.port }}
+      protocol: TCP
+  selector:
+    app: {{ .Release.Name }}-{{ .Values.btm.moduleName }}
+  sessionAffinity: None
+{{ end }}
