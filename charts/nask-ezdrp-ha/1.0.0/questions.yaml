@@ -8,6 +8,7 @@ questions:
   label: Deploy RabbitMQ
   type: boolean
   group: "Components"
+  show_subquestion_if: true
   subquestions:
   - variable: rabbitmqConfig.auth.username
     label: Username
@@ -85,6 +86,7 @@ questions:
   label: Deploy Postgresql
   type: boolean
   group: "Components"
+  show_subquestion_if: true
   subquestions:
   - variable: postgresqlConfig.auth.admPassword
     label: SuperUser Password
@@ -170,12 +172,6 @@ questions:
     type: password
     min: 8
     required: true
-#  - variable: redisConfig.customConfig.setit
-#    label: Replicas
-#    description: "Amount of replicas redis. Min 3 replicas for ha"
-#    group: "Redis Settings"
-#    type: int
-#    default: 1
   - variable: redisConfig.customConfig.storage.volumeClaimTemplate.spec.storageClassName
     label: Storage Class for database data
     description: "Select storage class for database data"
