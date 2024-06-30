@@ -1,0 +1,18 @@
+{{- if .Values.formsWeb.active }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.formsWeb.moduleName }}
+  labels:
+    run: {{ .Values.formsWeb.moduleName }}
+spec:
+  type: {{ .Values.formsWeb.service.type }}
+  ports:
+    - name: {{ .Values.formsWeb.moduleName }}
+      port: {{ .Values.formsWeb.port }}
+      targetPort: {{ .Values.formsWeb.port }}
+      protocol: TCP
+  selector:
+    app: {{ .Release.Name }}-{{ .Values.formsWeb.moduleName }}
+  sessionAffinity: None
+{{ end }}

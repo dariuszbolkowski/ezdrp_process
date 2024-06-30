@@ -1,0 +1,631 @@
+{{- if .Values.ezdrpApi.active }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.ezdrpApi.moduleName }}
+  labels:
+    app: {{ .Release.Name }}-{{ .Values.ezdrpApi.moduleName }}
+    role: backend
+    environment: {{ .Values.environment }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-{{ .Values.ezdrpApi.moduleName }}
+      role: backend
+      environment: {{ .Values.environment }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-{{ .Values.ezdrpApi.moduleName }}
+        role: backend
+        environment: {{ .Values.environment }}
+    spec:
+      {{- if and (.Values.affinity.nodeAffinitySelector.name) (.Values.affinity.nodeAffinitySelector.value) }}
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: {{ .Values.affinity.nodeAffinitySelector.name }}
+                    operator: In
+                    values:
+                      - {{ .Values.affinity.nodeAffinitySelector.value | quote }}
+      {{- end }}
+
+      containers:
+        - image: {{ .Values.imageCredentials.registryDomain }}/{{ .Values.ezdrpApi.image.name }}:{{ .Values.ezdrpApi.image.version }}
+          env:
+            - name: ICE_CLOUD_ADMIN_URL
+              value: "http://{{ .Values.cloudadmin.moduleName }}:{{ .Values.cloudadmin.port }}"
+            - name: ICE_CONFIG
+              value: {{ .Values.ezdrpApi.cloudadmin.configname }}
+            - name: REQUEST_STATISTIC
+              value: {{ .Values.ezdrpApi.params.requestStatistic | quote }}
+            - name: LONG_EXECUTION_STATISTIC
+              value: {{ .Values.ezdrpApi.params.longExecutionStatistic | quote }}
+            - name: TEST_VERSION_NAME
+              value: {{ .Values.ezdrpApi.params.testVersionName | quote }}
+            - name: Ezdrp_Feature_Ai_Klasyfikacja
+              value: {{ .Values.ezdrpApi.params.Ezdrp_Feature_Ai_Klasyfikacja | quote }}
+            - name: Ezdrp_Feature_Ai_Metadane
+              value: {{ .Values.ezdrpApi.params.Ezdrp_Feature_Ai_Metadane | quote }}
+            - name: Ezdrp_Feature_Ai_Streszczenia
+              value: {{ .Values.ezdrpApi.params.Ezdrp_Feature_Ai_Streszczenia | quote }}
+            - name: Ezdrp_Feature_Bpmn
+              value: {{ .Values.ezdrpApi.params.Ezdrp_Feature_Bpmn | quote }}
+            - name: Ezdrp_Feature_Ewd
+              value: {{ .Values.ezdrpApi.params.Ezdrp_Feature_Ewd | quote }}
+            - name: Ezdrp_Feature_Muas
+              value: {{ .Values.ezdrpApi.params.Ezdrp_Feature_Muas | quote }}
+            - name: Ezdrp_Feature_NoweZadania
+              value: {{ .Values.ezdrpApi.params.Ezdrp_Feature_NoweZadania | quote }}
+            - name: Ezdrp_Feature_Ocr
+              value: {{ .Values.ezdrpApi.params.Ezdrp_Feature_Ocr | quote }}
+            - name: Ezdrp_Feature_PieczecElektroniczna
+              value: {{ .Values.ezdrpApi.params.Ezdrp_Feature_PieczecElektroniczna | quote }}
+            - name: Ezdrp_Feature_PrzydzielanieDostepow
+              value: {{ .Values.ezdrpApi.params.Ezdrp_Feature_PrzydzielanieDostepow | quote }}
+            - name: ice-logging-Serilog__Properties__SeqLogger
+              value: {{ .Values.ezd.logging_serilog_seq_logger | quote }}
+            - name: ice-logging-Serilog__Properties__ConsoleLogger
+              value: {{ .Values.ezd.logging_serilog_console_logger | quote }}
+            - name: Ezdrp_Feature_CentrumStatystyk
+              value: {{ .Values.ezdrpApi.params.Ezdrp_Feature_CentrumStatystyk | quote }}
+            - name: statistics-config-Instance__ApiKey
+              value: {{ .Values.ezdrpApi.params.statistics_config_Instance_ApiKey | quote }}
+            - name: statistics-config-Instance__InstallationId
+              value: {{ .Values.ezdrpApi.params.statistics_config_Instance_InstallationId | quote }}
+            - name: statistics-config-Workers__TaskRequest__DefaultInterval
+              value: {{ .Values.ezdrpApi.params.statistics_config_Workers_TaskRequest_DefaultInterval | quote }}
+            - name: statistics-config-Workers__SendTaskResult__DefaultInterval
+              value: {{ .Values.ezdrpApi.params.statistics_config_Workers_SendTaskResult_DefaultInterval | quote }}
+          imagePullPolicy: IfNotPresent
+          name: {{ .Values.ezdrpApi.moduleName }}
+          readinessProbe:
+            failureThreshold: 2
+            initialDelaySeconds: {{ .Values.ezdrpApi.redinessDelay }}
+            periodSeconds: 10
+            successThreshold: 1
+            tcpSocket:
+              port: {{ .Values.ezdrpApi.port }}
+            timeoutSeconds: 1
+          startupProbe:
+            failureThreshold: 600
+            initialDelaySeconds: {{ .Values.ezdrpApi.startupDelay }}
+            periodSeconds: 30
+            successThreshold: 1
+            tcpSocket:
+              port: {{ .Values.ezdrpApi.port }}
+            timeoutSeconds: 1
+          livenessProbe:
+            failureThreshold: 4
+            initialDelaySeconds: {{ .Values.ezdrpApi.livenessDelay }}
+            periodSeconds: 10
+            successThreshold: 1
+            tcpSocket:
+              port: {{ .Values.ezdrpApi.port }}
+            timeoutSeconds: 1
+          {{- if or (.Values.ezdrpApi.resources.limits.cpu) (.Values.ezdrpApi.resources.limits.memory) (.Values.ezdrpApi.resources.requests.cpu) (.Values.ezdrpApi.resources.requests.memory) }}
+          resources:
+            {{- if or (.Values.ezdrpApi.resources.limits.cpu) (.Values.ezdrpApi.resources.limits.memory) }}
+            limits:
+              {{- if .Values.ezdrpApi.resources.limits.cpu }}
+              cpu: {{ .Values.ezdrpApi.resources.limits.cpu }}
+              {{- end }}
+              {{- if .Values.ezdrpApi.resources.limits.memory }}
+              memory: {{ .Values.ezdrpApi.resources.limits.memory }}
+              {{- end }}
+            {{- end }}
+            {{- if or (.Values.ezdrpApi.resources.requests.cpu) (.Values.ezdrpApi.resources.requests.memory) }}
+            requests:
+              {{- if .Values.ezdrpApi.resources.requests.cpu }}
+              cpu: {{ .Values.ezdrpApi.resources.requests.cpu }}
+              {{- end }}
+              {{- if .Values.ezdrpApi.resources.requests.memory }}
+              memory: {{ .Values.ezdrpApi.resources.requests.memory }}
+              {{- end }}
+            {{- end }}
+          {{- end }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities: {}
+            privileged: false
+            readOnlyRootFilesystem: false
+            runAsNonRoot: false
+          stdin: true
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          tty: true
+          volumeMounts:
+            - mountPath: /app/epuap
+              name: {{ .Values.ezdrpApi.moduleName }}-epuap
+            - mountPath: /app/edoreczenia
+              name: {{ .Values.ezdrpApi.moduleName }}-edoreczenia
+            - mountPath: /app/zewnetrznabazakontaktow
+              name: {{ .Values.ezdrpApi.moduleName }}-kontakty
+      dnsConfig: {}
+      dnsPolicy: ClusterFirst
+      initContainers:
+        - command:
+            - sh
+            - -c
+            - |
+              /docker-entrypoint.sh wait_for relationaldb:${relationalDbHost}:${relationalDbPort} redis:${redisHost}:${redisPort} redisAppend:${redisAppendHost}:${redisAppendPort} rabbit:${rabbitHost}:${rabbitPort} cloudadmin:${CLOUDADMIN_HOST}:${CLOUDADMIN_PORT} teryt:${TERYT_HOST}:${TERYT_PORT}
+          env:
+            - name: relationalDbHost
+              value: {{ include "ezdrp.connstring.ezdrp.host" . | quote }}
+            - name: relationalDbPort
+              value: {{ include "ezdrp.connstring.ezdrp.port" . | quote }}
+            - name: CLOUDADMIN_HOST
+              value: {{ .Values.cloudadmin.moduleName }}
+            - name: CLOUDADMIN_PORT
+              value: {{ .Values.cloudadmin.port | quote }}
+            - name: TERYT_HOST
+              value: {{ .Values.teryt.moduleName }}
+            - name: TERYT_PORT
+              value: {{ .Values.teryt.port | quote }}
+            - name: redisPort
+              value: {{ .Values.redisExt.port | quote }}
+            - name: redisHost
+              value: {{ .Values.redisExt.host }}
+            - name: redisAppendPort
+              value: {{ .Values.redisAppendExt.port | quote }}
+            - name: redisAppendHost
+              value: {{ .Values.redisAppendExt.host }}
+            - name: rabbitPort
+              value: {{ .Values.rabbitExt.port | quote }}
+            - name: rabbitHost
+              value: {{ .Values.rabbitExt.host }}
+          image: {{ .Values.waitfor.image.registry }}/{{ .Values.waitfor.image.name }}:{{ .Values.waitfor.image.version }}
+          imagePullPolicy: IfNotPresent
+          name: waitfor
+          resources: {}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities: {}
+            privileged: false
+            readOnlyRootFilesystem: false
+            runAsNonRoot: false
+          stdin: true
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          tty: true
+
+ 
+        - name: {{ .Values.ezdrpApi.moduleName }}-create-ezdrp-vhost
+          image: "{{ .Values.job.rabbit.registry }}/{{ .Values.job.rabbit.imageName }}:{{ .Values.job.rabbit.imageTag }}"
+          command:
+            - sh
+            - -c
+            - >
+              apt update -qq;
+              DEBIAN_FRONTEND=noninteractive apt install -qq -y curl;
+              while ! rabbitmqadmin -H ${BROKER_SERVER_HOST} -u ${BROKER_LOGIN} -p ${BROKER_PASSWORD} --vhost=/ list queues; do sleep 1; done;
+              if ! rabbitmqadmin -H ${BROKER_SERVER_HOST} -u ${BROKER_LOGIN} -p ${BROKER_PASSWORD} --vhost=${BROKER_VHOST} list queues ; then
+                echo "vhost ${BROKER_VHOST} is doesnt exist";
+                if curl --fail -u ${BROKER_LOGIN}:${BROKER_PASSWORD} -X PUT http://${BROKER_SERVER_HOST}:15672/api/vhosts/${BROKER_VHOST} ; then
+                  echo "i just created it - now i try download and create definitions for ${BROKER_VHOST} vhost";
+                  if curl --fail --cacert /cacert/ca.crt -o /tmp/rabbit_config.json --basic --user ${BasicAuthUsername}:${BasicAuthPassword} ${URL}/${FILE}; then
+                    echo "i just downloaded definitions file for ${BROKER_VHOST} vhost";
+                    if curl --fail -u ${BROKER_LOGIN}:${BROKER_PASSWORD} -F 'file=@/tmp/rabbit_config.json' http://${BROKER_SERVER_HOST}:15672/api/definitions/${BROKER_VHOST} ; then
+                      echo "i just upload definitions for ${BROKER_VHOST} to server";
+                    else
+                      echo "i have problem with creating definitions ${BROKER_VHOST} vhost on server";
+                    fi
+                  else
+                    echo "i have problem with downloading definitions for ${BROKER_VHOST} vhost from repos";
+                  fi
+                else
+                  echo "i have problem with creating ${BROKER_VHOST} vhost";
+                fi
+              else
+                echo "vhost ${BROKER_VHOST} is exist - skip";
+              fi;
+          env:
+            - name: BROKER_VHOST
+              value: {{ .Values.ezdrpApi.rabbitmq.vhostezdrp }}
+            - name: BasicAuthUsername
+              value: {{ .Values.preparing.basicAuth.username }}
+            - name: BasicAuthPassword
+              value: {{ .Values.preparing.basicAuth.password }}
+            - name: URL
+              value: {{ .Values.preparing.url }}
+            - name: FILE
+              value: "{{ .Values.preparing.server.rabbit.dir }}/{{ .Values.preparing.server.rabbit.file }}"
+            - name: BROKER_SERVER_HOST
+              value: {{ .Values.rabbitExt.host }}
+            - name: BROKER_PASSWORD
+              value: {{ .Values.rabbitExt.password }}
+            - name: BROKER_PORT
+              value: {{ .Values.rabbitExt.port | quote }}
+            - name: BROKER_LOGIN
+              value: {{ .Values.rabbitExt.user }}
+          resources:
+            limits:
+              cpu: "1000m"
+              memory: "1Gi"
+            requests:
+              cpu: "100m"
+              memory: "50Mi"
+        - name: {{ .Values.ezdrpApi.moduleName }}-create-archiwum-vhost
+          image: "{{ .Values.job.rabbit.registry }}/{{ .Values.job.rabbit.imageName }}:{{ .Values.job.rabbit.imageTag }}"
+          command:
+            - sh
+            - -c
+            - >
+              apt update;
+              DEBIAN_FRONTEND=noninteractive apt install -y curl;
+              while ! rabbitmqadmin -H ${BROKER_SERVER_HOST} -u ${BROKER_LOGIN} -p ${BROKER_PASSWORD} --vhost=/ list queues; do sleep 1; done;
+              if ! rabbitmqadmin -H ${BROKER_SERVER_HOST} -u ${BROKER_LOGIN} -p ${BROKER_PASSWORD} --vhost=${BROKER_VHOST} list queues ; then
+                echo "vhost ${BROKER_VHOST} is doesnt exist";
+                if curl --fail -u ${BROKER_LOGIN}:${BROKER_PASSWORD} -X PUT http://${BROKER_SERVER_HOST}:15672/api/vhosts/${BROKER_VHOST} ; then
+                  echo "i just created it";
+                else
+                  echo "i have problem with creating ${BROKER_VHOST} vhost";
+                fi
+              else
+                echo "vhost ${BROKER_VHOST} is exist - skip";
+              fi
+          env:
+            - name: BROKER_VHOST
+              value: {{ .Values.ezdrpApi.rabbitmq.vhostarchiwum }}
+            - name: BROKER_SERVER_HOST
+              value: {{ .Values.rabbitExt.host }}
+            - name: BROKER_PASSWORD
+              value: {{ .Values.rabbitExt.password }}
+            - name: BROKER_PORT
+              value: {{ .Values.rabbitExt.port | quote }}
+            - name: BROKER_LOGIN
+              value: {{ .Values.rabbitExt.user }}
+          resources:
+            limits:
+              cpu: "1000m"
+              memory: "1Gi"
+            requests:
+              cpu: "100m"
+              memory: "50Mi"
+        - name: {{ .Values.ezdrpApi.moduleName }}-createdb-odczyt
+      {{- if (eq "ORACLE" .Values.cloudadmin.relationaldb.connectiontype.ezdrp) }}
+          image: "{{ .Values.job.relationalDB.oracleconnector.registry }}/{{ .Values.job.relationalDB.oracleconnector.imageName }}:{{ .Values.job.relationalDB.oracleconnector.imageTag }}"
+      {{- else }}
+          image: "{{ .Values.job.relationalDB.universalconnector.registry }}/{{ .Values.job.relationalDB.universalconnector.imageName }}:{{ .Values.job.relationalDB.universalconnector.imageTag }}"
+      {{- end -}}
+
+      {{- if (eq "POSTGRESQL" .Values.cloudadmin.relationaldb.connectiontype.ezdrp) }}
+          command:
+            - bash
+            - -c
+            - >
+              echo -n "check for POSTGRESQL connection ";
+              while [[ $( PGPASSWORD=${DBPASSWORD} psql -U ${DBUSER} -h "${DBHOST}" -p "${DBPORT}" -d postgres -tAc "SELECT 1 FROM pg_roles WHERE rolname='${DBUSER}'") -ne '1' ]]; do
+                echo -n  ".";
+                sleep 1;
+              done;
+              echo ".. CONNECTED to POSTGRESQL $DBHOST";
+              if [[ $( PGPASSWORD=${DBPASSWORD} psql -U "${DBUSER}" -h "${DBHOST}" -p "${DBPORT}" -d "$DBNAME" -tAc "SELECT 1 FROM pg_database WHERE datname='$DBNAME'") = '1' ]]; then
+                echo "db ${DBNAME} is exist - skip";
+              else
+                echo "db ${DBNAME} is doesnt exist";
+                 if $( PGPASSWORD=${DBPASSWORD} createdb -h "${DBHOST}" -p "${DBPORT}" -U "${DBUSER}" "${DBNAME}") ; then
+                    echo "i just created it";
+                  else
+                    echo "i have problem with creating ${DBNAME} db";
+                  fi
+              fi
+      {{- end -}}
+
+      {{- if (eq "MYSQL" .Values.cloudadmin.relationaldb.connectiontype.ezdrp) }}
+          command:
+            - bash
+            - -c
+            - >
+              echo -n "check for MYSQL connection ";
+              while ! mysql -h ${DBHOST} -u ${DBUSER} -p${DBPASSWORD}  -e ";" > /dev/null 2>&1; do
+                echo -n  ".";
+                sleep 1;
+              done
+              echo ".. CONNECTED to MYSQL (some-mysql)";
+              if  mysql -h ${DBHOST} -u ${DBUSER} -p$DBPASSWORD "${DBNAME}" -e exit > /dev/null 2>&1; then
+                echo "Exists"
+              else
+                echo "Not exists - creating"
+                mysql -h ${DBHOST} -u ${DBUSER} -p$DBPASSWORD  -e "create database ${DBNAME};"
+              fi
+              if $(mysql -h ${DBHOST} -u ${DBUSER} -p$DBPASSWORD -N -e "select user,host from mysql.user where user='${DBUSER}';" |grep '%' | wc-l) -eq 1  then
+                mysql -h ${DBHOST} -u ${DBUSER} -p$DBPASSWORD  -e "GRANT ALL PRIVILEGES ON ${DBNAME}.* TO '${DBUSER}'@'%';"
+              fi
+              if $(mysql -h ${DBHOST} -u ${DBUSER} -p$DBPASSWORD -N -e "select user,host from mysql.user where user='${DBUSER}';" |grep 'localhost' | wc-l) -eq 1  then
+                mysql -h ${DBHOST} -u ${DBUSER} -p$DBPASSWORD  -e "GRANT ALL PRIVILEGES ON ${DBNAME}.* TO '${DBUSER}'@'localhost';"
+              fi
+                mysql -h ${DBHOST} -u ${DBUSER} -p$DBPASSWORD  -e "FLUSH PRIVILEGES;"
+              done
+      {{- end -}}
+
+      {{- if (eq "SQLSERVER" .Values.cloudadmin.relationaldb.connectiontype.ezdrp) }}
+          command:
+            - bash
+            - -c
+            - >
+              echo -n "check for {{ .Values.cloudadmin.relationaldb.connectiontype.ezdrp }} connection ";
+              while ! sqlcmd -S tcp:${DBHOST},${DBPORT} -U ${DBUSER} -P ${DBPASSWORD} -q "exit" -l 2 > /dev/null 2>&1; do
+                echo -n  ".";
+                sleep 1;
+              done;
+              echo ".. CONNECTED to {{ .Values.cloudadmin.relationaldb.connectiontype.ezdrp }} - ${DBHOST}";
+              sqlcmd -S tcp:${DBHOST},${DBPORT} -U ${DBUSER} -P ${DBPASSWORD} -Q "IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = '${DBNAME}')
+              BEGIN
+                PRINT 'i just creating DB !'
+                CREATE DATABASE ${DBNAME};
+              END;";
+              if [ $? != 0 ]; then
+                echo -e "\u2718 problem with creating DB ${DBNAME}";
+                exit 1;
+              else
+                echo -e "\u2714 DB ${DBNAME} exist !";
+              fi
+      {{- end -}}
+    
+      {{- if (eq "ORACLE" .Values.cloudadmin.relationaldb.connectiontype.ezdrp) }}
+      echo "check for ORACLE connection";
+      {{- end }}
+          env:
+            - name: DBNAME
+              value: {{ include "ezdrp.connstring.ezdrpodczyt.dbname" . | quote }}
+            - name: DBHOST
+              value: {{ include "ezdrp.connstring.ezdrpodczyt.host" . | quote }}
+            - name: DBPASSWORD
+              value: {{ include "ezdrp.connstring.ezdrpodczyt.password" . | quote }}
+            - name: DBPORT
+              value: {{ include "ezdrp.connstring.ezdrpodczyt.port" . | quote }}
+            - name: DBUSER
+              value: {{ include "ezdrp.connstring.ezdrpodczyt.username" . | quote }}
+          resources:
+            limits:
+              cpu: "1000m"
+              memory: "1Gi"
+            requests:
+              cpu: "100m"
+              memory: "50Mi"
+
+        - name: {{ .Values.ezdrpApi.moduleName }}-createdb-archiwum1
+      {{- if (eq "ORACLE" .Values.cloudadmin.relationaldb.connectiontype.ezdrp) }}
+          image: "{{ .Values.job.relationalDB.oracleconnector.registry }}/{{ .Values.job.relationalDB.oracleconnector.imageName }}:{{ .Values.job.relationalDB.oracleconnector.imageTag }}"
+      {{- else }}
+          image: "{{ .Values.job.relationalDB.universalconnector.registry }}/{{ .Values.job.relationalDB.universalconnector.imageName }}:{{ .Values.job.relationalDB.universalconnector.imageTag }}"
+      {{- end -}}
+
+      {{- if (eq "POSTGRESQL" .Values.cloudadmin.relationaldb.connectiontype.ezdrp) }}
+          command:
+            - bash
+            - -c
+            - >
+              echo -n "check for {{ .Values.cloudadmin.relationaldb.connectiontype.ezdrp }} connection ";
+              while [[ $( PGPASSWORD=${DBPASSWORD} psql -U ${DBUSER} -h "${DBHOST}" -p "${DBPORT}" -d postgres -tAc "SELECT 1 FROM pg_roles WHERE rolname='${DBUSER}'") -ne '1' ]]; do
+                echo -n  ".";
+                sleep 1;
+              done
+               echo ".. CONNECTED to {{ .Values.cloudadmin.relationaldb.connectiontype.ezdrp }} (${DBHOST})";
+              if [[ $( PGPASSWORD=${DBPASSWORD} psql -U "${DBUSER}" -h "${DBHOST}" -p "${DBPORT}" -d "$DBNAME" -tAc "SELECT 1 FROM pg_database WHERE datname='$DBNAME'") = '1' ]]; then
+                echo "db ${DBNAME} is exist - skip";
+              else
+                echo "db ${DBNAME} is doesnt exist";
+                 if $( PGPASSWORD=${DBPASSWORD} createdb -h "${DBHOST}" -p "${DBPORT}" -U "${DBUSER}" "${DBNAME}") ; then
+                    echo "i just created it";
+                  else
+                    echo "i have problem with creating ${DBNAME} db";
+                  fi
+              fi
+      {{- end -}}
+
+      {{- if (eq "MYSQL" .Values.cloudadmin.relationaldb.connectiontype.ezdrp) }}
+          command:
+            - bash
+            - -c
+            - >
+              echo -n "check for {{ .Values.cloudadmin.relationaldb.connectiontype.ezdrp }} connection ";
+              while ! mysql -h ${DBHOST} -u ${DBUSER} -p${DBPASSWORD}  -e ";" > /dev/null 2>&1; do
+                echo -n  ".";
+                sleep 1;
+              done
+              echo ".. CONNECTED to {{ .Values.cloudadmin.relationaldb.connectiontype.ezdrp }} (some-mysql)";
+              if  mysql -h ${DBHOST} -u ${DBUSER} -p$DBPASSWORD "${DBNAME}" -e exit > /dev/null 2>&1; then
+                echo "Exists"
+              else
+                echo "Not exists - creating"
+                mysql -h ${DBHOST} -u ${DBUSER} -p$DBPASSWORD  -e "create database ${DBNAME};"
+              fi
+              if $(mysql -h ${DBHOST} -u ${DBUSER} -p$DBPASSWORD -N -e "select user,host from mysql.user where user='${DBUSER}';" |grep '%' | wc-l) -eq 1  then
+                mysql -h ${DBHOST} -u ${DBUSER} -p$DBPASSWORD  -e "GRANT ALL PRIVILEGES ON ${DBNAME}.* TO '${DBUSER}'@'%';"
+              fi
+              if $(mysql -h ${DBHOST} -u ${DBUSER} -p$DBPASSWORD -N -e "select user,host from mysql.user where user='${DBUSER}';" |grep 'localhost' | wc-l) -eq 1  then
+                mysql -h ${DBHOST} -u ${DBUSER} -p$DBPASSWORD  -e "GRANT ALL PRIVILEGES ON ${DBNAME}.* TO '${DBUSER}'@'localhost';"
+              fi
+                mysql -h ${DBHOST} -u ${DBUSER} -p$DBPASSWORD  -e "FLUSH PRIVILEGES;"
+              done
+      {{- end -}}
+
+      {{- if (eq "SQLSERVER" .Values.cloudadmin.relationaldb.connectiontype.ezdrp) }}
+          command:
+            - bash
+            - -c
+            - >
+              echo -n "check for {{ .Values.cloudadmin.relationaldb.connectiontype.ezdrp }} connection ";
+              while ! sqlcmd -S tcp:${DBHOST},${DBPORT} -U ${DBUSER} -P ${DBPASSWORD} -q "exit" -l 2 > /dev/null 2>&1; do
+                echo -n  ".";
+                sleep 1;
+              done;
+              echo ".. CONNECTED to {{ .Values.cloudadmin.relationaldb.connectiontype.ezdrp }} - ${DBHOST}";
+              sqlcmd -S tcp:${DBHOST},${DBPORT} -U ${DBUSER} -P ${DBPASSWORD} -Q "IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = '${DBNAME}')
+              BEGIN
+                PRINT 'i just creating DB !'
+                CREATE DATABASE ${DBNAME};
+              END;";
+              if [ $? != 0 ]; then
+                echo -e "\u2718 problem with creating DB ${DBNAME}";
+                exit 1;
+              else
+                echo -e "\u2714 DB ${DBNAME} exist !";
+              fi
+      {{- end -}}
+      {{- if (eq "ORACLE" .Values.cloudadmin.relationaldb.connectiontype.ezdrp) }}
+          command:
+            - bash
+            - -c
+            - >
+            echo -n "check for {{ .Values.cloudadmin.relationaldb.connectiontype.ezdrp }} connection ";
+            echo "check for ORACLE connection";
+      {{- end }}
+          env:
+            - name: DBNAME
+              value: {{ include "ezdrp.connstring.ezdrp.dbname" . | quote }}
+            - name: DBHOST
+              value: {{ include "ezdrp.connstring.ezdrp.host" . | quote }}
+            - name: DBPASSWORD
+              value: {{ include "ezdrp.connstring.ezdrp.password" . | quote }}
+            - name: DBPORT
+              value: {{ include "ezdrp.connstring.ezdrp.port" . | quote }}
+            - name: DBUSER
+              value: {{ include "ezdrp.connstring.ezdrp.username" . | quote }}
+          resources:
+            limits:
+              cpu: "1000m"
+              memory: "1Gi"
+            requests:
+              cpu: "100m"
+              memory: "50Mi"
+        - name: {{ .Values.ezdrpApi.moduleName }}-createdb-archiwum
+      {{- if (eq "ORACLE" .Values.cloudadmin.relationaldb.connectiontype.ezdrp) }}
+          image: "{{ .Values.job.relationalDB.oracleconnector.registry }}/{{ .Values.job.relationalDB.oracleconnector.imageName }}:{{ .Values.job.relationalDB.oracleconnector.imageTag }}"
+      {{- else }}
+          image: "{{ .Values.job.relationalDB.universalconnector.registry }}/{{ .Values.job.relationalDB.universalconnector.imageName }}:{{ .Values.job.relationalDB.universalconnector.imageTag }}"
+      {{- end -}}
+
+      {{- if (eq "POSTGRESQL" .Values.cloudadmin.relationaldb.connectiontype.ezdrp) }}
+          command:
+            - bash
+            - -c
+            - >
+              echo -n "check for POSTGRESQL connection ";
+              while [[ $( PGPASSWORD=${DBPASSWORD} psql -U ${DBUSER} -h "${DBHOST}" -p "${DBPORT}" -d postgres -tAc "SELECT 1 FROM pg_roles WHERE rolname='${DBUSER}'") -ne '1' ]]; do
+                echo -n  ".";
+                sleep 1;
+              done;
+              echo ".. CONNECTED to POSTGRESQL $DBHOST";
+              if [[ $( PGPASSWORD=${DBPASSWORD} psql -U "${DBUSER}" -h "${DBHOST}" -p "${DBPORT}" -d "$DBNAME" -tAc "SELECT 1 FROM pg_database WHERE datname='$DBNAME'") = '1' ]]; then
+                echo "db ${DBNAME} is exist - skip";
+              else
+                echo "db ${DBNAME} is doesnt exist";
+                 if $( PGPASSWORD=${DBPASSWORD} createdb -h "${DBHOST}" -p "${DBPORT}" -U "${DBUSER}" "${DBNAME}") ; then
+                    echo "i just created it";
+                  else
+                    echo "i have problem with creating ${DBNAME} db";
+                  fi
+              fi
+      {{- end -}}
+      {{- if (eq "MYSQL" .Values.cloudadmin.relationaldb.connectiontype.ezdrp) }}
+          command:
+            - bash
+            - -c
+            - >
+              echo -n "check for MYSQL connection ";
+              while ! mysql -h ${DBHOST} -u ${DBUSER} -p${DBPASSWORD}  -e ";" > /dev/null 2>&1; do
+                echo -n  ".";
+                sleep 1;
+              done
+              echo ".. CONNECTED to MYSQL (some-mysql)";
+              if  mysql -h ${DBHOST} -u ${DBUSER} -p$DBPASSWORD "${DBNAME}" -e exit > /dev/null 2>&1; then
+                echo "Exists"
+              else
+                echo "Not exists - creating"
+                mysql -h ${DBHOST} -u ${DBUSER} -p$DBPASSWORD  -e "create database ${DBNAME};"
+              fi
+              if $(mysql -h ${DBHOST} -u ${DBUSER} -p$DBPASSWORD -N -e "select user,host from mysql.user where user='${DBUSER}';" |grep '%' | wc-l) -eq 1  then
+                mysql -h ${DBHOST} -u ${DBUSER} -p$DBPASSWORD  -e "GRANT ALL PRIVILEGES ON ${DBNAME}.* TO '${DBUSER}'@'%';"
+              fi
+              if $(mysql -h ${DBHOST} -u ${DBUSER} -p$DBPASSWORD -N -e "select user,host from mysql.user where user='${DBUSER}';" |grep 'localhost' | wc-l) -eq 1  then
+                mysql -h ${DBHOST} -u ${DBUSER} -p$DBPASSWORD  -e "GRANT ALL PRIVILEGES ON ${DBNAME}.* TO '${DBUSER}'@'localhost';"
+              fi
+                mysql -h ${DBHOST} -u ${DBUSER} -p$DBPASSWORD  -e "FLUSH PRIVILEGES;"
+              done
+      {{- end -}}
+      {{- if (eq "SQLSERVER" .Values.cloudadmin.relationaldb.connectiontype.ezdrp) }}
+          command:
+            - bash
+            - -c
+            - >
+              echo -n "check for {{ .Values.cloudadmin.relationaldb.connectiontype.ezdrp }} connection ";
+              while ! sqlcmd -S tcp:${DBHOST},${DBPORT} -U ${DBUSER} -P ${DBPASSWORD} -q "exit" -l 2 > /dev/null 2>&1; do
+                echo -n  ".";
+                sleep 1;
+              done;
+              echo ".. CONNECTED to {{ .Values.cloudadmin.relationaldb.connectiontype.ezdrp }} - ${DBHOST}";
+              sqlcmd -S tcp:${DBHOST},${DBPORT} -U ${DBUSER} -P ${DBPASSWORD} -Q "IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = '${DBNAME}')
+              BEGIN
+                PRINT 'i just creating DB !'
+                CREATE DATABASE ${DBNAME};
+              END;";
+              if [ $? != 0 ]; then
+                echo -e "\u2718 problem with creating DB ${DBNAME}";
+                exit 1;
+              else
+                echo -e "\u2714 DB ${DBNAME} exist !";
+              fi
+      {{- end -}}
+
+      {{- if (eq "ORACLE" .Values.cloudadmin.relationaldb.connectiontype.ezdrp) }}
+      echo "check for ORACLE connection";
+      {{- end }}
+          env:
+            - name: DBNAME
+              value: {{ include "ezdrp.connstring.archiwum.dbname" . | quote }}
+            - name: DBHOST
+              value: {{ include "ezdrp.connstring.archiwum.host" . | quote }}
+            - name: DBPASSWORD
+              value: {{ include "ezdrp.connstring.archiwum.password" . | quote }}
+            - name: DBPORT
+              value: {{ include "ezdrp.connstring.archiwum.port" . | quote }}
+            - name: DBUSER
+              value: {{ include "ezdrp.connstring.archiwum.username" . | quote }}
+          resources:
+            limits:
+              cpu: "1000m"
+              memory: "1Gi"
+            requests:
+              cpu: "100m"
+              memory: "50Mi"
+
+      {{- if or ( .Release.IsInstall ) ( .Values.storage.force_chown ) }}
+        - name: volume-owner-hack
+          image: busybox
+          command:
+            - sh
+            - -c
+            - |
+              chown -R 501:501 /app/epuap /app/edoreczenia /app/zewnetrznabazakontaktow
+          volumeMounts:
+          - name: {{ .Values.ezdrpApi.moduleName }}-epuap
+            mountPath: /app/epuap
+          - name: {{ .Values.ezdrpApi.moduleName }}-edoreczenia
+            mountPath: /app/edoreczenia
+          - name: {{ .Values.ezdrpApi.moduleName }}-kontakty
+            mountPath: /app/zewnetrznabazakontaktow
+      {{- end }}
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      terminationGracePeriodSeconds: 30
+      volumes:
+        - name: {{ .Values.ezdrpApi.moduleName }}-epuap
+          persistentVolumeClaim:
+            claimName: {{ .Values.ezdrpApi.moduleName }}-epuap-storage
+        - name: {{ .Values.ezdrpApi.moduleName }}-edoreczenia
+          persistentVolumeClaim:
+            claimName: {{ .Values.ezdrpApi.moduleName }}-edoreczenia-storage
+        - name: {{ .Values.ezdrpApi.moduleName }}-kontakty
+          persistentVolumeClaim:
+            claimName: {{ .Values.ezdrpApi.moduleName }}-kontakty-storage
+      serviceAccount: ezdrp
+      serviceAccountName: ezdrp
+{{ end }}
