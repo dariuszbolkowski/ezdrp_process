@@ -4,10 +4,10 @@ description: Elektroniczne Zarządzanie Dokumentacją RP
 home: https://ezd.gov.pl/www/index
 icon: https://www.nask.pl/dokumenty/zalaczniki/30/30-3224_g.png
 dependencies:
-  - condition: global.ezd-crd.deploy
-    name: ezd-crd
-    repository: file://./charts/ezd-crd
-    version: 1.4.1
+#  - condition: global.ezd-crd.deploy
+#    name: ezd-crd
+#    repository: file://./charts/ezd-crd
+#    version: 1.4.1
   - condition: global.ezd-backend.deploy
     name: ezd-backend
     repository: file://./charts/ezd-backend
@@ -24,4 +24,4 @@ maintainers:
   name: NASK
 name: nask-ezdrp-ha
 type: application
-version: 19.7.15
+version: 19.7.151

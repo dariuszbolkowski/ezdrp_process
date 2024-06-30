@@ -170,15 +170,15 @@ spec:
             - name: redisPort
               value: {{ .Values.redisExt.port | quote }}
             - name: redisHost
-              value: {{ .Values.redisExt.host }}
+              value: {{ .Values.global.redisConfig.fullnameOverride }}
             - name: redisAppendPort
               value: {{ .Values.redisAppendExt.port | quote }}
             - name: redisAppendHost
-              value: {{ .Values.redisAppendExt.host }}
+              value: {{ .Values.global.redisConfig.fullnameOverride }}-append
             - name: rabbitPort
               value: {{ .Values.rabbitExt.port | quote }}
             - name: rabbitHost
-              value: {{ .Values.rabbitExt.host }}
+              value: {{ .Values.global.rabbitmqConfig.fullnameOverride }}
           image: {{ .Values.waitfor.image.registry }}/{{ .Values.waitfor.image.name }}:{{ .Values.waitfor.image.version }}
           imagePullPolicy: IfNotPresent
           name: waitfor
@@ -236,13 +236,13 @@ spec:
             - name: FILE
               value: "{{ .Values.preparing.server.rabbit.dir }}/{{ .Values.preparing.server.rabbit.file }}"
             - name: BROKER_SERVER_HOST
-              value: {{ .Values.rabbitExt.host }}
+              value: {{ .Values.global.rabbitmqConfig.fullnameOverride }}
             - name: BROKER_PASSWORD
-              value: {{ .Values.rabbitExt.password }}
+              value: {{ .Values.global.rabbitmqConfig.auth.password }}
             - name: BROKER_PORT
               value: {{ .Values.rabbitExt.port | quote }}
             - name: BROKER_LOGIN
-              value: {{ .Values.rabbitExt.user }}
+              value: {{ .Values.global.rabbitmqConfig.auth.username }}
           resources:
             limits:
               cpu: "1000m"
@@ -273,13 +273,13 @@ spec:
             - name: BROKER_VHOST
               value: {{ .Values.ezdrpApi.rabbitmq.vhostarchiwum }}
             - name: BROKER_SERVER_HOST
-              value: {{ .Values.rabbitExt.host }}
+              value: {{ .Values.global.rabbitmqConfig.fullnameOverride }}
             - name: BROKER_PASSWORD
-              value: {{ .Values.rabbitExt.password }}
+              value: {{ .Values.global.rabbitmqConfig.auth.password }}
             - name: BROKER_PORT
               value: {{ .Values.rabbitExt.port | quote }}
             - name: BROKER_LOGIN
-              value: {{ .Values.rabbitExt.user }}
+              value: {{ .Values.global.rabbitmqConfig.auth.username }}
           resources:
             limits:
               cpu: "1000m"

@@ -72,35 +72,18 @@ Create the name of the service account to use
 ############################## EZDRP connstring ###########################
 */}}
 
+
 {{/*
 regexp ezdrp host :
 */}}
+
+{{- define "ezdrp.connstring.cloudadmin.ezdrp" -}}
+Host={{ include "ezdrp.connstring.ezdrp.host" . }};Port={{ include "ezdrp.connstring.ezdrp.port" . }};Database={{ include "ezdrp.connstring.ezdrp.dbname" . }};Username={{ include "ezdrp.connstring.ezdrp.username" . }};Password={{ include "ezdrp.connstring.ezdrp.password" . }}
+{{- end -}}
+
+
 {{- define "ezdrp.connstring.ezdrp.host" -}}
-
-  {{- if (eq "POSTGRESQL" .Values.cloudadmin.relationaldb.connectiontype.ezdrp) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.ezdrp | toString | regexFind "(Host=)[^;]+" }}
-    {{- $match := $match | toString | regexFind "=[^;]+" }}
-    {{- $match | trimAll "=" }}
-  {{- end -}}
-
-  {{- if (eq "SQLSERVER" .Values.cloudadmin.relationaldb.connectiontype.ezdrp) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.ezdrp | toString | regexFind "Server=([^;=]+)[;]" }}
-    {{- $match := $match | toString | regexFind "=[^;]+" }}
-    {{- $match := $match | toString | regexFind "=[^,]+" }}
-    {{- $match | trimAll "=" }}
-  {{- end -}}
-
-  {{- if (eq "ORACLE" .Values.cloudadmin.relationaldb.connectiontype.ezdrp) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.ezdrp | toString | regexFind "(Data Source=)[^;]+" }}
-    {{- $match := $match | toString | regexFind "=[^:]+" }}
-    {{- $match | trimAll "=" }}
-  {{- end -}}
-
-  {{- if (eq "MYSQL" .Values.cloudadmin.relationaldb.connectiontype.ezdrp) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.ezdrp | toString | regexFind "(Server=)[^;]+" }}
-    {{- $match := $match | toString | regexFind "=[^;]+" }}
-    {{- $match | trimAll "=" }}
-  {{- end -}}
+{{ .Values.global.postgresqlConfig.fullnameOverride }}-rw
 {{- end -}}
 
 
@@ -108,31 +91,7 @@ regexp ezdrp host :
 regexp ezdrp port :
 */}}
 {{- define "ezdrp.connstring.ezdrp.port" -}}
-
-  {{- if (eq "POSTGRESQL" .Values.cloudadmin.relationaldb.connectiontype.ezdrp) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.ezdrp | toString | regexFind "(Port=)[^;]+" }}
-    {{- $match := $match | toString | regexFind "=[^;]+" }}
-    {{- $match | trimAll "=" | default (printf "5432") }}
-  {{- end -}}
-
-  {{- if (eq "SQLSERVER" .Values.cloudadmin.relationaldb.connectiontype.ezdrp) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.ezdrp | toString | regexFind "(Server=)([^;=]+)[;]" }}
-    {{- $match := $match | toString | regexFind "=[^;]+" }}
-    {{- $match := $match | toString | regexFind ",[^;]+" }}
-    {{- $match | trimAll "," | default (printf "1433") }}
-  {{- end -}}
-
-  {{- if (eq "ORACLE" .Values.cloudadmin.relationaldb.connectiontype.ezdrp) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.ezdrp | toString | regexFind "(Data Source=)[^;]+" }}
-    {{- $match := $match | toString | regexFind ":[^\\/]+" }}
-    {{- $match | trimAll ":" | default (printf "1521") }}
-  {{- end -}}
-
-  {{- if (eq "MYSQL" .Values.cloudadmin.relationaldb.connectiontype.ezdrp) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.ezdrp | toString | regexFind "(Port=)[^;]+" }}
-    {{- $match := $match | toString | regexFind "=[^;]+" }}
-    {{- $match | trimAll "=" | default (printf "3306") }}
-  {{- end }}
+{{- print "5432" }}
 {{- end -}}
 
 
@@ -140,30 +99,7 @@ regexp ezdrp port :
 regexp ezdrp username :
 */}}
 {{- define "ezdrp.connstring.ezdrp.username" -}}
-
-  {{- if (eq "POSTGRESQL" .Values.cloudadmin.relationaldb.connectiontype.ezdrp) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.ezdrp | toString | regexFind "(Username=)[^;]+" }}
-    {{- $match := $match | toString | regexFind "=[^;]+" }}
-    {{- $match | trimAll "=" }}
-  {{- end -}}
-
-  {{- if (eq "SQLSERVER" .Values.cloudadmin.relationaldb.connectiontype.ezdrp) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.ezdrp | toString | regexFind "(User Id=)([^;=]+)[;]" }}
-    {{- $match := $match | toString | regexFind "=[^;]+" }}
-    {{- $match | trimAll "=" }}
-  {{- end -}}
-
-  {{- if (eq "ORACLE" .Values.cloudadmin.relationaldb.connectiontype.ezdrp) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.ezdrp | toString | regexFind "(Id=)[^;]+" }}
-    {{- $match := $match | toString | regexFind "=[^;]+" }}
-    {{- $match | trimAll "=" }}
-  {{- end -}}
-
-  {{- if (eq "MYSQL" .Values.cloudadmin.relationaldb.connectiontype.ezdrp) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.ezdrp | toString | regexFind "(Uid=)[^;]+" }}
-    {{- $match := $match | toString | regexFind "=[^;]+" }}
-    {{- $match | trimAll "=" }}
-  {{- end }}
+{{- print "postgres" }}
 {{- end -}}
 
 
@@ -171,59 +107,14 @@ regexp ezdrp username :
 regexp ezdrp password :
 */}}
 {{- define "ezdrp.connstring.ezdrp.password" }}
-  {{- if (eq "POSTGRESQL" .Values.cloudadmin.relationaldb.connectiontype.ezdrp) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.ezdrp | toString | regexFind "(Password=')[^'']+" }}
-    {{- $match := $match | toString | regexFind "=[^;]+" }}
-    {{- $match | trimAll "=" | trimAll "'='" }}
-  {{- end -}}
-
-  {{- if (eq "SQLSERVER" .Values.cloudadmin.relationaldb.connectiontype.ezdrp) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.ezdrp | toString | regexFind "(Password=')[^'']+" }}
-    {{- $match := $match | toString | regexFind "=[^;]+" }}
-    {{- $match | trimAll "=" | trimAll "'='" }}
-  {{- end -}}
-
-  {{- if (eq "ORACLE" .Values.cloudadmin.relationaldb.connectiontype.ezdrp) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.ezdrp | toString | regexFind "(Password=)[^;]+" }}
-    {{- $match := $match | toString | regexFind "=[^;]+" }}
-    {{- $match | trimAll "=" | trimAll "'='" }}
-  {{- end -}}
-
-  {{- if (eq "MYSQL" .Values.cloudadmin.relationaldb.connectiontype.ezdrp) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.ezdrp | toString | regexFind "(Pwd=)[^;]+" }}
-    {{- $match := $match | toString | regexFind "=[^;]+" }}
-    {{- $match | trimAll "=" | trimAll "'='" }}
-  {{- end }}
+{{- .Values.global.postgresqlConfig.auth.admPassword }}
 {{- end -}}
 
 {{/*
 regexp ezdrp database :
 */}}
 {{- define "ezdrp.connstring.ezdrp.dbname" -}}
-
-  {{- if (eq "POSTGRESQL" .Values.cloudadmin.relationaldb.connectiontype.ezdrp) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.ezdrp | toString | regexFind "(Database=)[^;]+" -}}
-    {{- $match := $match | toString | regexFind "=[^;]+" -}}
-    {{- $match | trimAll "=" -}}
-  {{- end -}}
-
-  {{- if (eq "SQLSERVER" .Values.cloudadmin.relationaldb.connectiontype.ezdrp) -}}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.ezdrp | toString | regexFind "(Database=)([^;=]+)[;]" -}}
-    {{- $match := $match | toString | regexFind "=[^;]+" -}}
-    {{- $match | trimAll "=" -}}
-  {{- end -}}
-
-  {{- if (eq "ORACLE" .Values.cloudadmin.relationaldb.connectiontype.ezdrp) -}}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.ezdrp | toString | regexFind "(Data Source=)[^;]+" -}}
-    {{- $match := $match | toString | regexFind "/[^;]+" | trimAll "'/'" -}}
-    {{- $match | trimAll "=" -}}
-  {{- end -}}
-
-  {{- if (eq "MYSQL" .Values.cloudadmin.relationaldb.connectiontype.ezdrp) -}}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.ezdrp | toString | regexFind "(Database=)[^;]+" -}}
-    {{- $match := $match | toString | regexFind "=[^;]+" -}}
-    {{- $match | trimAll "=" -}}
-  {{- end -}}
+{{- print "ezdrp" }}
 {{- end -}}
 
 {{/*
@@ -233,32 +124,14 @@ regexp ezdrp database :
 {{/*
 regexp kuip host :
 */}}
+
+{{- define "ezdrp.connstring.cloudadmin.kuip" -}}
+Host={{ include "ezdrp.connstring.kuip.host" . }};Port={{ include "ezdrp.connstring.kuip.port" . }};Database={{ include "ezdrp.connstring.kuip.dbname" . }};Username={{ include "ezdrp.connstring.kuip.username" . }};Password={{ include "ezdrp.connstring.kuip.password" . }}
+
+{{- end -}}
+
 {{- define "ezdrp.connstring.kuip.host" -}}
-
-  {{- if (eq "POSTGRESQL" .Values.cloudadmin.relationaldb.connectiontype.kuip) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.kuip | toString | regexFind "(Host=)[^;]+" }}
-    {{- $match := $match | toString | regexFind "=[^;]+" }}
-    {{- $match | trimAll "=" }}
-  {{- end -}}
-
-  {{- if (eq "SQLSERVER" .Values.cloudadmin.relationaldb.connectiontype.kuip) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.kuip | toString | regexFind "Server=([^;=]+)[;]" }}
-    {{- $match := $match | toString | regexFind "=[^;]+" }}
-    {{- $match := $match | toString | regexFind "=[^,]+" }}
-    {{- $match | trimAll "=" }}
-  {{- end -}}
-
-  {{- if (eq "ORACLE" .Values.cloudadmin.relationaldb.connectiontype.kuip) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.kuip | toString | regexFind "(Data Source=)[^;]+" }}
-    {{- $match := $match | toString | regexFind "=[^:]+" }}
-    {{- $match | trimAll "=" }}
-  {{- end -}}
-
-  {{- if (eq "MYSQL" .Values.cloudadmin.relationaldb.connectiontype.kuip) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.kuip | toString | regexFind "(Server=)[^;]+" }}
-    {{- $match := $match | toString | regexFind "=[^;]+" }}
-    {{- $match | trimAll "=" }}
-  {{- end -}}
+{{- .Values.global.postgresqlConfig.fullnameOverride }}-rw
 {{- end -}}
 
 
@@ -266,31 +139,7 @@ regexp kuip host :
 regexp kuip port :
 */}}
 {{- define "ezdrp.connstring.kuip.port" -}}
-
-  {{- if (eq "POSTGRESQL" .Values.cloudadmin.relationaldb.connectiontype.kuip) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.kuip | toString | regexFind "(Port=)[^;]+" }}
-    {{- $match := $match | toString | regexFind "=[^;]+" }}
-    {{- $match | trimAll "=" | default (printf "5432") }}
-  {{- end -}}
-
-  {{- if (eq "SQLSERVER" .Values.cloudadmin.relationaldb.connectiontype.kuip) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.kuip | toString | regexFind "(Server=)([^;=]+)[;]" }}
-    {{- $match := $match | toString | regexFind "=[^;]+" }}
-    {{- $match := $match | toString | regexFind ",[^;]+" }}
-    {{- $match | trimAll "," | default (printf "1433") }}
-  {{- end -}}
-
-  {{- if (eq "ORACLE" .Values.cloudadmin.relationaldb.connectiontype.kuip) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.kuip | toString | regexFind "(Data Source=)[^;]+" }}
-    {{- $match := $match | toString | regexFind ":[^\\/]+" }}
-    {{- $match | trimAll ":" | default (printf "1521") }}
-  {{- end -}}
-
-  {{- if (eq "MYSQL" .Values.cloudadmin.relationaldb.connectiontype.kuip) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.kuip | toString | regexFind "(Port=)[^;]+" }}
-    {{- $match := $match | toString | regexFind "=[^;]+" }}
-    {{- $match | trimAll "=" | default (printf "3306") }}
-  {{- end }}
+{{- print "5432" }}
 {{- end -}}
 
 
@@ -298,30 +147,7 @@ regexp kuip port :
 regexp kuip username :
 */}}
 {{- define "ezdrp.connstring.kuip.username" -}}
-
-  {{- if (eq "POSTGRESQL" .Values.cloudadmin.relationaldb.connectiontype.kuip) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.kuip | toString | regexFind "(Username=)[^;]+" }}
-    {{- $match := $match | toString | regexFind "=[^;]+" }}
-    {{- $match | trimAll "=" }}
-  {{- end -}}
-
-  {{- if (eq "SQLSERVER" .Values.cloudadmin.relationaldb.connectiontype.kuip) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.kuip | toString | regexFind "(User Id=)([^;=]+)[;]" }}
-    {{- $match := $match | toString | regexFind "=[^;]+" }}
-    {{- $match | trimAll "=" }}
-  {{- end -}}
-
-  {{- if (eq "ORACLE" .Values.cloudadmin.relationaldb.connectiontype.kuip) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.kuip | toString | regexFind "(Id=)[^;]+" }}
-    {{- $match := $match | toString | regexFind "=[^;]+" }}
-    {{- $match | trimAll "=" }}
-  {{- end -}}
-
-  {{- if (eq "MYSQL" .Values.cloudadmin.relationaldb.connectiontype.kuip) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.kuip | toString | regexFind "(Uid=)[^;]+" }}
-    {{- $match := $match | toString | regexFind "=[^;]+" }}
-    {{- $match | trimAll "=" }}
-  {{- end }}
+{{- print "postgres" }}
 {{- end -}}
 
 
@@ -329,59 +155,14 @@ regexp kuip username :
 regexp kuip password :
 */}}
 {{- define "ezdrp.connstring.kuip.password" }}
-  {{- if (eq "POSTGRESQL" .Values.cloudadmin.relationaldb.connectiontype.kuip) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.kuip | toString | regexFind "(Password=')[^'']+" }}
-    {{- $match := $match | toString | regexFind "=[^;]+" }}
-    {{- $match | trimAll "=" | trimAll "'='" }}
-  {{- end -}}
-
-  {{- if (eq "SQLSERVER" .Values.cloudadmin.relationaldb.connectiontype.kuip) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.kuip | toString | regexFind "(Password=')[^'']+" }}
-    {{- $match := $match | toString | regexFind "=[^;]+" }}
-    {{- $match | trimAll "=" | trimAll "'='" }}
-  {{- end -}}
-
-  {{- if (eq "ORACLE" .Values.cloudadmin.relationaldb.connectiontype.kuip) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.kuip | toString | regexFind "(Password=)[^;]+" }}
-    {{- $match := $match | toString | regexFind "=[^;]+" }}
-    {{- $match | trimAll "=" | trimAll "'='" }}
-  {{- end -}}
-
-  {{- if (eq "MYSQL" .Values.cloudadmin.relationaldb.connectiontype.kuip) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.kuip | toString | regexFind "(Pwd=)[^;]+" }}
-    {{- $match := $match | toString | regexFind "=[^;]+" }}
-    {{- $match | trimAll "=" | trimAll "'='" }}
-  {{- end }}
+{{- .Values.global.postgresqlConfig.auth.admPassword }}
 {{- end -}}
 
 {{/*
 regexp kuip database :
 */}}
 {{- define "ezdrp.connstring.kuip.dbname" -}}
-
-  {{- if (eq "POSTGRESQL" .Values.cloudadmin.relationaldb.connectiontype.kuip) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.kuip | toString | regexFind "(Database=)[^;]+" -}}
-    {{- $match := $match | toString | regexFind "=[^;]+" -}}
-    {{- $match | trimAll "=" -}}
-  {{- end -}}
-
-  {{- if (eq "SQLSERVER" .Values.cloudadmin.relationaldb.connectiontype.kuip) -}}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.kuip | toString | regexFind "(Database=)([^;=]+)[;]" -}}
-    {{- $match := $match | toString | regexFind "=[^;]+" -}}
-    {{- $match | trimAll "=" -}}
-  {{- end -}}
-
-  {{- if (eq "ORACLE" .Values.cloudadmin.relationaldb.connectiontype.kuip) -}}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.kuip | toString | regexFind "(Data Source=)[^;]+" -}}
-    {{- $match := $match | toString | regexFind "/[^;]+" | trimAll "'/'" -}}
-    {{- $match | trimAll "=" -}}
-  {{- end -}}
-
-  {{- if (eq "MYSQL" .Values.cloudadmin.relationaldb.connectiontype.kuip) -}}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.kuip | toString | regexFind "(Database=)[^;]+" -}}
-    {{- $match := $match | toString | regexFind "=[^;]+" -}}
-    {{- $match | trimAll "=" -}}
-  {{- end -}}
+{{- print "ezdrp" }}
 {{- end -}}
 
 
@@ -392,32 +173,12 @@ regexp kuip database :
 {{/*
 regexp archiwum host :
 */}}
+{{- define "ezdrp.connstring.cloudadmin.archiwum" -}}
+Host={{ include "ezdrp.connstring.archiwum.host" . }};Port={{ include "ezdrp.connstring.archiwum.port" . }};Database={{ include "ezdrp.connstring.archiwum.dbname" . }};Username={{ include "ezdrp.connstring.archiwum.username" . }};Password={{ include "ezdrp.connstring.archiwum.password" . }}
+{{- end -}}
+
 {{- define "ezdrp.connstring.archiwum.host" -}}
-
-  {{- if (eq "POSTGRESQL" .Values.cloudadmin.relationaldb.connectiontype.archiwum) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.archiwum | toString | regexFind "(Host=)[^;]+" }}
-    {{- $match := $match | toString | regexFind "=[^;]+" }}
-    {{- $match | trimAll "=" }}
-  {{- end -}}
-
-  {{- if (eq "SQLSERVER" .Values.cloudadmin.relationaldb.connectiontype.archiwum) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.archiwum | toString | regexFind "Server=([^;=]+)[;]" }}
-    {{- $match := $match | toString | regexFind "=[^;]+" }}
-    {{- $match := $match | toString | regexFind "=[^,]+" }}
-    {{- $match | trimAll "=" }}
-  {{- end -}}
-
-  {{- if (eq "ORACLE" .Values.cloudadmin.relationaldb.connectiontype.archiwum) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.archiwum | toString | regexFind "(Data Source=)[^;]+" }}
-    {{- $match := $match | toString | regexFind "=[^:]+" }}
-    {{- $match | trimAll "=" }}
-  {{- end -}}
-
-  {{- if (eq "MYSQL" .Values.cloudadmin.relationaldb.connectiontype.archiwum) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.archiwum | toString | regexFind "(Server=)[^;]+" }}
-    {{- $match := $match | toString | regexFind "=[^;]+" }}
-    {{- $match | trimAll "=" }}
-  {{- end -}}
+{{- .Values.global.postgresqlConfig.fullnameOverride }}-rw
 {{- end -}}
 
 
@@ -425,31 +186,7 @@ regexp archiwum host :
 regexp archiwum port :
 */}}
 {{- define "ezdrp.connstring.archiwum.port" -}}
-
-  {{- if (eq "POSTGRESQL" .Values.cloudadmin.relationaldb.connectiontype.archiwum) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.archiwum | toString | regexFind "(Port=)[^;]+" }}
-    {{- $match := $match | toString | regexFind "=[^;]+" }}
-    {{- $match | trimAll "=" | default (printf "5432") }}
-  {{- end -}}
-
-  {{- if (eq "SQLSERVER" .Values.cloudadmin.relationaldb.connectiontype.archiwum) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.archiwum | toString | regexFind "(Server=)([^;=]+)[;]" }}
-    {{- $match := $match | toString | regexFind "=[^;]+" }}
-    {{- $match := $match | toString | regexFind ",[^;]+" }}
-    {{- $match | trimAll "," | default (printf "1433") }}
-  {{- end -}}
-
-  {{- if (eq "ORACLE" .Values.cloudadmin.relationaldb.connectiontype.archiwum) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.archiwum | toString | regexFind "(Data Source=)[^;]+" }}
-    {{- $match := $match | toString | regexFind ":[^\\/]+" }}
-    {{- $match | trimAll ":" | default (printf "1521") }}
-  {{- end -}}
-
-  {{- if (eq "MYSQL" .Values.cloudadmin.relationaldb.connectiontype.archiwum) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.archiwum | toString | regexFind "(Port=)[^;]+" }}
-    {{- $match := $match | toString | regexFind "=[^;]+" }}
-    {{- $match | trimAll "=" | default (printf "3306") }}
-  {{- end }}
+{{- print "5432" }}
 {{- end -}}
 
 
@@ -457,30 +194,7 @@ regexp archiwum port :
 regexp archiwum username :
 */}}
 {{- define "ezdrp.connstring.archiwum.username" -}}
-
-  {{- if (eq "POSTGRESQL" .Values.cloudadmin.relationaldb.connectiontype.archiwum) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.archiwum | toString | regexFind "(Username=)[^;]+" }}
-    {{- $match := $match | toString | regexFind "=[^;]+" }}
-    {{- $match | trimAll "=" }}
-  {{- end -}}
-
-  {{- if (eq "SQLSERVER" .Values.cloudadmin.relationaldb.connectiontype.archiwum) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.archiwum | toString | regexFind "(User Id=)([^;=]+)[;]" }}
-    {{- $match := $match | toString | regexFind "=[^;]+" }}
-    {{- $match | trimAll "=" }}
-  {{- end -}}
-
-  {{- if (eq "ORACLE" .Values.cloudadmin.relationaldb.connectiontype.archiwum) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.archiwum | toString | regexFind "(Id=)[^;]+" }}
-    {{- $match := $match | toString | regexFind "=[^;]+" }}
-    {{- $match | trimAll "=" }}
-  {{- end -}}
-
-  {{- if (eq "MYSQL" .Values.cloudadmin.relationaldb.connectiontype.archiwum) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.archiwum | toString | regexFind "(Uid=)[^;]+" }}
-    {{- $match := $match | toString | regexFind "=[^;]+" }}
-    {{- $match | trimAll "=" }}
-  {{- end }}
+{{- print "postgres" }}
 {{- end -}}
 
 
@@ -488,59 +202,14 @@ regexp archiwum username :
 regexp archiwum password :
 */}}
 {{- define "ezdrp.connstring.archiwum.password" }}
-  {{- if (eq "POSTGRESQL" .Values.cloudadmin.relationaldb.connectiontype.archiwum) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.archiwum | toString | regexFind "(Password=')[^'']+" }}
-    {{- $match := $match | toString | regexFind "=[^;]+" }}
-    {{- $match | trimAll "=" | trimAll "'='" }}
-  {{- end -}}
-
-  {{- if (eq "SQLSERVER" .Values.cloudadmin.relationaldb.connectiontype.archiwum) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.archiwum | toString | regexFind "(Password=')[^'']+" }}
-    {{- $match := $match | toString | regexFind "=[^;]+" }}
-    {{- $match | trimAll "=" | trimAll "'='" }}
-  {{- end -}}
-
-  {{- if (eq "ORACLE" .Values.cloudadmin.relationaldb.connectiontype.archiwum) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.archiwum | toString | regexFind "(Password=)[^;]+" }}
-    {{- $match := $match | toString | regexFind "=[^;]+" }}
-    {{- $match | trimAll "=" | trimAll "'='" }}
-  {{- end -}}
-
-  {{- if (eq "MYSQL" .Values.cloudadmin.relationaldb.connectiontype.archiwum) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.archiwum | toString | regexFind "(Pwd=)[^;]+" }}
-    {{- $match := $match | toString | regexFind "=[^;]+" }}
-    {{- $match | trimAll "=" | trimAll "'='" }}
-  {{- end }}
+{{- .Values.global.postgresqlConfig.auth.admPassword }}
 {{- end -}}
 
 {{/*
 regexp archiwum database :
 */}}
 {{- define "ezdrp.connstring.archiwum.dbname" -}}
-
-  {{- if (eq "POSTGRESQL" .Values.cloudadmin.relationaldb.connectiontype.archiwum) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.archiwum | toString | regexFind "(Database=)[^;]+" -}}
-    {{- $match := $match | toString | regexFind "=[^;]+" -}}
-    {{- $match | trimAll "=" -}}
-  {{- end -}}
-
-  {{- if (eq "SQLSERVER" .Values.cloudadmin.relationaldb.connectiontype.archiwum) -}}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.archiwum | toString | regexFind "(Database=)([^;=]+)[;]" -}}
-    {{- $match := $match | toString | regexFind "=[^;]+" -}}
-    {{- $match | trimAll "=" -}}
-  {{- end -}}
-
-  {{- if (eq "ORACLE" .Values.cloudadmin.relationaldb.connectiontype.archiwum) -}}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.archiwum | toString | regexFind "(Data Source=)[^;]+" -}}
-    {{- $match := $match | toString | regexFind "/[^;]+" | trimAll "'/'" -}}
-    {{- $match | trimAll "=" -}}
-  {{- end -}}
-
-  {{- if (eq "MYSQL" .Values.cloudadmin.relationaldb.connectiontype.archiwum) -}}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.archiwum | toString | regexFind "(Database=)[^;]+" -}}
-    {{- $match := $match | toString | regexFind "=[^;]+" -}}
-    {{- $match | trimAll "=" -}}
-  {{- end -}}
+{{- print "archiwum" }}
 {{- end -}}
 
 {{/*
@@ -550,32 +219,12 @@ regexp archiwum database :
 {{/*
 regexp ezdrpodczyt host :
 */}}
+{{- define "ezdrp.connstring.cloudadmin.ezdrpodczyt" -}}
+Host={{ include "ezdrp.connstring.ezdrpodczyt.host" . }};Port={{ include "ezdrp.connstring.ezdrpodczyt.port" . }};Database={{ include "ezdrp.connstring.ezdrpodczyt.dbname" . }};Username={{ include "ezdrp.connstring.ezdrpodczyt.username" . }};Password={{ include "ezdrp.connstring.ezdrpodczyt.password" . }}
+{{- end -}}
+
 {{- define "ezdrp.connstring.ezdrpodczyt.host" -}}
-
-  {{- if (eq "POSTGRESQL" .Values.cloudadmin.relationaldb.connectiontype.ezdrpodczyt) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.ezdrpodczyt | toString | regexFind "(Host=)[^;]+" }}
-    {{- $match := $match | toString | regexFind "=[^;]+" }}
-    {{- $match | trimAll "=" }}
-  {{- end -}}
-
-  {{- if (eq "SQLSERVER" .Values.cloudadmin.relationaldb.connectiontype.ezdrpodczyt) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.ezdrpodczyt | toString | regexFind "Server=([^;=]+)[;]" }}
-    {{- $match := $match | toString | regexFind "=[^;]+" }}
-    {{- $match := $match | toString | regexFind "=[^,]+" }}
-    {{- $match | trimAll "=" }}
-  {{- end -}}
-
-  {{- if (eq "ORACLE" .Values.cloudadmin.relationaldb.connectiontype.ezdrpodczyt) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.ezdrpodczyt | toString | regexFind "(Data Source=)[^;]+" }}
-    {{- $match := $match | toString | regexFind "=[^:]+" }}
-    {{- $match | trimAll "=" }}
-  {{- end -}}
-
-  {{- if (eq "MYSQL" .Values.cloudadmin.relationaldb.connectiontype.ezdrpodczyt) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.ezdrpodczyt | toString | regexFind "(Server=)[^;]+" }}
-    {{- $match := $match | toString | regexFind "=[^;]+" }}
-    {{- $match | trimAll "=" }}
-  {{- end -}}
+{{- .Values.global.postgresqlConfig.fullnameOverride }}-rw
 {{- end -}}
 
 
@@ -583,31 +232,7 @@ regexp ezdrpodczyt host :
 regexp ezdrpodczyt port :
 */}}
 {{- define "ezdrp.connstring.ezdrpodczyt.port" -}}
-
-  {{- if (eq "POSTGRESQL" .Values.cloudadmin.relationaldb.connectiontype.ezdrpodczyt) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.ezdrpodczyt | toString | regexFind "(Port=)[^;]+" }}
-    {{- $match := $match | toString | regexFind "=[^;]+" }}
-    {{- $match | trimAll "=" | default (printf "5432") }}
-  {{- end -}}
-
-  {{- if (eq "SQLSERVER" .Values.cloudadmin.relationaldb.connectiontype.ezdrpodczyt) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.ezdrpodczyt | toString | regexFind "(Server=)([^;=]+)[;]" }}
-    {{- $match := $match | toString | regexFind "=[^;]+" }}
-    {{- $match := $match | toString | regexFind ",[^;]+" }}
-    {{- $match | trimAll "," | default (printf "1433") }}
-  {{- end -}}
-
-  {{- if (eq "ORACLE" .Values.cloudadmin.relationaldb.connectiontype.ezdrpodczyt) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.ezdrpodczyt | toString | regexFind "(Data Source=)[^;]+" }}
-    {{- $match := $match | toString | regexFind ":[^\\/]+" }}
-    {{- $match | trimAll ":" | default (printf "1521") }}
-  {{- end -}}
-
-  {{- if (eq "MYSQL" .Values.cloudadmin.relationaldb.connectiontype.ezdrpodczyt) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.ezdrpodczyt | toString | regexFind "(Port=)[^;]+" }}
-    {{- $match := $match | toString | regexFind "=[^;]+" }}
-    {{- $match | trimAll "=" | default (printf "3306") }}
-  {{- end }}
+{{- print "5432" }}
 {{- end -}}
 
 
@@ -615,30 +240,7 @@ regexp ezdrpodczyt port :
 regexp ezdrpodczyt username :
 */}}
 {{- define "ezdrp.connstring.ezdrpodczyt.username" -}}
-
-  {{- if (eq "POSTGRESQL" .Values.cloudadmin.relationaldb.connectiontype.ezdrpodczyt) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.ezdrpodczyt | toString | regexFind "(Username=)[^;]+" }}
-    {{- $match := $match | toString | regexFind "=[^;]+" }}
-    {{- $match | trimAll "=" }}
-  {{- end -}}
-
-  {{- if (eq "SQLSERVER" .Values.cloudadmin.relationaldb.connectiontype.ezdrpodczyt) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.ezdrpodczyt | toString | regexFind "(User Id=)([^;=]+)[;]" }}
-    {{- $match := $match | toString | regexFind "=[^;]+" }}
-    {{- $match | trimAll "=" }}
-  {{- end -}}
-
-  {{- if (eq "ORACLE" .Values.cloudadmin.relationaldb.connectiontype.ezdrpodczyt) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.ezdrpodczyt | toString | regexFind "(Id=)[^;]+" }}
-    {{- $match := $match | toString | regexFind "=[^;]+" }}
-    {{- $match | trimAll "=" }}
-  {{- end -}}
-
-  {{- if (eq "MYSQL" .Values.cloudadmin.relationaldb.connectiontype.ezdrpodczyt) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.ezdrpodczyt | toString | regexFind "(Uid=)[^;]+" }}
-    {{- $match := $match | toString | regexFind "=[^;]+" }}
-    {{- $match | trimAll "=" }}
-  {{- end }}
+{{- print "postgres" }}
 {{- end -}}
 
 
@@ -646,57 +248,12 @@ regexp ezdrpodczyt username :
 regexp ezdrpodczyt password :
 */}}
 {{- define "ezdrp.connstring.ezdrpodczyt.password" }}
-  {{- if (eq "POSTGRESQL" .Values.cloudadmin.relationaldb.connectiontype.ezdrpodczyt) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.ezdrpodczyt | toString | regexFind "(Password=')[^'']+" }}
-    {{- $match := $match | toString | regexFind "=[^;]+" }}
-    {{- $match | trimAll "=" | trimAll "'='" }}
-  {{- end -}}
-
-  {{- if (eq "SQLSERVER" .Values.cloudadmin.relationaldb.connectiontype.ezdrpodczyt) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.ezdrpodczyt | toString | regexFind "(Password=')[^'']+" }}
-    {{- $match := $match | toString | regexFind "=[^;]+" }}
-    {{- $match | trimAll "=" | trimAll "'='" }}
-  {{- end -}}
-
-  {{- if (eq "ORACLE" .Values.cloudadmin.relationaldb.connectiontype.ezdrpodczyt) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.ezdrpodczyt | toString | regexFind "(Password=)[^;]+" }}
-    {{- $match := $match | toString | regexFind "=[^;]+" }}
-    {{- $match | trimAll "=" | trimAll "'='" }}
-  {{- end -}}
-
-  {{- if (eq "MYSQL" .Values.cloudadmin.relationaldb.connectiontype.ezdrpodczyt) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.ezdrpodczyt | toString | regexFind "(Pwd=)[^;]+" }}
-    {{- $match := $match | toString | regexFind "=[^;]+" }}
-    {{- $match | trimAll "=" | trimAll "'='" }}
-  {{- end }}
+{{- .Values.global.postgresqlConfig.auth.admPassword }}
 {{- end -}}
 
 {{/*
 regexp ezdrpodczyt database :
 */}}
 {{- define "ezdrp.connstring.ezdrpodczyt.dbname" -}}
-
-  {{- if (eq "POSTGRESQL" .Values.cloudadmin.relationaldb.connectiontype.ezdrpodczyt) }}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.ezdrpodczyt | toString | regexFind "(Database=)[^;]+" -}}
-    {{- $match := $match | toString | regexFind "=[^;]+" -}}
-    {{- $match | trimAll "=" -}}
-  {{- end -}}
-
-  {{- if (eq "SQLSERVER" .Values.cloudadmin.relationaldb.connectiontype.ezdrpodczyt) -}}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.ezdrpodczyt | toString | regexFind "(Database=)([^;=]+)[;]" -}}
-    {{- $match := $match | toString | regexFind "=[^;]+" -}}
-    {{- $match | trimAll "=" -}}
-  {{- end -}}
-
-  {{- if (eq "ORACLE" .Values.cloudadmin.relationaldb.connectiontype.ezdrpodczyt) -}}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.ezdrpodczyt | toString | regexFind "(Data Source=)[^;]+" -}}
-    {{- $match := $match | toString | regexFind "/[^;]+" | trimAll "'/'" -}}
-    {{- $match | trimAll "=" -}}
-  {{- end -}}
-
-  {{- if (eq "MYSQL" .Values.cloudadmin.relationaldb.connectiontype.ezdrpodczyt) -}}
-    {{- $match := .Values.cloudadmin.relationaldb.connectionstring.ezdrpodczyt | toString | regexFind "(Database=)[^;]+" -}}
-    {{- $match := $match | toString | regexFind "=[^;]+" -}}
-    {{- $match | trimAll "=" -}}
-  {{- end -}}
+{{- print "ezdrp_odczyt" }}
 {{- end -}}

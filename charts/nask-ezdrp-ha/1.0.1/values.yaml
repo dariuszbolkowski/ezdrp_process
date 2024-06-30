@@ -1,11 +1,70 @@
-
 global:
-  ezd-crd:
-    deploy: true
   ezd-backend:
     deploy: true
-  nask-ezdrp-ha:
-    deploy: false
+  rabbitmqConfig:
+    fullnameOverride: "lp-backend-rabbitmq"
+    auth:
+      username: ""
+      password: ""
+    customConfig:
+      replicas: 1
+      persistence:
+        storage: "10Gi"
+      resources:
+        requests:
+          cpu: 1000m
+          memory: 2Gi
+        limits:
+          cpu: 2000m
+          memory: 2Gi
+
+  postgresqlConfig:
+    fullnameOverride: "lp-backend-postgresql"
+    auth:
+      admPassword: ""
+      appPassword: ""
+    customConfig:
+      instances: 1
+      minSyncReplicas: 0
+      maxSyncReplicas: 0
+      replicationSlots:
+        highAvailability:
+          enabled: true
+      storage:
+        size: 2Gi
+        resizeInUseVolumes: True
+      walStorage:
+        size: 2Gi
+        resizeInUseVolumes: True
+      resources:
+        requests:
+          memory: "2Gi"
+          cpu: "2"
+        limits:
+          memory: "2Gi"
+          cpu: "2"
+
+  redisConfig:
+    fullnameOverride: "lp-backend-redis"
+    auth:
+      password: ""
+    customConfig:
+      kubernetesConfig:
+        resources:
+          requests:
+            cpu: 101m
+            memory: 128Mi
+          limits:
+            cpu: 101m
+            memory: 128Mi
+      storage:
+        volumeClaimTemplate:
+          spec:
+            accessModes: ["ReadWriteOnce"]
+            resources:
+              requests:
+                storage: 1Gi
+
 
 environment: &environment Development
 
@@ -64,23 +123,23 @@ preparing:
 
 #### Redis DB variables
 redisExt:
-  password: 
-  host: 
+#  password: 
+#  host: 
   port: 6379
   serviceName: mymaster
   isCluster: false
 
 #### rabbit DB variables
 rabbitExt:
-  user: 
-  password: 
-  host: 
+#  user: 
+#  password: 
+#  host: 
   port: 5672
 
 #Redis-APPEND SERVER
 redisAppendExt:
-  password: 
-  host: 
+#  password: 
+#  host: 
   port: 6380
   serviceName: mymaster
   isCluster: false
@@ -603,11 +662,11 @@ cloudadmin:
       archiwum: 
       kuip: 
       ezdrpodczyt: 
-    connectionstring:
-      ezdrp: 
-      archiwum: 
-      kuip: 
-      ezdrpodczyt: 
+#    connectionstring:
+#      ezdrp: 
+#      archiwum: 
+#      kuip: 
+#      ezdrpodczyt: 
   rabbit:
     confirms: true
   redis:

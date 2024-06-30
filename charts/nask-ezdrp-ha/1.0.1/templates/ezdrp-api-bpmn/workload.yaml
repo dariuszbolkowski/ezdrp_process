@@ -154,15 +154,15 @@ spec:
             - name: redisPort
               value: {{ .Values.redisExt.port | quote }}
             - name: redisHost
-              value: {{ .Values.redisExt.host }}
+              value: {{ .Values.global.redisConfig.fullnameOverride }}
             - name: redisAppendPort
               value: {{ .Values.redisAppendExt.port | quote }}
             - name: redisAppendHost
-              value: {{ .Values.redisAppendExt.host }}
+              value: {{ .Values.global.redisConfig.fullnameOverride }}-append
             - name: rabbitPort
               value: {{ .Values.rabbitExt.port | quote }}
             - name: rabbitHost
-              value: {{ .Values.rabbitExt.host }}
+              value: {{ .Values.global.rabbitmqConfig.fullnameOverride }}
           image: {{ .Values.waitfor.image.registry }}/{{ .Values.waitfor.image.name }}:{{ .Values.waitfor.image.version }}
           imagePullPolicy: IfNotPresent
           name: waitfor

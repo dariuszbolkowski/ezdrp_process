@@ -46,29 +46,29 @@ spec:
           - name: EZD_INTERNAL_EZDRP_DATASOURCE_TYPE
             value: {{ .Values.cloudadmin.relationaldb.connectiontype.ezdrp }}
           - name: EZD_INTERNAL_EZDRP_DATASOURCE_CONFIGURATION
-            value: {{ .Values.cloudadmin.relationaldb.connectionstring.ezdrp | quote }}
+            value: {{ include "ezdrp.connstring.cloudadmin.ezdrp" . | quote }}
           - name: EZD_INTERNAL_ARCHIWUM_DATASOURCE_TYPE
             value: {{ .Values.cloudadmin.relationaldb.connectiontype.archiwum }}
           - name: EZD_INTERNAL_ARCHIWUM_DATASOURCE_CONFIGURATION
-            value: {{ .Values.cloudadmin.relationaldb.connectionstring.archiwum | quote }}
+            value: {{ include "ezdrp.connstring.cloudadmin.archiwum" . | quote }}
           - name: EZD_INTERNAL_KUIP_DATASOURCE_TYPE
             value: {{ .Values.cloudadmin.relationaldb.connectiontype.kuip }}
           - name: EZD_INTERNAL_KUIP_DATASOURCE_CONFIGURATION
-            value: {{ .Values.cloudadmin.relationaldb.connectionstring.kuip | quote }}
+            value: {{ include "ezdrp.connstring.cloudadmin.kuip" . | quote }}
           - name: EZD_INTERNAL_EZDRP_ODCZYT_DATASOURCE_TYPE
             value: {{ .Values.cloudadmin.relationaldb.connectiontype.ezdrpodczyt }}
           - name: EZD_INTERNAL_EZDRP_ODCZYT_DATASOURCE_CONFIGURATION
-            value: {{ .Values.cloudadmin.relationaldb.connectionstring.ezdrpodczyt | quote }}
+            value: {{ include "ezdrp.connstring.cloudadmin.ezdrpodczyt" . | quote }}
 
 
           - name: EZD_INTERNAL_RABBIT_HOST
-            value: {{ .Values.rabbitExt.host }}
+            value: {{ .Values.global.rabbitmqConfig.fullnameOverride }}
           - name: EZD_INTERNAL_RABBIT_PASSWORD
-            value: {{ .Values.rabbitExt.password }}
+            value: {{ .Values.global.rabbitmqConfig.auth.password }}
           - name: EZD_INTERNAL_RABBIT_PORT
             value: {{ .Values.rabbitExt.port | quote  }}
           - name: EZD_INTERNAL_RABBIT_USER
-            value: {{ .Values.rabbitExt.user }}
+            value: {{ .Values.global.rabbitmqConfig.auth.username }}
 
           - name: EZD_INTERNAL_RABBIT_DB
             value: {{ .Values.ezdrpApi.rabbitmq.vhostezdrp }}
@@ -78,9 +78,9 @@ spec:
             value: {{ .Values.cloudadmin.rabbit.confirms | quote }}
 
           - name: EZD_REDIS_HOST
-            value: {{ .Values.redisExt.host }}
+            value: {{ .Values.global.redisConfig.fullnameOverride }}
           - name: EZD_REDIS_PASSWORD
-            value: {{ .Values.redisExt.password | quote }}
+            value: {{ .Values.global.redisConfig.auth.password | quote }}
           {{- if and .Values.redisExt.serviceName .Values.redisExt.isCluster }}
           - name: EZD_REDIS_SERVICENAME
             value: {{ .Values.redisExt.serviceName }}
@@ -92,9 +92,9 @@ spec:
             value: {{ .Values.redisExt.port | quote }}
 
           - name: EZD_REDIS_APPEND_HOST
-            value: {{ .Values.redisAppendExt.host }}
+            value: {{ .Values.global.redisConfig.fullnameOverride }}-append
           - name: EZD_REDIS_APPEND_PASSWORD
-            value: {{ .Values.redisAppendExt.password }}
+            value: {{ .Values.global.redisConfig.auth.password }}
           {{- if and .Values.redisAppendExt.serviceName .Values.redisAppendExt.isCluster }}
           - name: EZD_REDIS_APPEND_SERVICENAME
             value: {{ .Values.redisAppendExt.serviceName }}
