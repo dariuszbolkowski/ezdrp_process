@@ -422,46 +422,38 @@ questions:
 
 - variable: global.s3.deploy
   default: "false"
-  label: Deploy MinIO
+  label: S3 object store integration
   type: boolean
   group: "Components"
   show_subquestion_if: true
   subquestions:
-  - variable: filerepository.persistence.filerepoStorageType
-    type: enum
-    options: ["S3"]
-    default: "S3"
-    description: "S3 for S3 systems (eq MINIO, etc.)"
-    label: Choose Filerepository Storage Configuration
-    required: true
-    group: "Persistent Storage"
   - variable: filerepository.persistence.s3.host
+    default: "https://api.obj0.dbo.test"
     type: string
     description: "Enter the host address for S3 storage"
     label: S3 host
     required: true
-    show_if: "filerepository.persistence.filerepoStorageType=S3"
     group: "Persistent Storage"
   - variable: filerepository.persistence.s3.port
+    default: "9000"
     type: string
     description: "Enter the port for S3 storage"
     label: S3 port
     required: true
-    show_if: "filerepository.persistence.filerepoStorageType=S3"
     group: "Persistent Storage"
   - variable: filerepository.persistence.s3.access_key
+    default: "minoiadmin"
     type: string
     description: "Enter the access_key for S3 storage"
     label: S3 access_key
     required: true
-    show_if: "filerepository.persistence.filerepoStorageType=S3"
     group: "Persistent Storage"
   - variable: filerepository.persistence.s3.secret_key
+    default: "minoadmin"
     type: string
     description: "Enter the secret_key for S3 storage"
     label: S3 secret_key
     required: true
-    show_if: "filerepository.persistence.filerepoStorageType=S3"
     group: "Persistent Storage"
   - variable: filerepository.persistence.s3.tls
     default: false
@@ -469,14 +461,13 @@ questions:
     description: "Check this options if connection is with TLS"
     label: TLS
     required: true
-    show_if: "filerepository.persistence.filerepoStorageType=S3"
     group: "Persistent Storage"
   - variable: filerepository.persistence.s3.bucketname
+    default: "ezdrp2024"
     type: string
     description: "Enter the bucket name in S3 storage"
     label: S3 bucket name
     required: true
-    show_if: "filerepository.persistence.filerepoStorageType=S3"
     group: "Persistent Storage"
   
   - variable: filerepository.persistence.ezdpuwmigration.enabled
