@@ -9,7 +9,7 @@ entries:
       catalog.cattle.io/release-name: ezd-backend
     apiVersion: v2
     appVersion: 1.2024-19.7
-    created: "2024-06-27T15:11:29.766243941+02:00"
+    created: "2024-07-01T05:54:51.325725998+02:00"
     description: Services necessary to run EZD RP app
     digest: e889436fceace468b990d394759e86c8e2996979b2a46502e95f0c78cfc692d8
     home: https://linuxpolska.com
@@ -36,7 +36,7 @@ entries:
       catalog.cattle.io/release-name: ezd-crd
     apiVersion: v2
     appVersion: 1.2024-19.7
-    created: "2024-06-27T15:11:29.800110489+02:00"
+    created: "2024-07-01T05:54:51.342371997+02:00"
     dependencies:
     - condition: global.rabbitmq.deploy
       name: rabbitmq-operator
@@ -79,7 +79,7 @@ entries:
       catalog.cattle.io/release-name: monitoring-stack-app
     apiVersion: v2
     appVersion: 1.2024-1.0.0
-    created: "2024-06-27T15:11:29.842942661+02:00"
+    created: "2024-07-01T05:54:51.366959819+02:00"
     dependencies:
     - condition: global.elastic.enabled
       name: elastic
@@ -122,7 +122,7 @@ entries:
       catalog.cattle.io/release-name: monitoring-stack-crd
     apiVersion: v2
     appVersion: 1.2024-1.0.0
-    created: "2024-06-27T15:11:29.868588952+02:00"
+    created: "2024-07-01T05:54:51.380521306+02:00"
     dependencies:
     - condition: global.eck-operator-crds.enabled
       name: eck-operator-crds
@@ -167,7 +167,7 @@ entries:
       catalog.cattle.io/release-name: security-stack-crd
     apiVersion: v2
     appVersion: 1.2024-1.0.0
-    created: "2024-06-27T15:11:29.977344064+02:00"
+    created: "2024-07-01T05:54:51.441552171+02:00"
     dependencies:
     - alias: neuvector-crds
       condition: global.neuvector-crd.enabled
@@ -217,7 +217,34 @@ entries:
   nask-ezdrp-ha:
   - apiVersion: v2
     appVersion: 1.2024-19.7
-    created: "2024-06-27T15:11:29.912208792+02:00"
+    created: "2024-07-01T05:54:51.40754806+02:00"
+    dependencies:
+    - condition: global.ezd-backend.deploy
+      name: ezd-backend
+      repository: file://./charts/ezd-backend
+      version: 1.4.1
+    description: Elektroniczne Zarządzanie Dokumentacją RP
+    digest: 6259e7d5bb5de9187ee2f06faafe8bc745ed146b7dd1b9c5cc247fc4539fad7e
+    home: https://ezd.gov.pl/www/index
+    icon: https://www.nask.pl/dokumenty/zalaczniki/30/30-3224_g.png
+    keywords:
+    - ezdrp
+    - cms
+    - dokumenty
+    - administracja
+    - rp
+    - ezd
+    maintainers:
+    - email: duchu.zgloszenia@nask.pl
+      name: NASK
+    name: nask-ezdrp-ha
+    type: application
+    urls:
+    - nask-ezdrp-ha/nask-ezdrp-ha-19.7.16.tgz
+    version: 19.7.16
+  - apiVersion: v2
+    appVersion: 1.2024-19.7
+    created: "2024-07-01T05:54:51.402581008+02:00"
     dependencies:
     - condition: global.ezd-crd.deploy
       name: ezd-crd
@@ -254,7 +281,7 @@ entries:
       catalog.cattle.io/release-name: security-stack-app
     apiVersion: v2
     appVersion: 1.2024-1.0.0
-    created: "2024-06-27T15:11:29.947364868+02:00"
+    created: "2024-07-01T05:54:51.429648462+02:00"
     dependencies:
     - condition: global.conjur-oss.enabled
       name: conjur-oss
@@ -315,7 +342,7 @@ entries:
       catalog.cattle.io/release-name: security-stack-crd
     apiVersion: v2
     appVersion: 1.2024-1.0.0
-    created: "2024-06-27T15:11:30.002842974+02:00"
+    created: "2024-07-01T05:54:51.453550675+02:00"
     dependencies:
     - alias: neuvector-crds
       condition: global.neuvector-crd.enabled
@@ -362,4 +389,4 @@ entries:
     urls:
     - security-stack-crd/security-stack-crd-1.0.0.tgz
     version: 1.0.0
-generated: "2024-06-27T15:11:29.763186921+02:00"
+generated: "2024-07-01T05:54:51.32388014+02:00"

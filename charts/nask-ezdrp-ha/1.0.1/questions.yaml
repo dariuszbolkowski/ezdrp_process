@@ -383,48 +383,56 @@ questions:
   type: enum
   options: ["POSTGRESQL", "SQLSERVER"]
   group: "Database Configuration"
+  show_if: "global.postgresql.deploy=false"
 - variable: cloudadmin.relationaldb.connectionstring.ezdrp
   default: "Host=<EZDRP_DB_HOSTNAME>;Port=<EZDRP_DB_PORT>;Database=<EZDRP_DB_NAME>;Username=<EZDRP_DB_USER>;Password='<EZDRP_DB_PASSWORD>' "
   description: "Set <EZDRP_DB_HOSTNAME> to your propper value (eq. your.domain.for.ezdrp.ezd.db.pl or server IP)"
   type: string
   label: External DB connectionstring
   group: "Database Configuration"
+  show_if: "global.postgresql.deploy=false"
 - variable: cloudadmin.relationaldb.connectiontype.archiwum
   description: "Choose database for ARCHIWUM."
   label: Select ARCHIWUM database type
   type: enum
   options: ["POSTGRESQL", "SQLSERVER"]
   group: "Database Configuration"
+  show_if: "global.postgresql.deploy=false"
 - variable: cloudadmin.relationaldb.connectionstring.archiwum
   default: "Host=<ARCHIWUM_DB_HOSTNAME>;Port=<ARCHIWUM_DB_PORT>;Database=<ARCHIWUM_DB_NAME>;Username=<ARCHIWUM_DB_USER>;Password='<ARCHIWUM_DB_PASSWORD>' "
   description: "Set <ARCHIWUM_DB_HOSTNAME> to your propper value (eq. your.domain.for.archiwum.ezd.db.pl or server IP)"
   type: string
   label: External DB connectionstring
   group: "Database Configuration"
+  show_if: "global.postgresql.deploy=false"
 - variable: cloudadmin.relationaldb.connectiontype.kuip
   description: "Choose database for KUIP."
   label: Select KUIP database type
   type: enum
   options: ["POSTGRESQL", "SQLSERVER" ]
   group: "Database Configuration"
+  show_if: "global.postgresql.deploy=false"
 - variable: cloudadmin.relationaldb.connectionstring.kuip
   default: "Host=<KUIP_DB_HOSTNAME>;Port=<KUIP_DB_PORT>;Database=<KUIP_DB_NAME>;Username=<KUIP_DB_USER>;Password='<KUIP_DB_PASSWORD>' "
   description: "Set <KUIP_DB_HOSTNAME> to your propper value (eq. your.domain.for.kuip.ezd.db.pl or server IP)"
   type: string
   label: External DB connectionstring
   group: "Database Configuration"
+  show_if: "global.postgresql.deploy=false"
 - variable: cloudadmin.relationaldb.connectiontype.ezdrpodczyt
   description: "Choose database for EZDRP_ODCZYT."
   label: Select EZDRP_ODCZYT database type
   type: enum
   options: ["POSTGRESQL", "SQLSERVER" ]
   group: "Database Configuration"
+  show_if: "global.postgresql.deploy=false"
 - variable: cloudadmin.relationaldb.connectionstring.ezdrpodczyt
   default: "Host=<EZDRP_ODCZYT_DB_HOSTNAME>;Port=<EZDRP_ODCZYT_DB_PORT>;Database=<EZDRP_ODCZYT_DB_NAME>;Username=<EZDRP_ODCZYT_DB_USER>;Password='<EZDRP_ODCZYT_DB_PASSWORD>' "
   description: "Set <EZDRP_ODCZYT_DB_HOSTNAME> to your propper value (eq. your.domain.for.odczyt.ezd.db.pl or server IP)"
   type: string
   label: External DB connectionstring
   group: "Database Configuration"
+  show_if: "global.postgresql.deploy=false"
 
   #redis :
 - variable: useBuiltInRedis.enabled
