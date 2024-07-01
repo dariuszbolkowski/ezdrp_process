@@ -425,12 +425,12 @@ questions:
   label: Deploy MinIO
   type: boolean
   group: "Components"
-  show_subquestion_if: false
+  show_subquestion_if: true
   subquestions:
   - variable: filerepository.persistence.filerepoStorageType
     type: enum
-    options: ["S1"]
-    description: "Choose: S1 for the Flat Storage (eq local path, NFS, etc.), S3 for S3 systems (eq MINIO, etc.)"
+    options: ["S3"]
+    description: "S3 for S3 systems (eq MINIO, etc.)"
     label: Choose Filerepository Storage Configuration
     required: true
     group: "Persistent Storage"
@@ -525,18 +525,6 @@ questions:
     group: "Persistent Storage"
     show_if: "storage.enabled=true"
   
-  - variable: filerepository.persistence.storageClass
-    description: "Filerepository persistent storage class"
-    type: storageclass
-    label: "FileRepository Persistent Storage Class Name"
-    group: "Persistent Storage"
-    show_if: "storage.enabled=true&&filerepository.persistence.filerepoStorageType=S1"
-  - variable: filerepository.persistence.size
-    description: "Filerepository Persistent Volume Size in Gi (gigabyte)"
-    label: "FileRepository Persistent Volume Size"
-    type: int
-    group: "Persistent Storage"
-    show_if: "storage.enabled=true&&filerepository.persistence.filerepoStorageType=S1"
   
   - variable: ssoIdentityServer.persistence.storageClass
     description: "SSO-IDP persistent storage class"
