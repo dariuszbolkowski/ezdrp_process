@@ -91,49 +91,49 @@ questions:
   - variable: global.postgresqlConfig.auth.admPassword
     label: SuperUser Password
     description: "Password for SuperUser role"
-    group: "Postgresql Settings"
+    group: "Database Configuration"
     type: password
     min: 8
     required: true
   - variable: global.postgresqlConfig.auth.appPassword
     label: Application Password
     description: "Password for application role"
-    group: "Postgresql Settings"
+    group: "Database Configuration"
     type: password
     min: 8
     required: true
   - variable: global.postgresqlConfig.customConfig.instances
     label: Replicas
     description: "Amount of replicas postgresql. Min 3 replicas for ha"
-    group: "Postgresql Settings"
+    group: "Database Configuration"
     type: int
     default: 1
   - variable: global.postgresqlConfig.customConfig.storage.storageClass
     label: Storage Class for database data
     description: "Select storage class for database data"
-    group: "Postgresql Settings"
+    group: "Database Configuration"
     type: storageclass
   - variable: global.postgresqlConfig.customConfig.storage.size
     label: Database size
     description: "Size database data"
-    group: "Postgresql Settings"
+    group: "Database Configuration"
     type: string
     default: "2Gi"
   - variable: global.postgresqlConfig.customConfig.walStorage.storageClass
     label: Storage Class for database WAL
     description: "Select storage class for database WAL"
-    group: "Postgresql Settings"
+    group: "Database Configuration"
     type: storageclass
   - variable: global.postgresqlConfig.customConfig.walStorage.size
     label: WAL Size
     description: "Size database WAL"
-    group: "Postgresql Settings"
+    group: "Database Configuration"
     type: string
     default: "2Gi"
   - variable: global.postgresql.custom.consumption
     default: "false"
     label: Modify resource consumption
-    group: "Postgresql Settings"
+    group: "Database Configuration"
     type: boolean
     show_subquestion_if: true
     subquestions:

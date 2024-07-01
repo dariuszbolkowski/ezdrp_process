@@ -658,10 +658,10 @@ cloudadmin:
       memory: 128Mi
   relationaldb:
     connectiontype:
-      ezdrp: 
-      archiwum: 
-      kuip: 
-      ezdrpodczyt: 
+      ezdrp: POSTGRESQL
+      archiwum: POSTGRESQL
+      kuip: POSTGRESQL
+      ezdrpodczyt: POSTGRESQL
 #    connectionstring:
 #      ezdrp: 
 #      archiwum: 
