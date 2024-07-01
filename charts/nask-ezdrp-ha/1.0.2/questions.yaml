@@ -10,7 +10,7 @@ questions:
   group: "Components"
   show_subquestion_if: true
   subquestions:
-  - variable: rabbitmqConfig.auth.username
+  - variable: ezdBackend.rabbitmqConfig.auth.username
     default: "ezdrpadmin"
     label: Username
     description: "RabbitMQ Username"
@@ -18,25 +18,25 @@ questions:
     type: string
     min: 6
     required: true
-  - variable: global.rabbitmqConfig.auth.password
+  - variable: ezdBackend.rabbitmqConfig.auth.password
     label: Password
     description: "RabbitMQ Password"
     group: "Rabbit Database Configuration"
     type: password
     min: 8
     required: true
-  - variable: global.rabbitmqConfig.customConfig.replicas
+  - variable: ezdBackend.rabbitmqConfig.customConfig.replicas
     label: Replicas
     description: "Amount of replicas rabbitmq. Min 3 replicas for ha"
     group: "Rabbit Database Configuration"
     type: int
     default: 1
-  - variable: global.rabbitmqConfig.customConfig.persistence.storageClassName
+  - variable: ezdBackend.rabbitmqConfig.customConfig.persistence.storageClassName
     label: Storage Class for database data
     description: "Select storage class for database data"
     group: "Rabbit Database Configuration"
     type: storageclass
-  - variable: global.rabbitmqConfig.customConfig.persistence.storage
+  - variable: ezdBackend.rabbitmqConfig.customConfig.persistence.storage
     label: Database size
     description: "Size database data"
     group: "Rabbit Database Configuration"
@@ -49,34 +49,34 @@ questions:
     type: boolean
     show_subquestion_if: true
     subquestions:
-    - variable: global.rabbitmqConfig.customConfig.resources.limits.cpu
+    - variable: ezdBackend.rabbitmqConfig.customConfig.resources.limits.cpu
       label: Milicore limit for rabbitmq instance
       description: "1000 milicores = 1vCPU"
       type: string
       default: "2000m"
-    - variable: global.rabbitmqConfig.customConfig.resources.requests.cpu
+    - variable: ezdBackend.rabbitmqConfig.customConfig.resources.requests.cpu
       label: Milicore request for rabbitmq instance
       description: "1000 milicores = 1vCPU, value must be <= milicore limit"
       type: string
       default: "2000m"
-    - variable: global.rabbitmqConfig.customConfig.resources.limits.memory
+    - variable: ezdBackend.rabbitmqConfig.customConfig.resources.limits.memory
       label: Memory limit for rabbitmq instance
       description: "Memory limit"
       type: string
       default: "2Gi"
-    - variable: global.rabbitmqConfig.customConfig.resources.requests.memory
+    - variable: ezdBackend.rabbitmqConfig.customConfig.resources.requests.memory
       label: Memory request for rabbitmq instance
       description: "Memory request, value must be <= memory limit"
       type: string
       default: "2Gi"
-  - variable: global.rabbitmqConfig.ingress.enabled
+  - variable: ezdBackend.rabbitmqConfig.ingress.enabled
     default: "false"
     label: Enable web console for RabbitMQ
     group: "Rabbit Database Configuration"
     type: boolean
     show_subquestion_if: true
     subquestions:
-    - variable: global.rabbitmqConfig.ingress.hosts.host
+    - variable: ezdBackend.rabbitmqConfig.ingress.hosts.host
       label: URL
       description: "Configure url for rabbitmq web-ui"
       type: string
@@ -135,71 +135,71 @@ questions:
   group: "Components"
   show_subquestion_if: true
   subquestions:
-  - variable: global.postgresqlConfig.auth.admPassword
+  - variable: ezdBackend.postgresqlConfig.auth.admPassword
     label: SuperUser Password
     description: "Password for SuperUser role"
     group: "Database Configuration"
     type: password
     min: 8
     required: true
-  - variable: global.postgresqlConfig.auth.appPassword
+  - variable: ezdBackend.postgresqlConfig.auth.appPassword
     label: Application Password
     description: "Password for application role"
     group: "Database Configuration"
     type: password
     min: 8
     required: true
-  - variable: global.postgresqlConfig.customConfig.instances
+  - variable: ezdBackend.postgresqlConfig.customConfig.instances
     label: Replicas
     description: "Amount of replicas postgresql. Min 3 replicas for ha"
     group: "Database Configuration"
     type: int
     default: 1
-  - variable: global.postgresqlConfig.customConfig.storage.storageClass
+  - variable: ezdBackend.postgresqlConfig.customConfig.storage.storageClass
     label: Storage Class for database data
     description: "Select storage class for database data"
     group: "Database Configuration"
     type: storageclass
-  - variable: global.postgresqlConfig.customConfig.storage.size
+  - variable: ezdBackend.postgresqlConfig.customConfig.storage.size
     label: Database size
     description: "Size database data"
     group: "Database Configuration"
     type: string
     default: "2Gi"
-  - variable: global.postgresqlConfig.customConfig.walStorage.storageClass
+  - variable: ezdBackend.postgresqlConfig.customConfig.walStorage.storageClass
     label: Storage Class for database WAL
     description: "Select storage class for database WAL"
     group: "Database Configuration"
     type: storageclass
-  - variable: global.postgresqlConfig.customConfig.walStorage.size
+  - variable: ezdBackend.postgresqlConfig.customConfig.walStorage.size
     label: WAL Size
     description: "Size database WAL"
     group: "Database Configuration"
     type: string
     default: "2Gi"
-  - variable: global.postgresql.custom.consumption
+  - variable: ezdBackend.postgresql.custom.consumption
     default: "false"
     label: Modify resource consumption
     group: "Database Configuration"
     type: boolean
     show_subquestion_if: true
     subquestions:
-    - variable: global.postgresqlConfig.customConfig.postgresql.parameters.resources.limits.cpu
+    - variable: ezdBackend.postgresqlConfig.customConfig.postgresql.parameters.resources.limits.cpu
       label: Milicore limit for postgresql instance
       description: "1000 milicores = 1vCPU"
       type: string
       default: "2000m"
-    - variable: global.postgresqlConfig.customConfig.postgresql.parameters.resources.requests.cpu
+    - variable: ezdBackend.postgresqlConfig.customConfig.postgresql.parameters.resources.requests.cpu
       label: Milicore request for postgresql instance
       description: "1000 milicores = 1vCPU, value must be <= milicore limit"
       type: string
       default: "2000m"
-    - variable: global.postgresqlConfig.customConfig.postgresql.parameters.resources.limits.memory
+    - variable: ezdBackend.postgresqlConfig.customConfig.postgresql.parameters.resources.limits.memory
       label: Memory limit for postgresql instance
       description: "Memory limit"
       type: string
       default: "2Gi"
-    - variable: global.postgresqlConfig.customConfig.postgresql.parameters.resources.requests.memory
+    - variable: ezdBackend.postgresqlConfig.customConfig.postgresql.parameters.resources.requests.memory
       label: Memory request for postgresql instance
       description: "Memory request, value must be <= memory limit"
       type: string
@@ -269,19 +269,19 @@ questions:
   group: "Components"
   show_subquestion_if: true
   subquestions:
-  - variable: global.redisConfig.auth.password
+  - variable: ezdBackend.redisConfig.auth.password
     label: Password
     description: "Redis Password"
     group: "Redis Database Configuration"
     type: password
     min: 8
     required: true
-  - variable: global.redisConfig.customConfig.storage.volumeClaimTemplate.spec.storageClassName
+  - variable: ezdBackend.redisConfig.customConfig.storage.volumeClaimTemplate.spec.storageClassName
     label: Storage Class for database data
     description: "Select storage class for database data"
     group: "Redis Database Configuration"
     type: storageclass
-  - variable: global.redisConfig.customConfig.storage.volumeClaimTemplate.spec.resources.requests.storage
+  - variable: ezdBackend.redisConfig.customConfig.storage.volumeClaimTemplate.spec.resources.requests.storage
     label: Database size
     description: "Size database data"
     group: "Redis Database Configuration"
@@ -294,22 +294,22 @@ questions:
     type: boolean
     show_subquestion_if: true
     subquestions:
-    - variable: global.redisConfig.customConfig.kubernetesConfig.resources.limits.cpu
+    - variable: ezdBackend.redisConfig.customConfig.kubernetesConfig.resources.limits.cpu
       label: Milicore limit for redis instance
       description: "1000 milicores = 1vCPU"
       type: string
       default: "128m"
-    - variable: global.redisConfig.customConfig.kubernetesConfig.resources.requests.cpu
+    - variable: ezdBackend.redisConfig.customConfig.kubernetesConfig.resources.requests.cpu
       label: Milicore request for redis instance
       description: "1000 milicores = 1vCPU, value must be <= milicore limit"
       type: string
       default: "128m"
-    - variable: global.redisConfig.customConfig.kubernetesConfig.resources.limits.memory
+    - variable: ezdBackend.redisConfig.customConfig.kubernetesConfig.resources.limits.memory
       label: Memory limit for redis instance
       description: "Memory limit"
       type: string
       default: "128Mi"
-    - variable: global.redisConfig.customConfig.kubernetesConfig.resources.requests.memory
+    - variable: ezdBackend.redisConfig.customConfig.kubernetesConfig.resources.requests.memory
       label: Memory request for redis instance
       description: "Memory request, value must be <= memory limit"
       type: string
@@ -358,7 +358,7 @@ questions:
   label: Service name
   show_if: "useBuiltInRedis.enabled=false&&redisExt.isCluster=true"
   group: "Redis Database Configuration"
-  show_if: "global.redis.deploy=false&&global.redis.deploy=false"
+  show_if: "global.redis.deploy=false"
 - variable: redisInt.useExistingSecret
   default: "redis-config"
   description: "Use secret with existing config to RedisDB"

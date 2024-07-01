@@ -1,6 +1,7 @@
 global:
   ezd-backend:
     deploy: true
+ezdBackend:
   rabbitmqConfig:
     fullnameOverride: "lp-backend-rabbitmq"
 #    auth:

@@ -58,13 +58,13 @@ spec:
             - name: BROKER_VHOST
               value: {{ .Values.anonimizator.rabbitmq.vhostanonimizator }}
             - name: BROKER_SERVER_HOST
-              value: {{ .Values.global.rabbitmqConfig.fullnameOverride }}
+              value: {{ .Values.ezdBackend.rabbitmqConfig.fullnameOverride }}
             - name: BROKER_PASSWORD
-              value: {{ .Values.global.rabbitmqConfig.auth.password }}
+              value: {{ .Values.ezdBackend.rabbitmqConfig.auth.password }}
             - name: BROKER_PORT
               value: {{ .Values.rabbitExt.port | quote }}
             - name: BROKER_LOGIN
-              value: {{ .Values.global.rabbitmqConfig.auth.username }}
+              value: {{ .Values.ezdBackend.rabbitmqConfig.auth.username }}
           resources:
             limits:
               cpu: "1000m"
@@ -82,13 +82,13 @@ spec:
           - name: BROKER_VHOST
             value: {{ .Values.anonimizator.rabbitmq.vhostanonimizator }}
           - name: BROKER_SERVER_HOST
-            value: {{ .Values.global.rabbitmqConfig.fullnameOverride }}
+            value: {{ .Values.ezdBackend.rabbitmqConfig.fullnameOverride }}
           - name: BROKER_PASSWORD
-            value: {{ .Values.global.rabbitmqConfig.auth.password }}
+            value: {{ .Values.ezdBackend.rabbitmqConfig.auth.password }}
           - name: BROKER_PORT
             value: {{ .Values.rabbitExt.port | quote }}
           - name: BROKER_LOGIN
-            value: {{ .Values.global.rabbitmqConfig.auth.username }}
+            value: {{ .Values.ezdBackend.rabbitmqConfig.auth.username }}
 
           imagePullPolicy: IfNotPresent
           livenessProbe:

@@ -232,7 +232,7 @@ spec:
             - name: rabbitPort
               value: {{ .Values.rabbitExt.port | quote }}
             - name: rabbitHost
-              value: {{ .Values.global.rabbitmqConfig.fullnameOverride }}
+              value: {{ .Values.ezdBackend.rabbitmqConfig.fullnameOverride }}
           image: {{ .Values.waitfor.image.registry }}/{{ .Values.waitfor.image.name }}:{{ .Values.waitfor.image.version }}
           imagePullPolicy: IfNotPresent
           name: waitfor

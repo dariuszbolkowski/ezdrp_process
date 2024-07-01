@@ -83,7 +83,7 @@ Host={{ include "ezdrp.connstring.ezdrp.host" . }};Port={{ include "ezdrp.connst
 
 
 {{- define "ezdrp.connstring.ezdrp.host" -}}
-{{ .Values.global.postgresqlConfig.fullnameOverride }}-rw
+{{ .Values.ezdBackend.postgresqlConfig.fullnameOverride }}-rw
 {{- end -}}
 
 
@@ -107,7 +107,7 @@ regexp ezdrp username :
 regexp ezdrp password :
 */}}
 {{- define "ezdrp.connstring.ezdrp.password" }}
-{{- .Values.global.postgresqlConfig.auth.admPassword }}
+{{- .Values.ezdBackend.postgresqlConfig.auth.admPassword }}
 {{- end -}}
 
 {{/*
@@ -131,7 +131,7 @@ Host={{ include "ezdrp.connstring.kuip.host" . }};Port={{ include "ezdrp.connstr
 {{- end -}}
 
 {{- define "ezdrp.connstring.kuip.host" -}}
-{{- .Values.global.postgresqlConfig.fullnameOverride }}-rw
+{{- .Values.ezdBackend.postgresqlConfig.fullnameOverride }}-rw
 {{- end -}}
 
 
@@ -155,7 +155,7 @@ regexp kuip username :
 regexp kuip password :
 */}}
 {{- define "ezdrp.connstring.kuip.password" }}
-{{- .Values.global.postgresqlConfig.auth.admPassword }}
+{{- .Values.ezdBackend.postgresqlConfig.auth.admPassword }}
 {{- end -}}
 
 {{/*
@@ -178,7 +178,7 @@ Host={{ include "ezdrp.connstring.archiwum.host" . }};Port={{ include "ezdrp.con
 {{- end -}}
 
 {{- define "ezdrp.connstring.archiwum.host" -}}
-{{- .Values.global.postgresqlConfig.fullnameOverride }}-rw
+{{- .Values.ezdBackend.postgresqlConfig.fullnameOverride }}-rw
 {{- end -}}
 
 
@@ -202,7 +202,7 @@ regexp archiwum username :
 regexp archiwum password :
 */}}
 {{- define "ezdrp.connstring.archiwum.password" }}
-{{- .Values.global.postgresqlConfig.auth.admPassword }}
+{{- .Values.ezdBackend.postgresqlConfig.auth.admPassword }}
 {{- end -}}
 
 {{/*
@@ -224,7 +224,7 @@ Host={{ include "ezdrp.connstring.ezdrpodczyt.host" . }};Port={{ include "ezdrp.
 {{- end -}}
 
 {{- define "ezdrp.connstring.ezdrpodczyt.host" -}}
-{{- .Values.global.postgresqlConfig.fullnameOverride }}-rw
+{{- .Values.ezdBackend.postgresqlConfig.fullnameOverride }}-rw
 {{- end -}}
 
 
@@ -248,7 +248,7 @@ regexp ezdrpodczyt username :
 regexp ezdrpodczyt password :
 */}}
 {{- define "ezdrp.connstring.ezdrpodczyt.password" }}
-{{- .Values.global.postgresqlConfig.auth.admPassword }}
+{{- .Values.ezdBackend.postgresqlConfig.auth.admPassword }}
 {{- end -}}
 
 {{/*

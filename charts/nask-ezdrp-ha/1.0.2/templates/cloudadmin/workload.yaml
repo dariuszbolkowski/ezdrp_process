@@ -62,13 +62,13 @@ spec:
 
 
           - name: EZD_INTERNAL_RABBIT_HOST
-            value: {{ .Values.global.rabbitmqConfig.fullnameOverride }}
+            value: {{ .Values.ezdBackend.rabbitmqConfig.fullnameOverride }}
           - name: EZD_INTERNAL_RABBIT_PASSWORD
-            value: {{ .Values.global.rabbitmqConfig.auth.password }}
+            value: {{ .Values.ezdBackend.rabbitmqConfig.auth.password }}
           - name: EZD_INTERNAL_RABBIT_PORT
             value: {{ .Values.rabbitExt.port | quote  }}
           - name: EZD_INTERNAL_RABBIT_USER
-            value: {{ .Values.global.rabbitmqConfig.auth.username }}
+            value: {{ .Values.ezdBackend.rabbitmqConfig.auth.username }}
 
           - name: EZD_INTERNAL_RABBIT_DB
             value: {{ .Values.ezdrpApi.rabbitmq.vhostezdrp }}
@@ -78,9 +78,9 @@ spec:
             value: {{ .Values.cloudadmin.rabbit.confirms | quote }}
 
           - name: EZD_REDIS_HOST
-            value: {{ .Values.global.redisConfig.fullnameOverride }}
+            value: {{ .Values.ezdBackend.redisConfig.fullnameOverride }}
           - name: EZD_REDIS_PASSWORD
-            value: {{ .Values.global.redisConfig.auth.password | quote }}
+            value: {{ .Values.ezdBackend.redisConfig.auth.password | quote }}
           {{- if and .Values.redisExt.serviceName .Values.redisExt.isCluster }}
           - name: EZD_REDIS_SERVICENAME
             value: {{ .Values.redisExt.serviceName }}
@@ -92,9 +92,9 @@ spec:
             value: {{ .Values.redisExt.port | quote }}
 
           - name: EZD_REDIS_APPEND_HOST
-            value: {{ .Values.global.redisConfig.fullnameOverride }}-append
+            value: {{ .Values.ezdBackend.redisConfig.fullnameOverride }}-append
           - name: EZD_REDIS_APPEND_PASSWORD
-            value: {{ .Values.global.redisConfig.auth.password }}
+            value: {{ .Values.ezdBackend.redisConfig.auth.password }}
           {{- if and .Values.redisAppendExt.serviceName .Values.redisAppendExt.isCluster }}
           - name: EZD_REDIS_APPEND_SERVICENAME
             value: {{ .Values.redisAppendExt.serviceName }}

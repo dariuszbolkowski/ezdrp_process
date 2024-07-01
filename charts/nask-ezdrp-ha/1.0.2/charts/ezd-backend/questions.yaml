@@ -1,6 +1,18 @@
 categories:
 - database
 questions:
+- variable: ezd-crd.namespace
+  default: default
+  description: "namespace for crd"
+  type: string
+  context:
+     component: ezd-crd
+- variable: ezd-backend.namespace
+  default: ezd-rp
+  description: "namespace for crd"
+  type: string
+  context:
+     component: ezd-backend  
 - variable: global.rabbitmq.deploy
   default: "true"
   label: Deploy RabbitMQ
@@ -275,5 +287,5 @@ questions:
     label: Redis Exporter Image Name
     description: "Redis Exporter Image Name."
     type: string
-    default: "quay.io/linuxpolska/ezd-backend_redis-exporter:1.44.0"
+    default: "quay.io/linuxpolska/ezd-backend_redis-exporter:v1.44.0"
     show_if: "global.redis.deploy=true"

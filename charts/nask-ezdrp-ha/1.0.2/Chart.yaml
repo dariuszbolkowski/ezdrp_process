@@ -10,6 +10,7 @@ dependencies:
 #    version: 1.4.1
   - condition: global.ezd-backend.deploy
     name: ezd-backend
+    alias: ezdBackend
     repository: file://./charts/ezd-backend
     version: 1.4.1
 keywords:

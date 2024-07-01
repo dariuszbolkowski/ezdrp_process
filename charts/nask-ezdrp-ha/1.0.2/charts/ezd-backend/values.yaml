@@ -49,7 +49,7 @@ rabbitmqConfig:
     #      - chart-example.local
   customConfig:
     image: quay.io/linuxpolska/ezd-backend_rabbitmq:3.13.0-management-rabbitmq-3.13-r1
-    replicas: 1
+    replicas: 2
     rabbitmq:
       additionalConfig: |
         cluster_partition_handling = pause_minority
@@ -88,9 +88,9 @@ postgresqlConfig:
 #    pullPolicy: IfNotPresent
 #    tag: "15.2"
   customConfig:
-    instances: 1
-    minSyncReplicas: 0
-    maxSyncReplicas: 0
+    instances: 3
+    minSyncReplicas: 1
+    maxSyncReplicas: 2
     replicationSlots:
       highAvailability:
         enabled: true
@@ -203,7 +203,7 @@ redisConfig:
               storage: 1Gi
     redisExporter:
       enabled: false
-      image: quay.io/linuxpolska/ezd-backend_redis-exporter:1.44.0
+      image: quay.io/linuxpolska/ezd-backend_redis-exporter:v1.44.0
     podSecurityContext:
       runAsUser: 1000
       fsGroup: 1000
