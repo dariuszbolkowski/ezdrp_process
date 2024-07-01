@@ -268,110 +268,110 @@ questions:
       type: string
       default: "128Mi"
 
-    #redis :
-  - variable: useBuiltInRedis.enabled
-    default: false
-    description: "Use internal builtin RedisDB"
-    label: Use RedisDB builtin container
-    type: boolean
-    group: "Redis Database Configuration"
-    show_if: "global.redis.deploy=false"
-  - variable: redisExt.host
-    default: "127.0.0.1"
-    description: "Enter the external DB address (Redis)"
-    type: string
-    label: External RedisDB hostname
-    show_if: "useBuiltInRedis.enabled=false&&global.redis.deploy=false"
-    group: "Redis Database Configuration"
-  - variable: redisExt.port
-    default: "6379"
-    description: "Enter the external port for RedisDB"
-    type: string
-    label: External RedisDB port
-    show_if: "useBuiltInRedis.enabled=false&&global.redis.deploy=false"
-    group: "Redis Database Configuration"
-  - variable: redisExt.password
-    description: "Type the password for external RedisDB. Min. length is 30 chars"
-    type: password
-    min_length: 30
-    label: External RedisDB password
-    show_if: "useBuiltInRedis.enabled=false&&global.redis.deploy=false"
-    group: "Redis Database Configuration"
-  - variable: redisExt.isCluster
-    default: "false"
-    description: "Check true if your instalation is in redis cluster"
-    type: boolean
-    label: Check if install cluster
-    show_if: "useBuiltInRedis.enabled=false&&global.redis.deploy=false"
-    group: "Redis Database Configuration"
-  - variable: redisExt.serviceName
-    default: "mymaster"
-    description: "Enter the service name in this cluster"
-    type: string
-    label: Service name
-    show_if: "useBuiltInRedis.enabled=false&&redisExt.isCluster=true"
-    group: "Redis Database Configuration"
-    show_if: "global.redis.deploy=false&&global.redis.deploy=false"
-  - variable: redisInt.useExistingSecret
-    default: "redis-config"
-    description: "Use secret with existing config to RedisDB"
-    type: secret
-    required: true
-    label: Existing secret
-    show_if: "useBuiltInRedis.enabled=true&&global.redis.deploy=false"
-    group: "Redis Database Configuration"
-  
-    #redis-append :
-  - variable: useBuiltInRedisAppend.enabled
-    default: false
-    description: "Use internal builtin RedisDB - append mode"
-    label: Use RedisDB - append mode builtin container
-    type: boolean
-    group: "Redis-append Database Configuration"
-    show_if: "global.redis.deploy=false"
-  - variable: redisAppendExt.host
-    default: "127.0.0.1"
-    description: "Enter the external DB address (RedisDB - append mode)"
-    type: string
-    label: External hostname for RedisDB - append mode
-    show_if: "useBuiltInRedisAppend.enabled=false&&global.redis.deploy=false"
-    group: "Redis-append Database Configuration"
-  - variable: redisAppendExt.port
-    default: "6380"
-    description: "Enter the port to external Redis-APPEND-DB"
-    type: string
-    label: External port for RedisDB - append mode
-    show_if: "useBuiltInRedisAppend.enabled=false&&global.redis.deploy=false"
-    group: "Redis-append Database Configuration"
-  - variable: redisAppendExt.password
-    description: "Enter the password for external Redis-APPEND-DB. Min. length is 30 characters"
-    type: password
-    min_length: 30
-    label: External RedisDB - append mode password
-    show_if: "useBuiltInRedisAppend.enabled=false&&global.redis.deploy=false"
-    group: "Redis-append Database Configuration"
-  - variable: redisAppendExt.isCluster
-    default: "false"
-    description: "Mark true if your instalation is in Redis cluster."
-    type: boolean
-    label: Check if install cluster
-    show_if: "useBuiltInRedisAppend.enabled=false&&global.redis.deploy=false"
-    group: "Redis-append Database Configuration"
-  - variable: redisAppendExt.serviceName
-    default: "mymaster"
-    description: "Enter the service name in this cluster."
-    type: string
-    label: Service name
-    show_if: "useBuiltInRedisAppend.enabled=false&&redisAppendExt.isCluster=true&&global.redis.deploy=false"
-    group: "Redis-append Database Configuration"
-  - variable: redisAppendInt.useExistingSecret
-    default: "redis-append-config"
-    description: "Use secret with existing config to RedisDB - append mode"
-    type: secret
-    required: true
-    label: Existing secret
-    show_if: "useBuiltInRedisAppend.enabled=true&&global.redis.deploy=false"
-    group: "Redis-append Database Configuration"
+  #redis :
+- variable: useBuiltInRedis.enabled
+  default: false
+  description: "Use internal builtin RedisDB"
+  label: Use RedisDB builtin container
+  type: boolean
+  group: "Redis Database Configuration"
+  show_if: "global.redis.deploy=false"
+- variable: redisExt.host
+  default: "127.0.0.1"
+  description: "Enter the external DB address (Redis)"
+  type: string
+  label: External RedisDB hostname
+  show_if: "useBuiltInRedis.enabled=false&&global.redis.deploy=false"
+  group: "Redis Database Configuration"
+- variable: redisExt.port
+  default: "6379"
+  description: "Enter the external port for RedisDB"
+  type: string
+  label: External RedisDB port
+  show_if: "useBuiltInRedis.enabled=false&&global.redis.deploy=false"
+  group: "Redis Database Configuration"
+- variable: redisExt.password
+  description: "Type the password for external RedisDB. Min. length is 30 chars"
+  type: password
+  min_length: 30
+  label: External RedisDB password
+  show_if: "useBuiltInRedis.enabled=false&&global.redis.deploy=false"
+  group: "Redis Database Configuration"
+- variable: redisExt.isCluster
+  default: "false"
+  description: "Check true if your instalation is in redis cluster"
+  type: boolean
+  label: Check if install cluster
+  show_if: "useBuiltInRedis.enabled=false&&global.redis.deploy=false"
+  group: "Redis Database Configuration"
+- variable: redisExt.serviceName
+  default: "mymaster"
+  description: "Enter the service name in this cluster"
+  type: string
+  label: Service name
+  show_if: "useBuiltInRedis.enabled=false&&redisExt.isCluster=true"
+  group: "Redis Database Configuration"
+  show_if: "global.redis.deploy=false&&global.redis.deploy=false"
+- variable: redisInt.useExistingSecret
+  default: "redis-config"
+  description: "Use secret with existing config to RedisDB"
+  type: secret
+  required: true
+  label: Existing secret
+  show_if: "useBuiltInRedis.enabled=true&&global.redis.deploy=false"
+  group: "Redis Database Configuration"
+
+  #redis-append :
+- variable: useBuiltInRedisAppend.enabled
+  default: false
+  description: "Use internal builtin RedisDB - append mode"
+  label: Use RedisDB - append mode builtin container
+  type: boolean
+  group: "Redis-append Database Configuration"
+  show_if: "global.redis.deploy=false"
+- variable: redisAppendExt.host
+  default: "127.0.0.1"
+  description: "Enter the external DB address (RedisDB - append mode)"
+  type: string
+  label: External hostname for RedisDB - append mode
+  show_if: "useBuiltInRedisAppend.enabled=false&&global.redis.deploy=false"
+  group: "Redis-append Database Configuration"
+- variable: redisAppendExt.port
+  default: "6380"
+  description: "Enter the port to external Redis-APPEND-DB"
+  type: string
+  label: External port for RedisDB - append mode
+  show_if: "useBuiltInRedisAppend.enabled=false&&global.redis.deploy=false"
+  group: "Redis-append Database Configuration"
+- variable: redisAppendExt.password
+  description: "Enter the password for external Redis-APPEND-DB. Min. length is 30 characters"
+  type: password
+  min_length: 30
+  label: External RedisDB - append mode password
+  show_if: "useBuiltInRedisAppend.enabled=false&&global.redis.deploy=false"
+  group: "Redis-append Database Configuration"
+- variable: redisAppendExt.isCluster
+  default: "false"
+  description: "Mark true if your instalation is in Redis cluster."
+  type: boolean
+  label: Check if install cluster
+  show_if: "useBuiltInRedisAppend.enabled=false&&global.redis.deploy=false"
+  group: "Redis-append Database Configuration"
+- variable: redisAppendExt.serviceName
+  default: "mymaster"
+  description: "Enter the service name in this cluster."
+  type: string
+  label: Service name
+  show_if: "useBuiltInRedisAppend.enabled=false&&redisAppendExt.isCluster=true&&global.redis.deploy=false"
+  group: "Redis-append Database Configuration"
+- variable: redisAppendInt.useExistingSecret
+  default: "redis-append-config"
+  description: "Use secret with existing config to RedisDB - append mode"
+  type: secret
+  required: true
+  label: Existing secret
+  show_if: "useBuiltInRedisAppend.enabled=true&&global.redis.deploy=false"
+  group: "Redis-append Database Configuration"
 
 
 
