@@ -31,4 +31,4 @@ annotations:
 #  catalog.cattle.io/namespace: ezd-rp
   catalog.cattle.io/display-name: NASK EZD RP
   catalog.cattle.io/os: linux
-  catalog.cattle.io/release-name: nask-ezdrp-ha
+  catalog.cattle.io/release-name: ezdrp

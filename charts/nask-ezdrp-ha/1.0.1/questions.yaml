@@ -420,6 +420,151 @@ questions:
   group: "Redis-append Database Configuration"
 
 
+- variable: global.s3.deploy
+  default: "false"
+  label: Deploy MinIO
+  type: boolean
+  group: "Components"
+  show_subquestion_if: false
+  subquestions:
+  - variable: filerepository.persistence.filerepoStorageType
+    type: enum
+    options: ["S1"]
+    description: "Choose: S1 for the Flat Storage (eq local path, NFS, etc.), S3 for S3 systems (eq MINIO, etc.)"
+    label: Choose Filerepository Storage Configuration
+    required: true
+    group: "Persistent Storage"
+  - variable: filerepository.persistence.s3.host
+    type: string
+    description: "Enter the host address for S3 storage"
+    label: S3 host
+    required: true
+    show_if: "filerepository.persistence.filerepoStorageType=S3"
+    group: "Persistent Storage"
+  - variable: filerepository.persistence.s3.port
+    type: string
+    description: "Enter the port for S3 storage"
+    label: S3 port
+    required: true
+    show_if: "filerepository.persistence.filerepoStorageType=S3"
+    group: "Persistent Storage"
+  - variable: filerepository.persistence.s3.access_key
+    type: string
+    description: "Enter the access_key for S3 storage"
+    label: S3 access_key
+    required: true
+    show_if: "filerepository.persistence.filerepoStorageType=S3"
+    group: "Persistent Storage"
+  - variable: filerepository.persistence.s3.secret_key
+    type: string
+    description: "Enter the secret_key for S3 storage"
+    label: S3 secret_key
+    required: true
+    show_if: "filerepository.persistence.filerepoStorageType=S3"
+    group: "Persistent Storage"
+  - variable: filerepository.persistence.s3.tls
+    default: false
+    type: boolean
+    description: "Check this options if connection is with TLS"
+    label: TLS
+    required: true
+    show_if: "filerepository.persistence.filerepoStorageType=S3"
+    group: "Persistent Storage"
+  - variable: filerepository.persistence.s3.bucketname
+    type: string
+    description: "Enter the bucket name in S3 storage"
+    label: S3 bucket name
+    required: true
+    show_if: "filerepository.persistence.filerepoStorageType=S3"
+    group: "Persistent Storage"
+  
+  - variable: filerepository.persistence.ezdpuwmigration.enabled
+    default: false
+    description: "Create volume for migration data - Yes (check) - No (uncheck)"
+    label: "EZD-PUW Migration"
+    type: boolean
+    group: "Persistent Storage"
+    show_subquestion_if: true
+    subquestions:
+      - variable: filerepository.persistence.ezdpuwmigration.dataPath
+        default: "/data/EZD_PUW/data"
+        description: "Write patch where is EZD_PUW data"
+        type: string
+        required: true
+        label: Insert EZD-PUW data patch
+      - variable: filerepository.persistence.ezdpuwmigration.storageClass
+        description: "EZD-PUW migration persistent storage class - class must be named NFS*"
+        type: storageclass
+        required: true
+        label: EZD-PUW Persistent Storage Class Name
+      - variable: filerepository.persistence.ezdpuwmigration.size
+        description: "EZD-PUW Migration Persistent Volume Size in Gi (gigabyte)"
+        type: int
+        required: true
+        label: EZD-PUW Persistent Storage Size
+  
+  
+  #persistent storage for other module
+  - variable: storage.enabled
+    default: true
+    description: Use Persistent Storage
+    label: Persistent Storage
+    type: boolean
+    group: "Persistent Storage"
+  
+  - variable: ezdrpApi.persistence.storageClass
+    description: "EZDRP-API persistent storage class"
+    type: storageclass
+    label: "EZDP-API Persistent Storage Class Name"
+    group: "Persistent Storage"
+    show_if: "storage.enabled=true"
+  - variable: ezdrpApi.persistence.size
+    description: "EZDRP-API Persistent Volume Size in Gi (gigabyte)"
+    type: int
+    label: "EZDRP-API Persistent Volume Size"
+    group: "Persistent Storage"
+    show_if: "storage.enabled=true"
+  
+  - variable: filerepository.persistence.storageClass
+    description: "Filerepository persistent storage class"
+    type: storageclass
+    label: "FileRepository Persistent Storage Class Name"
+    group: "Persistent Storage"
+    show_if: "storage.enabled=true&&filerepository.persistence.filerepoStorageType=S1"
+  - variable: filerepository.persistence.size
+    description: "Filerepository Persistent Volume Size in Gi (gigabyte)"
+    label: "FileRepository Persistent Volume Size"
+    type: int
+    group: "Persistent Storage"
+    show_if: "storage.enabled=true&&filerepository.persistence.filerepoStorageType=S1"
+  
+  - variable: ssoIdentityServer.persistence.storageClass
+    description: "SSO-IDP persistent storage class"
+    type: storageclass
+    label: "SSO-IDP Persistent Storage Class Name"
+    group: "Persistent Storage"
+    show_if: "storage.enabled=true"
+  - variable: ssoIdentityServer.persistence.size
+    description: "SSO-IDP Persistent Volume Size in Gi (gigabyte)"
+    label: "SSO-IDP Persistent Volume Size"
+    type: int
+    group: "Persistent Storage"
+    show_if: "storage.enabled=true"
+  
+  - variable: wpeRest.persistence.storageClass
+    description: "WPE-REST persistent storage class"
+    type: storageclass
+    label: "WPE-REST Persistent Storage Class Name"
+    group: "Persistent Storage"
+    show_if: "storage.enabled=true"
+  - variable: wpeRest.persistence.size
+    description: "WPE-REST Persistent Volume Size in Gi (gigabyte)"
+    label: "WPE-REST Persistent Volume Size"
+    type: int
+    group: "Persistent Storage"
+    show_if: "storage.enabled=true"
+
+
 
 #domain info
 - variable: domainInfo.name
@@ -453,34 +598,35 @@ questions:
   label: Choose Filerepository Storage Configuration
   required: true
   group: "Persistent Storage"
+  show_if: "global.s3.deploy=false"
 
 - variable: filerepository.persistence.s3.host
   type: string
   description: "Enter the host address for S3 storage"
   label: S3 host
   required: true
-  show_if: "filerepository.persistence.filerepoStorageType=S3"
+  show_if: "filerepository.persistence.filerepoStorageType=S3&&global.s3.deploy=false"
   group: "Persistent Storage"
 - variable: filerepository.persistence.s3.port
   type: string
   description: "Enter the port for S3 storage"
   label: S3 port
   required: true
-  show_if: "filerepository.persistence.filerepoStorageType=S3"
+  show_if: "filerepository.persistence.filerepoStorageType=S3&&global.s3.deploy=false"
   group: "Persistent Storage"
 - variable: filerepository.persistence.s3.access_key
   type: string
   description: "Enter the access_key for S3 storage"
   label: S3 access_key
   required: true
-  show_if: "filerepository.persistence.filerepoStorageType=S3"
+  show_if: "filerepository.persistence.filerepoStorageType=S3&&global.s3.deploy=false"
   group: "Persistent Storage"
 - variable: filerepository.persistence.s3.secret_key
   type: string
   description: "Enter the secret_key for S3 storage"
   label: S3 secret_key
   required: true
-  show_if: "filerepository.persistence.filerepoStorageType=S3"
+  show_if: "filerepository.persistence.filerepoStorageType=S3&&global.s3.deploy=false"
   group: "Persistent Storage"
 - variable: filerepository.persistence.s3.tls
   default: false
@@ -488,14 +634,14 @@ questions:
   description: "Check this options if connection is with TLS"
   label: TLS
   required: true
-  show_if: "filerepository.persistence.filerepoStorageType=S3"
+  show_if: "filerepository.persistence.filerepoStorageType=S3&&global.s3.deploy=false"
   group: "Persistent Storage"
 - variable: filerepository.persistence.s3.bucketname
   type: string
   description: "Enter the bucket name in S3 storage"
   label: S3 bucket name
   required: true
-  show_if: "filerepository.persistence.filerepoStorageType=S3"
+  show_if: "filerepository.persistence.filerepoStorageType=S3&&global.s3.deploy=false"
   group: "Persistent Storage"
 
 - variable: filerepository.persistence.ezdpuwmigration.enabled
@@ -505,6 +651,7 @@ questions:
   type: boolean
   group: "Persistent Storage"
   show_subquestion_if: true
+  show_if: "global.s3.deploy=false"
   subquestions:
     - variable: filerepository.persistence.ezdpuwmigration.dataPath
       default: "/data/EZD_PUW/data"
@@ -531,63 +678,59 @@ questions:
   label: Persistent Storage
   type: boolean
   group: "Persistent Storage"
+  show_if: "global.s3.deploy=false"
 
 - variable: ezdrpApi.persistence.storageClass
   description: "EZDRP-API persistent storage class"
   type: storageclass
   label: "EZDP-API Persistent Storage Class Name"
   group: "Persistent Storage"
-  show_if: "storage.enabled=true"
+  show_if: "storage.enabled=true&&global.s3.deploy=false"
 - variable: ezdrpApi.persistence.size
   description: "EZDRP-API Persistent Volume Size in Gi (gigabyte)"
   type: int
   label: "EZDRP-API Persistent Volume Size"
   group: "Persistent Storage"
-  show_if: "storage.enabled=true"
+  show_if: "storage.enabled=true&&global.s3.deploy=false"
 
 - variable: filerepository.persistence.storageClass
   description: "Filerepository persistent storage class"
   type: storageclass
   label: "FileRepository Persistent Storage Class Name"
   group: "Persistent Storage"
-  show_if: "storage.enabled=true&&filerepository.persistence.filerepoStorageType=S1"
+  show_if: "storage.enabled=true&&filerepository.persistence.filerepoStorageType=S1&&global.s3.deploy=false"
 - variable: filerepository.persistence.size
   description: "Filerepository Persistent Volume Size in Gi (gigabyte)"
   label: "FileRepository Persistent Volume Size"
   type: int
   group: "Persistent Storage"
-  show_if: "storage.enabled=true&&filerepository.persistence.filerepoStorageType=S1"
+  show_if: "storage.enabled=true&&filerepository.persistence.filerepoStorageType=S1&&global.s3.deploy=false"
 
 - variable: ssoIdentityServer.persistence.storageClass
   description: "SSO-IDP persistent storage class"
   type: storageclass
   label: "SSO-IDP Persistent Storage Class Name"
   group: "Persistent Storage"
-  show_if: "storage.enabled=true"
+  show_if: "storage.enabled=true&&global.s3.deploy=false"
 - variable: ssoIdentityServer.persistence.size
   description: "SSO-IDP Persistent Volume Size in Gi (gigabyte)"
   label: "SSO-IDP Persistent Volume Size"
   type: int
   group: "Persistent Storage"
-  show_if: "storage.enabled=true"
+  show_if: "storage.enabled=true&&global.s3.deploy=false"
 
 - variable: wpeRest.persistence.storageClass
   description: "WPE-REST persistent storage class"
   type: storageclass
   label: "WPE-REST Persistent Storage Class Name"
   group: "Persistent Storage"
-  show_if: "storage.enabled=true"
+  show_if: "storage.enabled=true&&global.s3.deploy=false"
 - variable: wpeRest.persistence.size
   description: "WPE-REST Persistent Volume Size in Gi (gigabyte)"
   label: "WPE-REST Persistent Volume Size"
   type: int
   group: "Persistent Storage"
-  show_if: "storage.enabled=true"
-
-
-
-
-
+  show_if: "storage.enabled=true&&global.s3.deploy=false"
 
 
   #Email Configuration:
