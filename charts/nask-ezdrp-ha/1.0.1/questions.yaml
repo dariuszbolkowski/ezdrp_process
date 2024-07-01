@@ -544,32 +544,6 @@ questions:
     group: "Persistent Storage"
     show_if: "storage.enabled=true"
 
-
-
-#domain info
-- variable: domainInfo.name
-  default: "project.domain.pl"
-  description: "Enter the hostname to your EZDRP installation"
-  type: hostname
-  required: true
-  label: Hostname
-  group: "Domain info"
-- variable: domainInfo.cert_info
-  default: false
-  description: "If true - enter the name of these certificate in next step - if false - we create your self signed cert."
-  type: boolean
-  label: Domain certificate - wildcard - for EZD
-  group: "Domain info"
-  show_subquestion_if: true
-  subquestions:
-    - variable: domainInfo.cert_name
-      default: "ezdrp-cert"
-      description: "Enter the domain certificate name from Kubernetes (wildcard only - must exist already)"
-      type: string
-      required: true
-      label: Enter the certificate name (wildcard)
-
-
 #Storage type For Filerepository
 - variable: filerepository.persistence.filerepoStorageType
   type: enum
@@ -712,6 +686,32 @@ questions:
   type: int
   group: "Persistent Storage"
   show_if: "storage.enabled=true&&global.s3.deploy=false"
+
+
+#domain info
+- variable: domainInfo.name
+  default: "project.domain.pl"
+  description: "Enter the hostname to your EZDRP installation"
+  type: hostname
+  required: true
+  label: Hostname
+  group: "Domain info"
+- variable: domainInfo.cert_info
+  default: false
+  description: "If true - enter the name of these certificate in next step - if false - we create your self signed cert."
+  type: boolean
+  label: Domain certificate - wildcard - for EZD
+  group: "Domain info"
+  show_subquestion_if: true
+  subquestions:
+    - variable: domainInfo.cert_name
+      default: "ezdrp-cert"
+      description: "Enter the domain certificate name from Kubernetes (wildcard only - must exist already)"
+      type: string
+      required: true
+      label: Enter the certificate name (wildcard)
+
+
 
 
   #Email Configuration:
