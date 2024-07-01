@@ -157,6 +157,63 @@ questions:
       description: "Memory request, value must be <= memory limit"
       type: string
       default: "2Gi"
+#relationaldb :
+  - variable: cloudadmin.relationaldb.connectiontype.ezdrp
+    description: "Choose database for installation."
+    label: Select database type
+    type: enum
+    options: ["POSTGRESQL", "SQLSERVER"]
+    group: "Database Configuration"
+    show_if: "global.postgresql.deploy=false"
+  - variable: cloudadmin.relationaldb.connectionstring.ezdrp
+    default: "Host=<EZDRP_DB_HOSTNAME>;Port=<EZDRP_DB_PORT>;Database=<EZDRP_DB_NAME>;Username=<EZDRP_DB_USER>;Password='<EZDRP_DB_PASSWORD>' "
+    description: "Set <EZDRP_DB_HOSTNAME> to your propper value (eq. your.domain.for.ezdrp.ezd.db.pl or server IP)"
+    type: string
+    label: External DB connectionstring
+    group: "Database Configuration"
+    show_if: "global.postgresql.deploy=false"
+  - variable: cloudadmin.relationaldb.connectiontype.archiwum
+    description: "Choose database for ARCHIWUM."
+    label: Select ARCHIWUM database type
+    type: enum
+    options: ["POSTGRESQL", "SQLSERVER"]
+    group: "Database Configuration"
+    show_if: "global.postgresql.deploy=false"
+  - variable: cloudadmin.relationaldb.connectionstring.archiwum
+    default: "Host=<ARCHIWUM_DB_HOSTNAME>;Port=<ARCHIWUM_DB_PORT>;Database=<ARCHIWUM_DB_NAME>;Username=<ARCHIWUM_DB_USER>;Password='<ARCHIWUM_DB_PASSWORD>' "
+    description: "Set <ARCHIWUM_DB_HOSTNAME> to your propper value (eq. your.domain.for.archiwum.ezd.db.pl or server IP)"
+    type: string
+    label: External DB connectionstring
+    group: "Database Configuration"
+    show_if: "global.postgresql.deploy=false"
+  - variable: cloudadmin.relationaldb.connectiontype.kuip
+    description: "Choose database for KUIP."
+    label: Select KUIP database type
+    type: enum
+    options: ["POSTGRESQL", "SQLSERVER" ]
+    group: "Database Configuration"
+    show_if: "global.postgresql.deploy=false"
+  - variable: cloudadmin.relationaldb.connectionstring.kuip
+    default: "Host=<KUIP_DB_HOSTNAME>;Port=<KUIP_DB_PORT>;Database=<KUIP_DB_NAME>;Username=<KUIP_DB_USER>;Password='<KUIP_DB_PASSWORD>' "
+    description: "Set <KUIP_DB_HOSTNAME> to your propper value (eq. your.domain.for.kuip.ezd.db.pl or server IP)"
+    type: string
+    label: External DB connectionstring
+    group: "Database Configuration"
+    show_if: "global.postgresql.deploy=false"
+  - variable: cloudadmin.relationaldb.connectiontype.ezdrpodczyt
+    description: "Choose database for EZDRP_ODCZYT."
+    label: Select EZDRP_ODCZYT database type
+    type: enum
+    options: ["POSTGRESQL", "SQLSERVER" ]
+    group: "Database Configuration"
+    show_if: "global.postgresql.deploy=false"
+  - variable: cloudadmin.relationaldb.connectionstring.ezdrpodczyt
+    default: "Host=<EZDRP_ODCZYT_DB_HOSTNAME>;Port=<EZDRP_ODCZYT_DB_PORT>;Database=<EZDRP_ODCZYT_DB_NAME>;Username=<EZDRP_ODCZYT_DB_USER>;Password='<EZDRP_ODCZYT_DB_PASSWORD>' "
+    description: "Set <EZDRP_ODCZYT_DB_HOSTNAME> to your propper value (eq. your.domain.for.odczyt.ezd.db.pl or server IP)"
+    type: string
+    label: External DB connectionstring
+    group: "Database Configuration"
+    show_if: "global.postgresql.deploy=false"
       
 - variable: global.redis.deploy
   default: "true"
@@ -168,25 +225,25 @@ questions:
   - variable: global.redisConfig.auth.password
     label: Password
     description: "Redis Password"
-    group: "Redis Settings"
+    group: "Redis Database Configuration"
     type: password
     min: 8
     required: true
   - variable: global.redisConfig.customConfig.storage.volumeClaimTemplate.spec.storageClassName
     label: Storage Class for database data
     description: "Select storage class for database data"
-    group: "Redis Settings"
+    group: "Redis Database Configuration"
     type: storageclass
   - variable: global.redisConfig.customConfig.storage.volumeClaimTemplate.spec.resources.requests.storage
     label: Database size
     description: "Size database data"
-    group: "Redis Settings"
+    group: "Redis Database Configuration"
     type: string
     default: "2Gi"
   - variable: global.redis.custom.consumption
     default: "false"
     label: Modify resource consumption
-    group: "Redis Settings"
+    group: "Redis Database Configuration"
     type: boolean
     show_subquestion_if: true
     subquestions:
@@ -210,6 +267,112 @@ questions:
       description: "Memory request, value must be <= memory limit"
       type: string
       default: "128Mi"
+
+    #redis :
+  - variable: useBuiltInRedis.enabled
+    default: false
+    description: "Use internal builtin RedisDB"
+    label: Use RedisDB builtin container
+    type: boolean
+    group: "Redis Database Configuration"
+    show_if: "global.redis.deploy=false"
+  - variable: redisExt.host
+    default: "127.0.0.1"
+    description: "Enter the external DB address (Redis)"
+    type: string
+    label: External RedisDB hostname
+    show_if: "useBuiltInRedis.enabled=false&&global.redis.deploy=false"
+    group: "Redis Database Configuration"
+  - variable: redisExt.port
+    default: "6379"
+    description: "Enter the external port for RedisDB"
+    type: string
+    label: External RedisDB port
+    show_if: "useBuiltInRedis.enabled=false&&global.redis.deploy=false"
+    group: "Redis Database Configuration"
+  - variable: redisExt.password
+    description: "Type the password for external RedisDB. Min. length is 30 chars"
+    type: password
+    min_length: 30
+    label: External RedisDB password
+    show_if: "useBuiltInRedis.enabled=false&&global.redis.deploy=false"
+    group: "Redis Database Configuration"
+  - variable: redisExt.isCluster
+    default: "false"
+    description: "Check true if your instalation is in redis cluster"
+    type: boolean
+    label: Check if install cluster
+    show_if: "useBuiltInRedis.enabled=false&&global.redis.deploy=false"
+    group: "Redis Database Configuration"
+  - variable: redisExt.serviceName
+    default: "mymaster"
+    description: "Enter the service name in this cluster"
+    type: string
+    label: Service name
+    show_if: "useBuiltInRedis.enabled=false&&redisExt.isCluster=true"
+    group: "Redis Database Configuration"
+    show_if: "global.redis.deploy=false&&global.redis.deploy=false"
+  - variable: redisInt.useExistingSecret
+    default: "redis-config"
+    description: "Use secret with existing config to RedisDB"
+    type: secret
+    required: true
+    label: Existing secret
+    show_if: "useBuiltInRedis.enabled=true&&global.redis.deploy=false"
+    group: "Redis Database Configuration"
+  
+    #redis-append :
+  - variable: useBuiltInRedisAppend.enabled
+    default: false
+    description: "Use internal builtin RedisDB - append mode"
+    label: Use RedisDB - append mode builtin container
+    type: boolean
+    group: "Redis-append Database Configuration"
+    show_if: "global.redis.deploy=false"
+  - variable: redisAppendExt.host
+    default: "127.0.0.1"
+    description: "Enter the external DB address (RedisDB - append mode)"
+    type: string
+    label: External hostname for RedisDB - append mode
+    show_if: "useBuiltInRedisAppend.enabled=false&&global.redis.deploy=false"
+    group: "Redis-append Database Configuration"
+  - variable: redisAppendExt.port
+    default: "6380"
+    description: "Enter the port to external Redis-APPEND-DB"
+    type: string
+    label: External port for RedisDB - append mode
+    show_if: "useBuiltInRedisAppend.enabled=false&&global.redis.deploy=false"
+    group: "Redis-append Database Configuration"
+  - variable: redisAppendExt.password
+    description: "Enter the password for external Redis-APPEND-DB. Min. length is 30 characters"
+    type: password
+    min_length: 30
+    label: External RedisDB - append mode password
+    show_if: "useBuiltInRedisAppend.enabled=false&&global.redis.deploy=false"
+    group: "Redis-append Database Configuration"
+  - variable: redisAppendExt.isCluster
+    default: "false"
+    description: "Mark true if your instalation is in Redis cluster."
+    type: boolean
+    label: Check if install cluster
+    show_if: "useBuiltInRedisAppend.enabled=false&&global.redis.deploy=false"
+    group: "Redis-append Database Configuration"
+  - variable: redisAppendExt.serviceName
+    default: "mymaster"
+    description: "Enter the service name in this cluster."
+    type: string
+    label: Service name
+    show_if: "useBuiltInRedisAppend.enabled=false&&redisAppendExt.isCluster=true&&global.redis.deploy=false"
+    group: "Redis-append Database Configuration"
+  - variable: redisAppendInt.useExistingSecret
+    default: "redis-append-config"
+    description: "Use secret with existing config to RedisDB - append mode"
+    type: secret
+    required: true
+    label: Existing secret
+    show_if: "useBuiltInRedisAppend.enabled=true&&global.redis.deploy=false"
+    group: "Redis-append Database Configuration"
+
 
 
 #domain info
@@ -376,165 +539,7 @@ questions:
   show_if: "storage.enabled=true"
 
 
-#relationaldb :
-- variable: cloudadmin.relationaldb.connectiontype.ezdrp
-  description: "Choose database for installation."
-  label: Select database type
-  type: enum
-  options: ["POSTGRESQL", "SQLSERVER"]
-  group: "Database Configuration"
-  show_if: "global.postgresql.deploy=false"
-- variable: cloudadmin.relationaldb.connectionstring.ezdrp
-  default: "Host=<EZDRP_DB_HOSTNAME>;Port=<EZDRP_DB_PORT>;Database=<EZDRP_DB_NAME>;Username=<EZDRP_DB_USER>;Password='<EZDRP_DB_PASSWORD>' "
-  description: "Set <EZDRP_DB_HOSTNAME> to your propper value (eq. your.domain.for.ezdrp.ezd.db.pl or server IP)"
-  type: string
-  label: External DB connectionstring
-  group: "Database Configuration"
-  show_if: "global.postgresql.deploy=false"
-- variable: cloudadmin.relationaldb.connectiontype.archiwum
-  description: "Choose database for ARCHIWUM."
-  label: Select ARCHIWUM database type
-  type: enum
-  options: ["POSTGRESQL", "SQLSERVER"]
-  group: "Database Configuration"
-  show_if: "global.postgresql.deploy=false"
-- variable: cloudadmin.relationaldb.connectionstring.archiwum
-  default: "Host=<ARCHIWUM_DB_HOSTNAME>;Port=<ARCHIWUM_DB_PORT>;Database=<ARCHIWUM_DB_NAME>;Username=<ARCHIWUM_DB_USER>;Password='<ARCHIWUM_DB_PASSWORD>' "
-  description: "Set <ARCHIWUM_DB_HOSTNAME> to your propper value (eq. your.domain.for.archiwum.ezd.db.pl or server IP)"
-  type: string
-  label: External DB connectionstring
-  group: "Database Configuration"
-  show_if: "global.postgresql.deploy=false"
-- variable: cloudadmin.relationaldb.connectiontype.kuip
-  description: "Choose database for KUIP."
-  label: Select KUIP database type
-  type: enum
-  options: ["POSTGRESQL", "SQLSERVER" ]
-  group: "Database Configuration"
-  show_if: "global.postgresql.deploy=false"
-- variable: cloudadmin.relationaldb.connectionstring.kuip
-  default: "Host=<KUIP_DB_HOSTNAME>;Port=<KUIP_DB_PORT>;Database=<KUIP_DB_NAME>;Username=<KUIP_DB_USER>;Password='<KUIP_DB_PASSWORD>' "
-  description: "Set <KUIP_DB_HOSTNAME> to your propper value (eq. your.domain.for.kuip.ezd.db.pl or server IP)"
-  type: string
-  label: External DB connectionstring
-  group: "Database Configuration"
-  show_if: "global.postgresql.deploy=false"
-- variable: cloudadmin.relationaldb.connectiontype.ezdrpodczyt
-  description: "Choose database for EZDRP_ODCZYT."
-  label: Select EZDRP_ODCZYT database type
-  type: enum
-  options: ["POSTGRESQL", "SQLSERVER" ]
-  group: "Database Configuration"
-  show_if: "global.postgresql.deploy=false"
-- variable: cloudadmin.relationaldb.connectionstring.ezdrpodczyt
-  default: "Host=<EZDRP_ODCZYT_DB_HOSTNAME>;Port=<EZDRP_ODCZYT_DB_PORT>;Database=<EZDRP_ODCZYT_DB_NAME>;Username=<EZDRP_ODCZYT_DB_USER>;Password='<EZDRP_ODCZYT_DB_PASSWORD>' "
-  description: "Set <EZDRP_ODCZYT_DB_HOSTNAME> to your propper value (eq. your.domain.for.odczyt.ezd.db.pl or server IP)"
-  type: string
-  label: External DB connectionstring
-  group: "Database Configuration"
-  show_if: "global.postgresql.deploy=false"
 
-  #redis :
-- variable: useBuiltInRedis.enabled
-  default: false
-  description: "Use internal builtin RedisDB"
-  label: Use RedisDB builtin container
-  type: boolean
-  group: "Redis Database Configuration"
-- variable: redisExt.host
-  default: "127.0.0.1"
-  description: "Enter the external DB address (Redis)"
-  type: string
-  label: External RedisDB hostname
-  show_if: "useBuiltInRedis.enabled=false"
-  group: "Redis Database Configuration"
-- variable: redisExt.port
-  default: "6379"
-  description: "Enter the external port for RedisDB"
-  type: string
-  label: External RedisDB port
-  show_if: "useBuiltInRedis.enabled=false"
-  group: "Redis Database Configuration"
-- variable: redisExt.password
-  description: "Type the password for external RedisDB. Min. length is 30 chars"
-  type: password
-  min_length: 30
-  label: External RedisDB password
-  show_if: "useBuiltInRedis.enabled=false"
-  group: "Redis Database Configuration"
-- variable: redisExt.isCluster
-  default: "false"
-  description: "Check true if your instalation is in redis cluster"
-  type: boolean
-  label: Check if install cluster
-  show_if: "useBuiltInRedis.enabled=false"
-  group: "Redis Database Configuration"
-- variable: redisExt.serviceName
-  default: "mymaster"
-  description: "Enter the service name in this cluster"
-  type: string
-  label: Service name
-  show_if: "useBuiltInRedis.enabled=false&&redisExt.isCluster=true"
-  group: "Redis Database Configuration"
-- variable: redisInt.useExistingSecret
-  default: "redis-config"
-  description: "Use secret with existing config to RedisDB"
-  type: secret
-  required: true
-  label: Existing secret
-  show_if: "useBuiltInRedis.enabled=true"
-  group: "Redis Database Configuration"
-
-  #redis-append :
-- variable: useBuiltInRedisAppend.enabled
-  default: false
-  description: "Use internal builtin RedisDB - append mode"
-  label: Use RedisDB - append mode builtin container
-  type: boolean
-  group: "Redis-append Database Configuration"
-- variable: redisAppendExt.host
-  default: "127.0.0.1"
-  description: "Enter the external DB address (RedisDB - append mode)"
-  type: string
-  label: External hostname for RedisDB - append mode
-  show_if: "useBuiltInRedisAppend.enabled=false"
-  group: "Redis-append Database Configuration"
-- variable: redisAppendExt.port
-  default: "6380"
-  description: "Enter the port to external Redis-APPEND-DB"
-  type: string
-  label: External port for RedisDB - append mode
-  show_if: "useBuiltInRedisAppend.enabled=false"
-  group: "Redis-append Database Configuration"
-- variable: redisAppendExt.password
-  description: "Enter the password for external Redis-APPEND-DB. Min. length is 30 characters"
-  type: password
-  min_length: 30
-  label: External RedisDB - append mode password
-  show_if: "useBuiltInRedisAppend.enabled=false"
-  group: "Redis-append Database Configuration"
-- variable: redisAppendExt.isCluster
-  default: "false"
-  description: "Mark true if your instalation is in Redis cluster."
-  type: boolean
-  label: Check if install cluster
-  show_if: "useBuiltInRedisAppend.enabled=false"
-  group: "Redis-append Database Configuration"
-- variable: redisAppendExt.serviceName
-  default: "mymaster"
-  description: "Enter the service name in this cluster."
-  type: string
-  label: Service name
-  show_if: "useBuiltInRedisAppend.enabled=false&&redisAppendExt.isCluster=true"
-  group: "Redis-append Database Configuration"
-- variable: redisAppendInt.useExistingSecret
-  default: "redis-append-config"
-  description: "Use secret with existing config to RedisDB - append mode"
-  type: secret
-  required: true
-  label: Existing secret
-  show_if: "useBuiltInRedisAppend.enabled=true"
-  group: "Redis-append Database Configuration"
 
   #rabbit :
 - variable: useBuiltInRabbit.enabled
