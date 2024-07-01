@@ -13,38 +13,38 @@ questions:
   - variable: global.rabbitmqConfig.auth.username
     label: Username
     description: "RabbitMQ Username"
-    group: "RabbitMQ Settings"
+    group: "Rabbit Database Configuration"
     type: string
     min: 6
     required: true
   - variable: global.rabbitmqConfig.auth.password
     label: Password
     description: "RabbitMQ Password"
-    group: "RabbitMQ Settings"
+    group: "Rabbit Database Configuration"
     type: password
     min: 8
     required: true
   - variable: global.rabbitmqConfig.customConfig.replicas
     label: Replicas
     description: "Amount of replicas rabbitmq. Min 3 replicas for ha"
-    group: "RabbitMQ Settings"
+    group: "Rabbit Database Configuration"
     type: int
     default: 1
   - variable: global.rabbitmqConfig.customConfig.persistence.storageClassName
     label: Storage Class for database data
     description: "Select storage class for database data"
-    group: "RabbitMQ Settings"
+    group: "Rabbit Database Configuration"
     type: storageclass
   - variable: global.rabbitmqConfig.customConfig.persistence.storage
     label: Database size
     description: "Size database data"
-    group: "RabbitMQ Settings"
+    group: "Rabbit Database Configuration"
     type: string
     default: "2Gi"
   - variable: global.rabbitmq.custom.consumption
     default: "false"
     label: Modify resource consumption
-    group: "RabbitMQ Settings"
+    group: "Rabbit Database Configuration"
     type: boolean
     show_subquestion_if: true
     subquestions:
@@ -71,7 +71,7 @@ questions:
   - variable: global.rabbitmqConfig.ingress.enabled
     default: "false"
     label: Enable web console for RabbitMQ
-    group: "RabbitMQ Settings"
+    group: "Rabbit Database Configuration"
     type: boolean
     show_subquestion_if: true
     subquestions:
