@@ -582,6 +582,7 @@ questions:
 - variable: filerepository.persistence.filerepoStorageType
   type: enum
   options: ["S1", "S3"]
+  default: "S1"
   description: "Choose: S1 for the Flat Storage (eq local path, NFS, etc.), S3 for S3 systems (eq MINIO, etc.)"
   label: Choose Filerepository Storage Configuration
   required: true
