@@ -1,0 +1,42 @@
+{{- if .Values.kuipApi.active }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/auth-tls-secret: "{{ .Release.Namespace }}/sso-ezdrpservercert"
+    nginx.ingress.kubernetes.io/auth-tls-verify-client: optional
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      gzip on;
+      gzip_vary off;
+      gzip_proxied any;
+      gzip_comp_level 6;
+      gzip_types *;
+      proxy_set_header X-SSL-CERT $ssl_client_escaped_cert;
+      proxy_set_header X-Origin $http_origin;
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "240"
+    nginx.ingress.kubernetes.io/proxy-http-version: "1.1"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "1200"
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+  name: {{ .Values.kuipApi.moduleName }}
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: {{ .Values.kuipApi.moduleName }}.{{ .Values.domainInfo.name }}
+    http:
+      paths:
+      - path: /(.+)
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ .Values.ssoApigateway.moduleName }}
+            port:
+              number: {{ .Values.ssoApigateway.port }}
+{{- if .Values.domainInfo.cert_info }}
+  tls:
+  - hosts:
+    - {{ .Values.kuipApi.moduleName }}.{{ .Values.domainInfo.name }}
+    secretName: {{ .Values.domainInfo.cert_name }}
+{{- end }}
+{{- end }}

@@ -1,0 +1,185 @@
+{{- if .Values.procesowosc.active }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.ezdrpApi.moduleName }}-bpmn
+  labels:
+    app: {{ .Release.Name }}-{{ .Values.ezdrpApi.moduleName }}-bpmn
+    role: backend
+    environment: {{ .Values.environment }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-{{ .Values.ezdrpApi.moduleName }}
+      role: backend
+      environment: {{ .Values.environment }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-{{ .Values.ezdrpApi.moduleName }}
+        role: backend
+        environment: {{ .Values.environment }}
+    spec:
+      {{- if and (.Values.affinity.nodeAffinitySelector.name) (.Values.affinity.nodeAffinitySelector.value) }}
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: {{ .Values.affinity.nodeAffinitySelector.name }}
+                    operator: In
+                    values:
+                      - {{ .Values.affinity.nodeAffinitySelector.value | quote }}
+      {{- end }}
+      containers:
+        - image: {{ .Values.imageCredentials.registryDomain }}/{{ .Values.ezdrpApi.image.name }}:{{ .Values.ezdrpApi.image.version }}
+          env:
+            - name: ICE_CLOUD_ADMIN_URL
+              value: "http://{{ .Values.cloudadmin.moduleName }}:{{ .Values.cloudadmin.port }}"
+            - name: ICE_CONFIG
+              value: "ezdrpapi-bpmn"
+            - name: REQUEST_STATISTIC
+              value: {{ .Values.ezdrpApi.params.requestStatistic | quote }}
+            - name: LONG_EXECUTION_STATISTIC
+              value: {{ .Values.ezdrpApi.params.longExecutionStatistic | quote }}
+            - name: TEST_VERSION_NAME
+              value: {{ .Values.ezdrpApi.params.testVersionName | quote }}
+            - name: Ezdrp_Feature_Ai_Klasyfikacja
+              value: {{ .Values.ezdrpApi.params.Ezdrp_Feature_Ai_Klasyfikacja | quote }}
+            - name: Ezdrp_Feature_Ai_Metadane
+              value: {{ .Values.ezdrpApi.params.Ezdrp_Feature_Ai_Metadane | quote }}
+            - name: Ezdrp_Feature_Ai_Streszczenia
+              value: {{ .Values.ezdrpApi.params.Ezdrp_Feature_Ai_Streszczenia | quote }}
+            - name: Ezdrp_Feature_Bpmn
+              value: {{ .Values.ezdrpApi.params.Ezdrp_Feature_Bpmn | quote }}
+            - name: Ezdrp_Feature_Ewd
+              value: {{ .Values.ezdrpApi.params.Ezdrp_Feature_Ewd | quote }}
+            - name: Ezdrp_Feature_Muas
+              value: {{ .Values.ezdrpApi.params.Ezdrp_Feature_Muas | quote }}
+            - name: Ezdrp_Feature_NoweZadania
+              value: {{ .Values.ezdrpApi.params.Ezdrp_Feature_NoweZadania | quote }}
+            - name: Ezdrp_Feature_Ocr
+              value: {{ .Values.ezdrpApi.params.Ezdrp_Feature_Ocr | quote }}
+            - name: Ezdrp_Feature_PieczecElektroniczna
+              value: {{ .Values.ezdrpApi.params.Ezdrp_Feature_PieczecElektroniczna | quote }}
+            - name: Ezdrp_Feature_PodpisChmurowy
+              value: {{ .Values.ezdrpApi.params.Ezdrp_Feature_PodpisChmurowy | quote }}
+            - name: Ezdrp_Feature_CentrumStatystyk
+              value: {{ .Values.ezdrpApi.params.Ezdrp_Feature_CentrumStatystyk | quote }}
+            - name: ice-logging-Serilog__Properties__SeqLogger
+              value: {{ .Values.ezd.logging_serilog_seq_logger | quote }}
+            - name: ice-logging-Serilog__Properties__ConsoleLogger
+              value: "false"
+          imagePullPolicy: IfNotPresent
+          name: {{ .Values.ezdrpApi.moduleName }}-bpmn
+          readinessProbe:
+            failureThreshold: 2
+            initialDelaySeconds: {{ .Values.ezdrpApi.redinessDelay }}
+            periodSeconds: 10
+            successThreshold: 1
+            tcpSocket:
+              port: {{ .Values.ezdrpApi.port }}
+            timeoutSeconds: 1
+          startupProbe:
+            failureThreshold: 600
+            initialDelaySeconds: {{ .Values.ezdrpApi.startupDelay }}
+            periodSeconds: 30
+            successThreshold: 1
+            tcpSocket:
+              port: {{ .Values.ezdrpApi.port }}
+            timeoutSeconds: 1
+          livenessProbe:
+            failureThreshold: 4
+            initialDelaySeconds: {{ .Values.ezdrpApi.livenessDelay }}
+            periodSeconds: 10
+            successThreshold: 1
+            tcpSocket:
+              port: {{ .Values.ezdrpApi.port }}
+            timeoutSeconds: 1
+          {{- if or (.Values.ezdrpApi.resources.limits.cpu) (.Values.ezdrpApi.resources.limits.memory) (.Values.ezdrpApi.resources.requests.cpu) (.Values.ezdrpApi.resources.requests.memory) }}
+          resources:
+            {{- if or (.Values.ezdrpApi.resources.limits.cpu) (.Values.ezdrpApi.resources.limits.memory) }}
+            limits:
+              {{- if .Values.ezdrpApi.resources.limits.cpu }}
+              cpu: {{ .Values.ezdrpApi.resources.limits.cpu }}
+              {{- end }}
+              {{- if .Values.ezdrpApi.resources.limits.memory }}
+              memory: {{ .Values.ezdrpApi.resources.limits.memory }}
+              {{- end }}
+            {{- end }}
+            {{- if or (.Values.ezdrpApi.resources.requests.cpu) (.Values.ezdrpApi.resources.requests.memory) }}
+            requests:
+              {{- if .Values.ezdrpApi.resources.requests.cpu }}
+              cpu: {{ .Values.ezdrpApi.resources.requests.cpu }}
+              {{- end }}
+              {{- if .Values.ezdrpApi.resources.requests.memory }}
+              memory: {{ .Values.ezdrpApi.resources.requests.memory }}
+              {{- end }}
+            {{- end }}
+          {{- end }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities: {}
+            privileged: false
+            readOnlyRootFilesystem: false
+            runAsNonRoot: false
+          stdin: true
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          tty: true
+      dnsConfig: {}
+      dnsPolicy: ClusterFirst
+      initContainers:
+        - command:
+            - sh
+            - -c
+            - |
+              /docker-entrypoint.sh wait_for relationaldb:${relationalDbHost}:${relationalDbPort} redis:${redisHost}:${redisPort} redisAppend:${redisAppendHost}:${redisAppendPort} rabbit:${rabbitHost}:${rabbitPort} cloudadmin:${CLOUDADMIN_HOST}:${CLOUDADMIN_PORT} teryt:${TERYT_HOST}:${TERYT_PORT}              
+          env:
+            - name: relationalDbHost
+              value: {{ include "ezdrp.connstring.ezdrp.host" . | quote }}
+            - name: relationalDbPort
+              value: {{ include "ezdrp.connstring.ezdrp.port" . | quote }}
+            - name: CLOUDADMIN_HOST
+              value: {{ .Values.cloudadmin.moduleName }}
+            - name: CLOUDADMIN_PORT
+              value: {{ .Values.cloudadmin.port | quote }}
+            - name: TERYT_HOST
+              value: {{ .Values.teryt.moduleName }}
+            - name: TERYT_PORT
+              value: {{ .Values.teryt.port | quote }}
+            - name: redisPort
+              value: {{ .Values.redisExt.port | quote }}
+            - name: redisHost
+              value: {{ .Values.global.redisConfig.fullnameOverride }}
+            - name: redisAppendPort
+              value: {{ .Values.redisAppendExt.port | quote }}
+            - name: redisAppendHost
+              value: {{ .Values.global.redisConfig.fullnameOverride }}-append
+            - name: rabbitPort
+              value: {{ .Values.rabbitExt.port | quote }}
+            - name: rabbitHost
+              value: {{ .Values.global.rabbitmqConfig.fullnameOverride }}
+          image: {{ .Values.waitfor.image.registry }}/{{ .Values.waitfor.image.name }}:{{ .Values.waitfor.image.version }}
+          imagePullPolicy: IfNotPresent
+          name: waitfor
+          resources: {}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities: {}
+            privileged: false
+            readOnlyRootFilesystem: false
+            runAsNonRoot: false
+          stdin: true
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          tty: true
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      terminationGracePeriodSeconds: 30
+      serviceAccount: ezdrp
+      serviceAccountName: ezdrp
+{{ end }}

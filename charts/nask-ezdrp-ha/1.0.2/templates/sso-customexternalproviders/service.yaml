@@ -1,0 +1,18 @@
+{{- if .Values.ssoExternalProviders.active }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.ssoExternalProviders.moduleName }}
+  labels:
+    run: {{ .Values.ssoExternalProviders.moduleName }}
+spec:
+  type: {{ .Values.ssoExternalProviders.service.type }}
+  ports:
+    - name: {{ .Values.ssoExternalProviders.moduleName }}
+      port: {{ .Values.ssoExternalProviders.port }}
+      targetPort: {{ .Values.ssoExternalProviders.port }}
+      protocol: TCP
+  selector:
+    app: {{ .Release.Name }}-{{ .Values.ssoExternalProviders.moduleName }}
+  sessionAffinity: None
+{{ end }}

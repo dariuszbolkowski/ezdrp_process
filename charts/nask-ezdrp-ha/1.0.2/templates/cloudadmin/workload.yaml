@@ -1,0 +1,343 @@
+{{- if .Values.cloudadmin.active }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: {{ .Release.Name }}-{{ .Values.cloudadmin.moduleName }}
+    role: backend
+    environment: {{ .Values.environment }}
+  name: {{ .Values.cloudadmin.moduleName }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-{{ .Values.cloudadmin.moduleName }}
+      role: backend
+      environment: {{ .Values.environment }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-{{ .Values.cloudadmin.moduleName }}
+        role: backend
+        environment: {{ .Values.environment }}
+    spec:
+    {{- if and (.Values.affinity.nodeAffinitySelector.name) (.Values.affinity.nodeAffinitySelector.value) }}
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: {{ .Values.affinity.nodeAffinitySelector.name }}
+                    operator: In
+                    values:
+                      - {{ .Values.affinity.nodeAffinitySelector.value | quote }}
+      {{- end }}
+      containers:
+      - image: quay.io/darekbola/cloudadmin-lp:1.0.0
+        env:
+          - name: EZD_DOMAIN
+            value: {{ .Values.domainInfo.name }}
+          - name: EZD_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          - name: EZD_INTERNAL_EZDRP_DATASOURCE_TYPE
+            value: {{ .Values.cloudadmin.relationaldb.connectiontype.ezdrp }}
+          - name: EZD_INTERNAL_EZDRP_DATASOURCE_CONFIGURATION
+            value: {{ include "ezdrp.connstring.cloudadmin.ezdrp" . | quote }}
+          - name: EZD_INTERNAL_ARCHIWUM_DATASOURCE_TYPE
+            value: {{ .Values.cloudadmin.relationaldb.connectiontype.archiwum }}
+          - name: EZD_INTERNAL_ARCHIWUM_DATASOURCE_CONFIGURATION
+            value: {{ include "ezdrp.connstring.cloudadmin.archiwum" . | quote }}
+          - name: EZD_INTERNAL_KUIP_DATASOURCE_TYPE
+            value: {{ .Values.cloudadmin.relationaldb.connectiontype.kuip }}
+          - name: EZD_INTERNAL_KUIP_DATASOURCE_CONFIGURATION
+            value: {{ include "ezdrp.connstring.cloudadmin.kuip" . | quote }}
+          - name: EZD_INTERNAL_EZDRP_ODCZYT_DATASOURCE_TYPE
+            value: {{ .Values.cloudadmin.relationaldb.connectiontype.ezdrpodczyt }}
+          - name: EZD_INTERNAL_EZDRP_ODCZYT_DATASOURCE_CONFIGURATION
+            value: {{ include "ezdrp.connstring.cloudadmin.ezdrpodczyt" . | quote }}
+
+
+          - name: EZD_INTERNAL_RABBIT_HOST
+            value: {{ .Values.global.rabbitmqConfig.fullnameOverride }}
+          - name: EZD_INTERNAL_RABBIT_PASSWORD
+            value: {{ .Values.global.rabbitmqConfig.auth.password }}
+          - name: EZD_INTERNAL_RABBIT_PORT
+            value: {{ .Values.rabbitExt.port | quote  }}
+          - name: EZD_INTERNAL_RABBIT_USER
+            value: {{ .Values.global.rabbitmqConfig.auth.username }}
+
+          - name: EZD_INTERNAL_RABBIT_DB
+            value: {{ .Values.ezdrpApi.rabbitmq.vhostezdrp }}
+          - name: EZD_INTERNAL_RABBIT_ARCHIWUM_DB
+            value: {{ .Values.ezdrpApi.rabbitmq.vhostarchiwum }}
+          - name: EZD_PUBLISHER_CONFIRMS_RABBIT
+            value: {{ .Values.cloudadmin.rabbit.confirms | quote }}
+
+          - name: EZD_REDIS_HOST
+            value: {{ .Values.global.redisConfig.fullnameOverride }}
+          - name: EZD_REDIS_PASSWORD
+            value: {{ .Values.global.redisConfig.auth.password | quote }}
+          {{- if and .Values.redisExt.serviceName .Values.redisExt.isCluster }}
+          - name: EZD_REDIS_SERVICENAME
+            value: {{ .Values.redisExt.serviceName }}
+          {{- else }}
+          - name: EZD_REDIS_SERVICENAME
+            value: ""
+          {{- end }}
+          - name: EZD_REDIS_PORT
+            value: {{ .Values.redisExt.port | quote }}
+
+          - name: EZD_REDIS_APPEND_HOST
+            value: {{ .Values.global.redisConfig.fullnameOverride }}-append
+          - name: EZD_REDIS_APPEND_PASSWORD
+            value: {{ .Values.global.redisConfig.auth.password }}
+          {{- if and .Values.redisAppendExt.serviceName .Values.redisAppendExt.isCluster }}
+          - name: EZD_REDIS_APPEND_SERVICENAME
+            value: {{ .Values.redisAppendExt.serviceName }}
+          {{- else }}
+          - name: EZD_REDIS_APPEND_SERVICENAME
+            value: ""
+          {{- end }}
+          - name: EZD_REDIS_APPEND_PORT
+            value: {{ .Values.redisAppendExt.port | quote }}
+
+          - name: EZD_INTERNAL_ANONIMIZATOR_HOST
+            value: {{ .Values.anonimizator.moduleName }}
+          - name: EZD_INTERNAL_ANONIMIZATOR_PORT
+            value: {{ .Values.anonimizator.port | quote }}
+
+          - name: EZD_INTERNAL_ELASTIC_HOST
+            value: {{ .Values.cloudadmin.elastic.host }}
+          - name: EZD_INTERNAL_ELASTIC_PORT
+            value: {{ .Values.cloudadmin.elastic.port | quote }}
+
+          - name: EZD_INTERNAL_FILEREPOSITORY_HOST
+            value: {{ .Values.filerepository.moduleName }}
+          - name: EZD_INTERNAL_FILEREPOSITORY_PORT
+            value: {{ .Values.filerepository.port | quote }}
+
+          - name: EZD_INTERNAL_API_HOST
+            value: {{ .Values.ezdrpApi.moduleName }}
+          - name: EZD_INTERNAL_API_PORT
+            value: {{ .Values.ezdrpApi.port | quote }}
+
+          - name: EZD_INTERNAL_ARCHIWUM_HOST
+            value: {{ .Values.cloudadmin.archiwum.host }}
+          - name: EZD_INTERNAL_ARCHIWUM_PORT
+            value: {{ .Values.cloudadmin.archiwum.port | quote }}
+
+          - name: EZD_INTERNAL_KUIP_HOST
+            value: {{ .Values.kuipApi.moduleName }}
+          - name: EZD_INTERNAL_KUIP_PORT
+            value: {{ .Values.kuipApi.port | quote }}
+
+          - name: EZD_INTERNAL_SSO_HOST
+            value: {{ .Values.ssoIdentityServer.moduleName }}
+          - name: EZD_INTERNAL_SSO_PORT
+            value: {{ .Values.ssoIdentityServer.port | quote }}
+          - name: EZD_INTERNAL_SSO_APIGATEWAY_HOST
+            value: {{ .Values.ssoApigateway.moduleName }}
+          - name: EZD_INTERNAL_SSO_APIGATEWAY_CACHE_PORT
+            value: {{ .Values.ssoApigateway.portCache | quote }}
+
+          - name: EZD_INTERNAL_RAZOR_HOST
+            value: {{ .Values.razor.moduleName }}
+          - name: EZD_INTERNAL_RAZOR_PORT
+            value: {{ .Values.razor.port | quote }}
+
+          - name: EZD_INTERNAL_WPE_HOST
+            value: {{ .Values.wpeRest.moduleName }}
+          - name: EZD_INTERNAL_WPE_PORT
+            value: {{ .Values.wpeRest.port | quote }}
+
+          - name: EZD_QUICKSCAN_UPDATE_URL
+            value: {{ .Values.cloudadmin.quickscan.url }}
+
+          - name: EZD_EMAIL_SMTP_HOST
+            value: {{ .Values.email.host | default "nohost" }}
+          - name: EZD_EMAIL_SMTP_PORT
+            value: {{ .Values.email.port | default 587 | quote }}
+          - name: EZD_EMAIL_SMTP_SENDERMAIL
+            value: {{ .Values.email.sendermail | default "without@email.loc" }}
+          - name: EZD_EMAIL_SMTP_SENDERNAME
+            value: {{ .Values.email.sendername | default "without@email.loc" }}
+          - name: EZD_EMAIL_SMTP_PASSWORD
+            value: {{ .Values.email.password | default "withoutpassword" }}
+          - name: EZD_EMAIL_SMTP_FROM
+            value: {{ .Values.email.from | default "EZD RP" }}
+
+          - name: EZD_INTERNAL_CRM_HOST
+            value: fake-host
+          - name: EZD_INTERNAL_CRM_PORT
+            value: "5000"
+
+          - name: EZD_INTERNAL_OCR_HOST
+            value: {{ .Values.ocrApi.moduleName }}
+          - name: EZD_INTERNAL_OCR_PORT
+            value: {{ .Values.ocrApi.port | quote }}
+
+          - name: EZD_INTERNAL_BTM_HOST
+            value: {{ .Values.btm.moduleName }}
+          - name: EZD_INTERNAL_BTM_PORT
+            value: {{ .Values.btm.port | quote }}
+
+
+          - name: EZD_INTERNAL_INTEGRATOR_HOST
+            value: {{ .Values.integratorApi.moduleName }}
+          - name: EZD_INTERNAL_INTEGRATOR_PORT
+            value: {{ .Values.integratorApi.port | quote }}
+
+          - name: EZD_EXTERNALPROVIDER_LDAP_IS_ENABLED
+            value: {{ .Values.externalIDP.LDAP.enabled | default "false" | quote }}
+          - name: EZD_EXTERNALPROVIDER_LDAP_OPTIONS
+            value: {{ .Values.externalIDP.LDAP.options | default "false" | quote }}
+          - name: EZD_EXTERNALPROVIDER_LDAP_DISPLAY_NAME
+            value: {{ .Values.externalIDP.LDAP.display_name | default "Logowanie LDAP" | quote }}
+
+          - name: EZD_EXTERNALPROVIDER_AD_IS_ENABLED
+            value: {{ .Values.externalIDP.AD.enabled | default "false" | quote }}
+          - name: EZD_EXTERNALPROVIDER_AD_OPTIONS
+            value: {{ .Values.externalIDP.AD.options | default "false" | quote }}
+          - name: EZD_EXTERNALPROVIDER_AD_DISPLAY_NAME
+            value: {{ .Values.externalIDP.AD.display_name | default "Logowanie AD" | quote }}
+
+          - name: EZD_EXTERNALPROVIDER_WK_IS_ENABLED
+            value: {{ .Values.externalIDP.WK.enabled | default "false" | quote }}
+          - name: EZD_EXTERNALPROVIDER_WK_OPTIONS
+            value: {{ .Values.externalIDP.WK.options | default "false" | quote }}
+          - name: EZD_EXTERNALPROVIDER_WK_DISPLAY_NAME
+            value: {{ .Values.externalIDP.WK.display_name | default "Logowanie WK INT" | quote }}
+
+          - name: EZD_USE_DTOCACHE
+            value: {{ .Values.ezd.use_dtocache | quote }}
+          - name: EZD_MINIMUM_LOG_LEVEL
+            value: {{ .Values.ezd.minimum_log_level | quote }}
+          - name: EZD_SSO_MINIMUM_LOG_LEVEL
+            value: {{ .Values.ezd.sso_minimum_log_level | quote }}
+          - name: EZD_LOG_SERVER_ADDRESS
+            value: {{ .Values.seq.url | quote }}
+          - name: EZD_LOKI_SERVER_ADDRESS
+            value: {{ .Values.loki.url | quote }}
+          - name: EZD_TRANSACTION_TIMEOUT
+            value: {{ .Values.cloudadmin.transactionTimeout | quote }}
+
+          - name: EZD_EXTERNALPROVIDER_LDAP_BIND_DN_SCHEME
+            value: {{ .Values.cloudadmin.ldapbinddnscheme | quote }}
+
+          - name: EZD_EXTERNALPROVIDER_1_SCHEME
+            value: {{ .Values.cloudadmin.externalprovider1.scheme | quote }}
+          - name: EZD_EXTERNALPROVIDER_1_SCHEME_DISPLAY_NAME
+            value: {{ .Values.cloudadmin.externalprovider1.schemeDisplayName | quote }}
+          - name: EZD_EXTERNALPROVIDER_1_HANDLER_TYPE
+            value: {{ .Values.cloudadmin.externalprovider1.handlerType | quote }}
+          - name: EZD_EXTERNALPROVIDER_1_IS_ENABLED
+            value: {{ .Values.cloudadmin.externalprovider1.enabled | quote }}
+          - name: EZD_EXTERNALPROVIDER_1_OPTIONS
+            value: {{ .Values.cloudadmin.externalprovider1.options | quote }}
+
+          - name: EZD_TRACING_STRATEGY
+            value: {{ .Values.cloudadmin.tracing.strategy | quote }}
+          - name: EZD_TRACING_ENDPOINT
+            value: {{ .Values.cloudadmin.tracing.endpoint | quote }}
+
+          - name: EZD_INTERNAL_SEAL_HOST
+            value: {{ .Values.cloudadmin.seal.host | quote }}
+          - name: EZD_INTERNAL_SEAL_PORT
+            value: {{ .Values.cloudadmin.seal.port | quote }}
+
+          - name: EZD_INTERNAL_TERYT_HOST
+            value: {{ .Values.cloudadmin.teryt.host | quote }}
+          - name: EZD_INTERNAL_TERYT_PORT
+            value: {{ .Values.cloudadmin.teryt.port | quote }}
+
+          - name: EZD_INTERNAL_EZDRPFORMS_WEB_HOST
+            value: {{ .Values.cloudadmin.forms.host | quote }}
+
+          - name: EZD_INTERNAL_BPMNCAMUNDACOCKPIT_HOST
+            value: {{ .Values.cloudadmin.camunda.host | quote }}
+
+          - name: EZD_INTERNAL_RAZOR_WEB
+            value: {{ .Values.cloudadmin.razor.host | quote }}
+
+          - name: EZD_INTERNAL_MUAS_HOST
+            value: {{ .Values.cloudadmin.muas.host | quote }}
+
+          - name: EZD_INTERNAL_MUAS_PORT
+            value: {{ .Values.cloudadmin.muas.port | quote }}
+
+          - name: EZD_CENTRUM_STATYSTYK_READER_SERVICE_URL
+            value: {{ .Values.cloudadmin.centrum_statystyk_reader_url | quote }}
+          - name: EZD_CENTRUM_STATYSTYK_WRITER_SERVICE_URL
+            value: {{ .Values.cloudadmin.centrum_statystyk_writer_url | quote }}
+
+
+        name: {{ .Values.cloudadmin.moduleName }}
+        imagePullPolicy: Always
+        volumeMounts:
+        - mountPath: /scripts/99-app-script.sh
+          name: cloudadminscript
+          subPath: 99-app-script.sh
+        livenessProbe:
+          failureThreshold: 4
+          initialDelaySeconds: {{ .Values.cloudadmin.livenessDelay }}
+          periodSeconds: 10
+          successThreshold: 1
+          tcpSocket:
+            port: {{ .Values.cloudadmin.port }}
+          timeoutSeconds: 1
+        readinessProbe:
+          failureThreshold: 2
+          initialDelaySeconds: {{ .Values.cloudadmin.redinessDelay }}
+          periodSeconds: 10
+          successThreshold: 1
+          tcpSocket:
+            port: {{ .Values.cloudadmin.port }}
+          timeoutSeconds: 1
+        {{- if or (.Values.cloudadmin.resources.limits.cpu) (.Values.cloudadmin.resources.limits.memory) (.Values.cloudadmin.resources.requests.cpu) (.Values.cloudadmin.resources.requests.memory) }}
+        resources:
+        {{- if or (.Values.cloudadmin.resources.limits.cpu) (.Values.cloudadmin.resources.limits.memory) }}
+          limits:
+          {{- if .Values.cloudadmin.resources.limits.cpu }}
+            cpu: {{ .Values.cloudadmin.resources.limits.cpu }}
+            {{- end }}
+            {{- if .Values.cloudadmin.resources.limits.memory }}
+            memory: {{ .Values.cloudadmin.resources.limits.memory }}
+            {{- end }}
+          {{- end }}
+          {{- if or (.Values.cloudadmin.resources.requests.cpu) (.Values.cloudadmin.resources.requests.memory) }}
+          requests:
+          {{- if .Values.cloudadmin.resources.requests.cpu }}
+            cpu: {{ .Values.cloudadmin.resources.requests.cpu }}
+            {{- end }}
+            {{- if .Values.cloudadmin.resources.requests.memory }}
+            memory: {{ .Values.cloudadmin.resources.requests.memory }}
+            {{- end }}
+          {{- end }}
+        {{- end }}
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities: {}
+          privileged: false
+          readOnlyRootFilesystem: false
+          runAsNonRoot: false
+        stdin: true
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        tty: true
+      dnsConfig: {}
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      terminationGracePeriodSeconds: 30
+      serviceAccount: ezdrp
+      serviceAccountName: ezdrp
+      volumes:
+      - configMap:
+          name: cloudadminscript
+          defaultMode: 0777
+        name: cloudadminscript
+{{ end }}

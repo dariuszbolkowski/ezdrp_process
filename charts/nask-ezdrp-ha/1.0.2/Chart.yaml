@@ -1,0 +1,34 @@
+apiVersion: v2
+appVersion: 1.2024-19.7
+description: Elektroniczne Zarządzanie Dokumentacją RP
+home: https://ezd.gov.pl/www/index
+icon: https://www.nask.pl/dokumenty/zalaczniki/30/30-3224_g.png
+dependencies:
+#  - condition: global.ezd-crd.deploy
+#    name: ezd-crd
+#    repository: file://./charts/ezd-crd
+#    version: 1.4.1
+  - condition: global.ezd-backend.deploy
+    name: ezd-backend
+    repository: file://./charts/ezd-backend
+    version: 1.4.1
+keywords:
+- ezdrp
+- cms
+- dokumenty
+- administracja
+- rp
+- ezd
+maintainers:
+- email: duchu.zgloszenia@nask.pl
+  name: NASK
+name: nask-ezdrp-ha
+type: application
+version: 19.7.17
+
+annotations:
+#  catalog.cattle.io/auto-install: ezd-crd=1.4.1
+#  catalog.cattle.io/namespace: ezd-rp
+  catalog.cattle.io/display-name: NASK EZD RP
+  catalog.cattle.io/os: linux
+  catalog.cattle.io/release-name: ezdrp
