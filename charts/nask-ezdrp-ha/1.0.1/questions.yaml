@@ -430,6 +430,7 @@ questions:
   - variable: filerepository.persistence.filerepoStorageType
     type: enum
     options: ["S3"]
+    default: "S3"
     description: "S3 for S3 systems (eq MINIO, etc.)"
     label: Choose Filerepository Storage Configuration
     required: true
