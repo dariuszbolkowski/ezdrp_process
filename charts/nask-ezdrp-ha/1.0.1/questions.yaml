@@ -81,6 +81,52 @@ questions:
       type: string
       default: "rabbitmq.my.domain.internal"
 
+  #rabbit :
+- variable: useBuiltInRabbit.enabled
+  default: false
+  description: "Use internal builtin RabbitMQ"
+  label: Use builtin RabbitMQ container
+  type: boolean
+  group: "Rabbit Database Configuration"
+  show_if: "global.rabbitmq.deploy=false"
+- variable: rabbitExt.host
+  default: "127.0.0.1"
+  description: "Enter the external RabbitMQ address"
+  type: string
+  label: Hostname for external RabbitMQ
+  show_if: "useBuiltInRabbit.enabled=false&&global.rabbitmq.deploy=false"
+  group: "Rabbit Database Configuration"
+- variable: rabbitExt.port
+  default: "5672"
+  description: "Enter the port for external RabbitMQ"
+  type: string
+  label: Port for external RabbitMQ
+  show_if: "useBuiltInRabbit.enabled=false&&global.rabbitmq.deploy=false"
+  group: "Rabbit Database Configuration"
+- variable: rabbitExt.user
+  default: "ezdrpadmin"
+  description: "Type the username for external RabbitMQ"
+  type: string
+  label: Username for external RabbitMQ
+  show_if: "useBuiltInRabbit.enabled=false&&global.rabbitmq.deploy=false"
+  group: "Rabbit Database Configuration"
+- variable: rabbitExt.password
+  description: "Type the password for external RabbitMQ. Min. length is 30 characters. Do not use special character like : ';'"
+  type: password
+  min_length: 30
+  invalid_chars: ";"
+  label: Password for external RabbitMQ
+  show_if: "useBuiltInRabbit.enabled=false&&global.rabbitmq.deploy=false"
+  group: "Rabbit Database Configuration"
+- variable: rabbitInt.useExistingSecret
+  default: "rabbit-config"
+  description: "Use secret with existing config to RabbitMQ"
+  type: secret
+  required: true
+  label: Use existing secret
+  show_if: "useBuiltInRabbit.enabled=true&&global.rabbitmq.deploy=false"
+  group: "Rabbit Database Configuration"
+
 - variable: global.postgresql.deploy
   default: "true"
   label: Deploy Postgresql
@@ -158,62 +204,62 @@ questions:
       type: string
       default: "2Gi"
 #relationaldb :
-  - variable: cloudadmin.relationaldb.connectiontype.ezdrp
-    description: "Choose database for installation."
-    label: Select database type
-    type: enum
-    options: ["POSTGRESQL", "SQLSERVER"]
-    group: "Database Configuration"
-    show_if: "global.postgresql.deploy=false"
-  - variable: cloudadmin.relationaldb.connectionstring.ezdrp
-    default: "Host=<EZDRP_DB_HOSTNAME>;Port=<EZDRP_DB_PORT>;Database=<EZDRP_DB_NAME>;Username=<EZDRP_DB_USER>;Password='<EZDRP_DB_PASSWORD>' "
-    description: "Set <EZDRP_DB_HOSTNAME> to your propper value (eq. your.domain.for.ezdrp.ezd.db.pl or server IP)"
-    type: string
-    label: External DB connectionstring
-    group: "Database Configuration"
-    show_if: "global.postgresql.deploy=false"
-  - variable: cloudadmin.relationaldb.connectiontype.archiwum
-    description: "Choose database for ARCHIWUM."
-    label: Select ARCHIWUM database type
-    type: enum
-    options: ["POSTGRESQL", "SQLSERVER"]
-    group: "Database Configuration"
-    show_if: "global.postgresql.deploy=false"
-  - variable: cloudadmin.relationaldb.connectionstring.archiwum
-    default: "Host=<ARCHIWUM_DB_HOSTNAME>;Port=<ARCHIWUM_DB_PORT>;Database=<ARCHIWUM_DB_NAME>;Username=<ARCHIWUM_DB_USER>;Password='<ARCHIWUM_DB_PASSWORD>' "
-    description: "Set <ARCHIWUM_DB_HOSTNAME> to your propper value (eq. your.domain.for.archiwum.ezd.db.pl or server IP)"
-    type: string
-    label: External DB connectionstring
-    group: "Database Configuration"
-    show_if: "global.postgresql.deploy=false"
-  - variable: cloudadmin.relationaldb.connectiontype.kuip
-    description: "Choose database for KUIP."
-    label: Select KUIP database type
-    type: enum
-    options: ["POSTGRESQL", "SQLSERVER" ]
-    group: "Database Configuration"
-    show_if: "global.postgresql.deploy=false"
-  - variable: cloudadmin.relationaldb.connectionstring.kuip
-    default: "Host=<KUIP_DB_HOSTNAME>;Port=<KUIP_DB_PORT>;Database=<KUIP_DB_NAME>;Username=<KUIP_DB_USER>;Password='<KUIP_DB_PASSWORD>' "
-    description: "Set <KUIP_DB_HOSTNAME> to your propper value (eq. your.domain.for.kuip.ezd.db.pl or server IP)"
-    type: string
-    label: External DB connectionstring
-    group: "Database Configuration"
-    show_if: "global.postgresql.deploy=false"
-  - variable: cloudadmin.relationaldb.connectiontype.ezdrpodczyt
-    description: "Choose database for EZDRP_ODCZYT."
-    label: Select EZDRP_ODCZYT database type
-    type: enum
-    options: ["POSTGRESQL", "SQLSERVER" ]
-    group: "Database Configuration"
-    show_if: "global.postgresql.deploy=false"
-  - variable: cloudadmin.relationaldb.connectionstring.ezdrpodczyt
-    default: "Host=<EZDRP_ODCZYT_DB_HOSTNAME>;Port=<EZDRP_ODCZYT_DB_PORT>;Database=<EZDRP_ODCZYT_DB_NAME>;Username=<EZDRP_ODCZYT_DB_USER>;Password='<EZDRP_ODCZYT_DB_PASSWORD>' "
-    description: "Set <EZDRP_ODCZYT_DB_HOSTNAME> to your propper value (eq. your.domain.for.odczyt.ezd.db.pl or server IP)"
-    type: string
-    label: External DB connectionstring
-    group: "Database Configuration"
-    show_if: "global.postgresql.deploy=false"
+- variable: cloudadmin.relationaldb.connectiontype.ezdrp
+  description: "Choose database for installation."
+  label: Select database type
+  type: enum
+  options: ["POSTGRESQL", "SQLSERVER"]
+  group: "Database Configuration"
+  show_if: "global.postgresql.deploy=false"
+- variable: cloudadmin.relationaldb.connectionstring.ezdrp
+  default: "Host=<EZDRP_DB_HOSTNAME>;Port=<EZDRP_DB_PORT>;Database=<EZDRP_DB_NAME>;Username=<EZDRP_DB_USER>;Password='<EZDRP_DB_PASSWORD>' "
+  description: "Set <EZDRP_DB_HOSTNAME> to your propper value (eq. your.domain.for.ezdrp.ezd.db.pl or server IP)"
+  type: string
+  label: External DB connectionstring
+  group: "Database Configuration"
+  show_if: "global.postgresql.deploy=false"
+- variable: cloudadmin.relationaldb.connectiontype.archiwum
+  description: "Choose database for ARCHIWUM."
+  label: Select ARCHIWUM database type
+  type: enum
+  options: ["POSTGRESQL", "SQLSERVER"]
+  group: "Database Configuration"
+  show_if: "global.postgresql.deploy=false"
+- variable: cloudadmin.relationaldb.connectionstring.archiwum
+  default: "Host=<ARCHIWUM_DB_HOSTNAME>;Port=<ARCHIWUM_DB_PORT>;Database=<ARCHIWUM_DB_NAME>;Username=<ARCHIWUM_DB_USER>;Password='<ARCHIWUM_DB_PASSWORD>' "
+  description: "Set <ARCHIWUM_DB_HOSTNAME> to your propper value (eq. your.domain.for.archiwum.ezd.db.pl or server IP)"
+  type: string
+  label: External DB connectionstring
+  group: "Database Configuration"
+  show_if: "global.postgresql.deploy=false"
+- variable: cloudadmin.relationaldb.connectiontype.kuip
+  description: "Choose database for KUIP."
+  label: Select KUIP database type
+  type: enum
+  options: ["POSTGRESQL", "SQLSERVER" ]
+  group: "Database Configuration"
+  show_if: "global.postgresql.deploy=false"
+- variable: cloudadmin.relationaldb.connectionstring.kuip
+  default: "Host=<KUIP_DB_HOSTNAME>;Port=<KUIP_DB_PORT>;Database=<KUIP_DB_NAME>;Username=<KUIP_DB_USER>;Password='<KUIP_DB_PASSWORD>' "
+  description: "Set <KUIP_DB_HOSTNAME> to your propper value (eq. your.domain.for.kuip.ezd.db.pl or server IP)"
+  type: string
+  label: External DB connectionstring
+  group: "Database Configuration"
+  show_if: "global.postgresql.deploy=false"
+- variable: cloudadmin.relationaldb.connectiontype.ezdrpodczyt
+  description: "Choose database for EZDRP_ODCZYT."
+  label: Select EZDRP_ODCZYT database type
+  type: enum
+  options: ["POSTGRESQL", "SQLSERVER" ]
+  group: "Database Configuration"
+  show_if: "global.postgresql.deploy=false"
+- variable: cloudadmin.relationaldb.connectionstring.ezdrpodczyt
+  default: "Host=<EZDRP_ODCZYT_DB_HOSTNAME>;Port=<EZDRP_ODCZYT_DB_PORT>;Database=<EZDRP_ODCZYT_DB_NAME>;Username=<EZDRP_ODCZYT_DB_USER>;Password='<EZDRP_ODCZYT_DB_PASSWORD>' "
+  description: "Set <EZDRP_ODCZYT_DB_HOSTNAME> to your propper value (eq. your.domain.for.odczyt.ezd.db.pl or server IP)"
+  type: string
+  label: External DB connectionstring
+  group: "Database Configuration"
+  show_if: "global.postgresql.deploy=false"
       
 - variable: global.redis.deploy
   default: "true"
@@ -541,50 +587,6 @@ questions:
 
 
 
-  #rabbit :
-- variable: useBuiltInRabbit.enabled
-  default: false
-  description: "Use internal builtin RabbitMQ"
-  label: Use builtin RabbitMQ container
-  type: boolean
-  group: "Rabbit Database Configuration"
-- variable: rabbitExt.host
-  default: "127.0.0.1"
-  description: "Enter the external RabbitMQ address"
-  type: string
-  label: Hostname for external RabbitMQ
-  show_if: "useBuiltInRabbit.enabled=false"
-  group: "Rabbit Database Configuration"
-- variable: rabbitExt.port
-  default: "5672"
-  description: "Enter the port for external RabbitMQ"
-  type: string
-  label: Port for external RabbitMQ
-  show_if: "useBuiltInRabbit.enabled=false"
-  group: "Rabbit Database Configuration"
-- variable: rabbitExt.user
-  default: "ezdrpadmin"
-  description: "Type the username for external RabbitMQ"
-  type: string
-  label: Username for external RabbitMQ
-  show_if: "useBuiltInRabbit.enabled=false"
-  group: "Rabbit Database Configuration"
-- variable: rabbitExt.password
-  description: "Type the password for external RabbitMQ. Min. length is 30 characters. Do not use special character like : ';'"
-  type: password
-  min_length: 30
-  invalid_chars: ";"
-  label: Password for external RabbitMQ
-  show_if: "useBuiltInRabbit.enabled=false"
-  group: "Rabbit Database Configuration"
-- variable: rabbitInt.useExistingSecret
-  default: "rabbit-config"
-  description: "Use secret with existing config to RabbitMQ"
-  type: secret
-  required: true
-  label: Use existing secret
-  show_if: "useBuiltInRabbit.enabled=true"
-  group: "Rabbit Database Configuration"
 
 
 
