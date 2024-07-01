@@ -11,6 +11,7 @@ questions:
   show_subquestion_if: true
   subquestions:
   - variable: global.rabbitmqConfig.auth.username
+    default: "ezdrpadmin"
     label: Username
     description: "RabbitMQ Username"
     group: "Rabbit Database Configuration"
@@ -697,7 +698,7 @@ questions:
   label: Hostname
   group: "Domain info"
 - variable: domainInfo.cert_info
-  default: false
+  default: true
   description: "If true - enter the name of these certificate in next step - if false - we create your self signed cert."
   type: boolean
   label: Domain certificate - wildcard - for EZD
