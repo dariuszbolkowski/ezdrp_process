@@ -3,9 +3,9 @@ global:
     deploy: true
   rabbitmqConfig:
     fullnameOverride: "lp-backend-rabbitmq"
-    auth:
-      username: ""
-      password: ""
+#    auth:
+#      username: ""
+#      password: ""
     customConfig:
       replicas: 1
       persistence:
@@ -20,9 +20,9 @@ global:
 
   postgresqlConfig:
     fullnameOverride: "lp-backend-postgresql"
-    auth:
-      admPassword: ""
-      appPassword: ""
+#    auth:
+#      admPassword: ""
+#      appPassword: ""
     customConfig:
       instances: 1
       minSyncReplicas: 0
@@ -46,8 +46,8 @@ global:
 
   redisConfig:
     fullnameOverride: "lp-backend-redis"
-    auth:
-      password: ""
+#    auth:
+#      password: ""
     customConfig:
       kubernetesConfig:
         resources:
