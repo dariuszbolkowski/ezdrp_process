@@ -1,5 +1,5 @@
 labels:
-  io.cattle.role: cluster # options are cluster/project
+  io.cattle.role: project # options are cluster/project
   io.rancher.app_min_version: 7.3.8
 
 questions:
