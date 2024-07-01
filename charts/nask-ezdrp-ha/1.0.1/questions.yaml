@@ -423,7 +423,7 @@ questions:
 
 #domain info
 - variable: domainInfo.name
-  default: "xip.io"
+  default: "project.domain.pl"
   description: "Enter the hostname to your EZDRP installation"
   type: hostname
   required: true
@@ -438,7 +438,7 @@ questions:
   show_subquestion_if: true
   subquestions:
     - variable: domainInfo.cert_name
-      default: "certyfikat"
+      default: "ezdrp-cert"
       description: "Enter the domain certificate name from Kubernetes (wildcard only - must exist already)"
       type: string
       required: true

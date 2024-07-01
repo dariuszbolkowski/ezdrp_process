@@ -25,3 +25,10 @@ maintainers:
 name: nask-ezdrp-ha
 type: application
 version: 19.7.16
+
+annotations:
+#  catalog.cattle.io/auto-install: ezd-crd=1.4.1
+#  catalog.cattle.io/namespace: ezd-rp
+  catalog.cattle.io/display-name: NASK EZD RP
+  catalog.cattle.io/os: linux
+  catalog.cattle.io/release-name: nask-ezdrp-ha

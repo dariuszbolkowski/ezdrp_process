@@ -83,7 +83,7 @@ affinity:
 
 domainInfo:
   name: project.domain.pl
-  cert_name: certyfikat
+  cert_name: ezdrp-cert
   cert_info: false
 
 network:
@@ -168,6 +168,7 @@ waitfor:
 
 #email credentials :
 email:
+  active: false
   host: loalhost
   port: 587
   sendermail: test@mail.loc
