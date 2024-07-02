@@ -9,7 +9,7 @@ entries:
       catalog.cattle.io/release-name: ezd-backend
     apiVersion: v2
     appVersion: 1.2024-19.7
-    created: "2024-07-01T11:28:33.405215944+02:00"
+    created: "2024-07-02T08:56:01.633296836+02:00"
     description: Services necessary to run EZD RP app
     digest: e889436fceace468b990d394759e86c8e2996979b2a46502e95f0c78cfc692d8
     home: https://linuxpolska.com
@@ -36,7 +36,7 @@ entries:
       catalog.cattle.io/release-name: ezd-crd
     apiVersion: v2
     appVersion: 1.2024-19.7
-    created: "2024-07-01T11:28:33.422040248+02:00"
+    created: "2024-07-02T08:56:01.650440281+02:00"
     dependencies:
     - condition: global.rabbitmq.deploy
       name: rabbitmq-operator
@@ -71,6 +71,21 @@ entries:
     urls:
     - ezd-crd/ezd-crd-1.4.1.tgz
     version: 1.4.1
+  mercury:
+  - annotations:
+      catalog.cattle.io/display-name: testuje
+      catalog.cattle.io/os: linux
+      catalog.cattle.io/release-name: testy
+    apiVersion: v2
+    appVersion: 1.16.0
+    created: "2024-07-02T08:56:01.650735226+02:00"
+    description: A Helm chart for Kubernetes
+    digest: d06679d7cd0ffbb5d097eabc0a142606607787aa5f3b81f53d61f0a9e095a52e
+    name: mercury
+    type: application
+    urls:
+    - mercury/mercury-0.1.0.tgz
+    version: 0.1.0
   monitoring-stack-app:
   - annotations:
       catalog.cattle.io/auto-install: monitoring-stack-crd=match
@@ -79,7 +94,7 @@ entries:
       catalog.cattle.io/release-name: monitoring-stack-app
     apiVersion: v2
     appVersion: 1.2024-1.0.0
-    created: "2024-07-01T11:28:33.447266466+02:00"
+    created: "2024-07-02T08:56:01.676861346+02:00"
     dependencies:
     - condition: global.elastic.enabled
       name: elastic
@@ -122,7 +137,7 @@ entries:
       catalog.cattle.io/release-name: monitoring-stack-crd
     apiVersion: v2
     appVersion: 1.2024-1.0.0
-    created: "2024-07-01T11:28:33.460626667+02:00"
+    created: "2024-07-02T08:56:01.689199698+02:00"
     dependencies:
     - condition: global.eck-operator-crds.enabled
       name: eck-operator-crds
@@ -167,7 +182,7 @@ entries:
       catalog.cattle.io/release-name: security-stack-crd
     apiVersion: v2
     appVersion: 1.2024-1.0.0
-    created: "2024-07-01T11:28:33.529867079+02:00"
+    created: "2024-07-02T08:56:01.763616388+02:00"
     dependencies:
     - alias: neuvector-crds
       condition: global.neuvector-crd.enabled
@@ -221,7 +236,7 @@ entries:
       catalog.cattle.io/release-name: ezdrp
     apiVersion: v2
     appVersion: 1.2024-19.7
-    created: "2024-07-01T11:28:33.491951231+02:00"
+    created: "2024-07-02T08:56:01.722771142+02:00"
     dependencies:
     - alias: ezdBackend
       condition: global.ezd-backend.deploy
@@ -253,7 +268,7 @@ entries:
       catalog.cattle.io/release-name: ezdrp
     apiVersion: v2
     appVersion: 1.2024-19.7
-    created: "2024-07-01T11:28:33.487520735+02:00"
+    created: "2024-07-02T08:56:01.718000894+02:00"
     dependencies:
     - condition: global.ezd-backend.deploy
       name: ezd-backend
@@ -280,7 +295,7 @@ entries:
     version: 19.7.16
   - apiVersion: v2
     appVersion: 1.2024-19.7
-    created: "2024-07-01T11:28:33.482669063+02:00"
+    created: "2024-07-02T08:56:01.713434462+02:00"
     dependencies:
     - condition: global.ezd-crd.deploy
       name: ezd-crd
@@ -317,7 +332,7 @@ entries:
       catalog.cattle.io/release-name: security-stack-app
     apiVersion: v2
     appVersion: 1.2024-1.0.0
-    created: "2024-07-01T11:28:33.516898074+02:00"
+    created: "2024-07-02T08:56:01.750704473+02:00"
     dependencies:
     - condition: global.conjur-oss.enabled
       name: conjur-oss
@@ -378,7 +393,7 @@ entries:
       catalog.cattle.io/release-name: security-stack-crd
     apiVersion: v2
     appVersion: 1.2024-1.0.0
-    created: "2024-07-01T11:28:33.543513308+02:00"
+    created: "2024-07-02T08:56:01.776170426+02:00"
     dependencies:
     - alias: neuvector-crds
       condition: global.neuvector-crd.enabled
@@ -425,4 +440,4 @@ entries:
     urls:
     - security-stack-crd/security-stack-crd-1.0.0.tgz
     version: 1.0.0
-generated: "2024-07-01T11:28:33.40414986+02:00"
+generated: "2024-07-02T08:56:01.632177591+02:00"
