@@ -690,19 +690,26 @@ questions:
 
 
 #domain info
+
+- variable: global.ezd.rootPassword
+  label: Password
+  description: "EZD RP Root password"
+  group: "EZD Configuration"
+  type: password
+  min: 8
 - variable: domainInfo.name
   default: "project.domain.pl"
   description: "Enter the hostname to your EZDRP installation"
   type: hostname
   required: true
   label: Hostname
-  group: "Domain info"
+  group: "EZD Configuration"
 - variable: domainInfo.cert_info
   default: true
   description: "If true - enter the name of these certificate in next step - if false - we create your self signed cert."
   type: boolean
   label: Domain certificate - wildcard - for EZD
-  group: "Domain info"
+  group: "EZD Configuration"
   show_subquestion_if: true
   subquestions:
     - variable: domainInfo.cert_name

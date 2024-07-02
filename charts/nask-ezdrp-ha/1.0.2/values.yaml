@@ -1,15 +1,30 @@
+
 global:
+  rabbitmq:
+    deploy: true
+    custom:
+      consumpion: false
   rabbitmqConfig:
     auth:
       username: ""
       password: ""
+  postgresql:
+    deploy: true
+    custom:
+      consumpion: false
   postgresqlConfig:
     auth:
       admPassword: ""
       appPassword: ""
+  redis:
+    deploy: true
+    custom:
+      consumpion: false
   redisConfig:
     auth:
       password: ""
+  ezd:
+    rootPassword: ""
   
 ezdBackend:
   rabbitmqConfig:

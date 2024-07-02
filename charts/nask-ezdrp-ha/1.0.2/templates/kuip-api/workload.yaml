@@ -46,6 +46,9 @@ spec:
             value: {{ .Values.ezd.logging_serilog_seq_logger | quote }}
           - name: ice-logging-Serilog__Properties__ConsoleLogger
             value: {{ .Values.ezd.logging_serilog_console_logger | quote }}
+          - name: KUIP_ROOT_RESET_PASSWORD
+            value: {{ .Values.global.ezd.rootPassword | quote }}
+
           imagePullPolicy: IfNotPresent
           readinessProbe:
             failureThreshold: 2
