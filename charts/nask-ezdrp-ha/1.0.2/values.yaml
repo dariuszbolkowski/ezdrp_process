@@ -157,7 +157,7 @@ rabbitExt:
 redisAppendExt:
 #  password: 
 #  host: 
-  port: 6380
+  port: 6379
   serviceName: mymaster
   isCluster: false
 
