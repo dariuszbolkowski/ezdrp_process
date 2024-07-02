@@ -107,7 +107,7 @@ regexp ezdrp username :
 regexp ezdrp password :
 */}}
 {{- define "ezdrp.connstring.ezdrp.password" }}
-{{- .Values.ezdBackend.postgresqlConfig.auth.admPassword }}
+{{- .Values.global.postgresqlConfig.auth.admPassword }}
 {{- end -}}
 
 {{/*
@@ -155,7 +155,7 @@ regexp kuip username :
 regexp kuip password :
 */}}
 {{- define "ezdrp.connstring.kuip.password" }}
-{{- .Values.ezdBackend.postgresqlConfig.auth.admPassword }}
+{{- .Values.global.postgresqlConfig.auth.admPassword }}
 {{- end -}}
 
 {{/*
@@ -202,7 +202,7 @@ regexp archiwum username :
 regexp archiwum password :
 */}}
 {{- define "ezdrp.connstring.archiwum.password" }}
-{{- .Values.ezdBackend.postgresqlConfig.auth.admPassword }}
+{{- .Values.global.postgresqlConfig.auth.admPassword }}
 {{- end -}}
 
 {{/*
@@ -248,7 +248,7 @@ regexp ezdrpodczyt username :
 regexp ezdrpodczyt password :
 */}}
 {{- define "ezdrp.connstring.ezdrpodczyt.password" }}
-{{- .Values.ezdBackend.postgresqlConfig.auth.admPassword }}
+{{- .Values.global.postgresqlConfig.auth.admPassword }}
 {{- end -}}
 
 {{/*

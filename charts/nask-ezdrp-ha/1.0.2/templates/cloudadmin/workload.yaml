@@ -64,11 +64,11 @@ spec:
           - name: EZD_INTERNAL_RABBIT_HOST
             value: {{ .Values.ezdBackend.rabbitmqConfig.fullnameOverride }}
           - name: EZD_INTERNAL_RABBIT_PASSWORD
-            value: {{ .Values.ezdBackend.rabbitmqConfig.auth.password }}
+            value: {{ .Values.global.rabbitmqConfig.auth.password }}
           - name: EZD_INTERNAL_RABBIT_PORT
             value: {{ .Values.rabbitExt.port | quote  }}
           - name: EZD_INTERNAL_RABBIT_USER
-            value: {{ .Values.ezdBackend.rabbitmqConfig.auth.username }}
+            value: {{ .Values.global.rabbitmqConfig.auth.username }}
 
           - name: EZD_INTERNAL_RABBIT_DB
             value: {{ .Values.ezdrpApi.rabbitmq.vhostezdrp }}
@@ -80,7 +80,7 @@ spec:
           - name: EZD_REDIS_HOST
             value: {{ .Values.ezdBackend.redisConfig.fullnameOverride }}
           - name: EZD_REDIS_PASSWORD
-            value: {{ .Values.ezdBackend.redisConfig.auth.password | quote }}
+            value: {{ .Values.global.redisConfig.auth.password | quote }}
           {{- if and .Values.redisExt.serviceName .Values.redisExt.isCluster }}
           - name: EZD_REDIS_SERVICENAME
             value: {{ .Values.redisExt.serviceName }}
@@ -94,7 +94,7 @@ spec:
           - name: EZD_REDIS_APPEND_HOST
             value: {{ .Values.ezdBackend.redisConfig.fullnameOverride }}-append
           - name: EZD_REDIS_APPEND_PASSWORD
-            value: {{ .Values.ezdBackend.redisConfig.auth.password }}
+            value: {{ .Values.global.redisConfig.auth.password }}
           {{- if and .Values.redisAppendExt.serviceName .Values.redisAppendExt.isCluster }}
           - name: EZD_REDIS_APPEND_SERVICENAME
             value: {{ .Values.redisAppendExt.serviceName }}

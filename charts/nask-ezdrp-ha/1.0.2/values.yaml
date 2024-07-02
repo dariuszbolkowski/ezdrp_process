@@ -1,12 +1,19 @@
 global:
-  ezd-backend:
-    deploy: true
+  rabbitmqConfig:
+    auth:
+      username: ""
+      password: ""
+  postgresqlConfig:
+    auth:
+      admPassword: ""
+      appPassword: ""
+  redisConfig:
+    auth:
+      password: ""
+  
 ezdBackend:
   rabbitmqConfig:
     fullnameOverride: "lp-backend-rabbitmq"
-#    auth:
-#      username: ""
-#      password: ""
     customConfig:
       replicas: 1
       persistence:
@@ -21,9 +28,6 @@ ezdBackend:
 
   postgresqlConfig:
     fullnameOverride: "lp-backend-postgresql"
-#    auth:
-#      admPassword: ""
-#      appPassword: ""
     customConfig:
       instances: 1
       minSyncReplicas: 0
@@ -47,8 +51,6 @@ ezdBackend:
 
   redisConfig:
     fullnameOverride: "lp-backend-redis"
-#    auth:
-#      password: ""
     customConfig:
       kubernetesConfig:
         resources:
@@ -61,7 +63,6 @@ ezdBackend:
       storage:
         volumeClaimTemplate:
           spec:
-            accessModes: ["ReadWriteOnce"]
             resources:
               requests:
                 storage: 1Gi

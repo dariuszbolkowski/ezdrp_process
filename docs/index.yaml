@@ -9,7 +9,7 @@ entries:
       catalog.cattle.io/release-name: ezd-backend
     apiVersion: v2
     appVersion: 1.2024-19.7
-    created: "2024-07-02T09:18:35.383597832+02:00"
+    created: "2024-07-02T11:05:40.310416067+02:00"
     description: Services necessary to run EZD RP app
     digest: e889436fceace468b990d394759e86c8e2996979b2a46502e95f0c78cfc692d8
     home: https://linuxpolska.com
@@ -36,7 +36,7 @@ entries:
       catalog.cattle.io/release-name: ezd-crd
     apiVersion: v2
     appVersion: 1.2024-19.7
-    created: "2024-07-02T09:18:35.399818258+02:00"
+    created: "2024-07-02T11:05:40.327725266+02:00"
     dependencies:
     - condition: global.rabbitmq.deploy
       name: rabbitmq-operator
@@ -78,7 +78,7 @@ entries:
       catalog.cattle.io/release-name: testy
     apiVersion: v2
     appVersion: 1.16.0
-    created: "2024-07-02T09:18:35.400047387+02:00"
+    created: "2024-07-02T11:05:40.327949783+02:00"
     description: A Helm chart for Kubernetes
     digest: 558d3a2d20888ae8ed4d95438ff7703a9a219f9f20177bcfba81270f26c88e9f
     name: mercury
@@ -94,7 +94,7 @@ entries:
       catalog.cattle.io/release-name: monitoring-stack-app
     apiVersion: v2
     appVersion: 1.2024-1.0.0
-    created: "2024-07-02T09:18:35.426495279+02:00"
+    created: "2024-07-02T11:05:40.353872844+02:00"
     dependencies:
     - condition: global.elastic.enabled
       name: elastic
@@ -137,7 +137,7 @@ entries:
       catalog.cattle.io/release-name: monitoring-stack-crd
     apiVersion: v2
     appVersion: 1.2024-1.0.0
-    created: "2024-07-02T09:18:35.440493447+02:00"
+    created: "2024-07-02T11:05:40.367844503+02:00"
     dependencies:
     - condition: global.eck-operator-crds.enabled
       name: eck-operator-crds
@@ -182,7 +182,7 @@ entries:
       catalog.cattle.io/release-name: security-stack-crd
     apiVersion: v2
     appVersion: 1.2024-1.0.0
-    created: "2024-07-02T09:18:35.514245245+02:00"
+    created: "2024-07-02T11:05:40.435700943+02:00"
     dependencies:
     - alias: neuvector-crds
       condition: global.neuvector-crd.enabled
@@ -236,15 +236,14 @@ entries:
       catalog.cattle.io/release-name: ezdrp
     apiVersion: v2
     appVersion: 1.2024-19.7
-    created: "2024-07-02T09:18:35.477042636+02:00"
+    created: "2024-07-02T11:05:40.398913352+02:00"
     dependencies:
     - alias: ezdBackend
-      condition: global.ezd-backend.deploy
       name: ezd-backend
       repository: file://./charts/ezd-backend
       version: 1.4.1
     description: Elektroniczne Zarządzanie Dokumentacją RP
-    digest: 049fb27482a129f09db82ac637a61fcd40f403c34e2606e3fb43ea4c5c5e6146
+    digest: 0d375552e22e8974b4f3992d721caaeed71dfb26ea20fc447fe58deff03f5151
     home: https://ezd.gov.pl/www/index
     icon: https://www.nask.pl/dokumenty/zalaczniki/30/30-3224_g.png
     keywords:
@@ -268,7 +267,7 @@ entries:
       catalog.cattle.io/release-name: ezdrp
     apiVersion: v2
     appVersion: 1.2024-19.7
-    created: "2024-07-02T09:18:35.470703587+02:00"
+    created: "2024-07-02T11:05:40.394114359+02:00"
     dependencies:
     - condition: global.ezd-backend.deploy
       name: ezd-backend
@@ -295,7 +294,7 @@ entries:
     version: 19.7.16
   - apiVersion: v2
     appVersion: 1.2024-19.7
-    created: "2024-07-02T09:18:35.466178364+02:00"
+    created: "2024-07-02T11:05:40.388910449+02:00"
     dependencies:
     - condition: global.ezd-crd.deploy
       name: ezd-crd
@@ -332,7 +331,7 @@ entries:
       catalog.cattle.io/release-name: security-stack-app
     apiVersion: v2
     appVersion: 1.2024-1.0.0
-    created: "2024-07-02T09:18:35.501220311+02:00"
+    created: "2024-07-02T11:05:40.424225697+02:00"
     dependencies:
     - condition: global.conjur-oss.enabled
       name: conjur-oss
@@ -393,7 +392,7 @@ entries:
       catalog.cattle.io/release-name: security-stack-crd
     apiVersion: v2
     appVersion: 1.2024-1.0.0
-    created: "2024-07-02T09:18:35.526866629+02:00"
+    created: "2024-07-02T11:05:40.448593269+02:00"
     dependencies:
     - alias: neuvector-crds
       condition: global.neuvector-crd.enabled
@@ -440,4 +439,4 @@ entries:
     urls:
     - security-stack-crd/security-stack-crd-1.0.0.tgz
     version: 1.0.0
-generated: "2024-07-02T09:18:35.382559761+02:00"
+generated: "2024-07-02T11:05:40.309304475+02:00"

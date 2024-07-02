@@ -79,7 +79,7 @@ spec:
           - name: REDIS_SERVICENAME
             value: {{ .Values.redisExt.user }}
           - name: REDIS_PASSWORD
-            value: {{ .Values.ezdBackend.redisConfig.auth.password }}
+            value: {{ .Values.global.redisConfig.auth.password }}
           - name: Serilog__MinimumLevel__Default
             value: {{ .Values.ezd.minimum_log_level | quote }}
           - name: Serilog__WriteTo__1__Args__serverUrl

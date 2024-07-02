@@ -1,5 +1,5 @@
 labels:
-  io.cattle.role: project # options are cluster/project
+  io.cattle.role: cluster # options are cluster/project
   io.rancher.app_min_version: 7.3.8
 
 questions:
@@ -10,7 +10,7 @@ questions:
   group: "Components"
   show_subquestion_if: true
   subquestions:
-  - variable: ezdBackend.rabbitmqConfig.auth.username
+  - variable: global.rabbitmqConfig.auth.username
     default: "ezdrpadmin"
     label: Username
     description: "RabbitMQ Username"
@@ -18,7 +18,7 @@ questions:
     type: string
     min: 6
     required: true
-  - variable: ezdBackend.rabbitmqConfig.auth.password
+  - variable: global.rabbitmqConfig.auth.password
     label: Password
     description: "RabbitMQ Password"
     group: "Rabbit Database Configuration"
@@ -135,14 +135,14 @@ questions:
   group: "Components"
   show_subquestion_if: true
   subquestions:
-  - variable: ezdBackend.postgresqlConfig.auth.admPassword
+  - variable: global.postgresqlConfig.auth.admPassword
     label: SuperUser Password
     description: "Password for SuperUser role"
     group: "Database Configuration"
     type: password
     min: 8
     required: true
-  - variable: ezdBackend.postgresqlConfig.auth.appPassword
+  - variable: global.postgresqlConfig.auth.appPassword
     label: Application Password
     description: "Password for application role"
     group: "Database Configuration"
@@ -269,7 +269,7 @@ questions:
   group: "Components"
   show_subquestion_if: true
   subquestions:
-  - variable: ezdBackend.redisConfig.auth.password
+  - variable: global.redisConfig.auth.password
     label: Password
     description: "Redis Password"
     group: "Redis Database Configuration"

@@ -60,11 +60,11 @@ spec:
             - name: BROKER_SERVER_HOST
               value: {{ .Values.ezdBackend.rabbitmqConfig.fullnameOverride }}
             - name: BROKER_PASSWORD
-              value: {{ .Values.ezdBackend.rabbitmqConfig.auth.password }}
+              value: {{ .Values.global.rabbitmqConfig.auth.password }}
             - name: BROKER_PORT
               value: {{ .Values.rabbitExt.port | quote }}
             - name: BROKER_LOGIN
-              value: {{ .Values.ezdBackend.rabbitmqConfig.auth.username }}
+              value: {{ .Values.global.rabbitmqConfig.auth.username }}
           resources:
             limits:
               cpu: "1000m"
@@ -84,11 +84,11 @@ spec:
           - name: BROKER_SERVER_HOST
             value: {{ .Values.ezdBackend.rabbitmqConfig.fullnameOverride }}
           - name: BROKER_PASSWORD
-            value: {{ .Values.ezdBackend.rabbitmqConfig.auth.password }}
+            value: {{ .Values.global.rabbitmqConfig.auth.password }}
           - name: BROKER_PORT
             value: {{ .Values.rabbitExt.port | quote }}
           - name: BROKER_LOGIN
-            value: {{ .Values.ezdBackend.rabbitmqConfig.auth.username }}
+            value: {{ .Values.global.rabbitmqConfig.auth.username }}
 
           imagePullPolicy: IfNotPresent
           livenessProbe:

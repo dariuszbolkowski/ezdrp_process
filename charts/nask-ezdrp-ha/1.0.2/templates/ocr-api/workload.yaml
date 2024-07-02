@@ -60,11 +60,11 @@ spec:
             - name: BROKER_SERVER_HOST
               value: {{ .Values.ezdBackend.rabbitmqConfig.fullnameOverride }}
             - name: BROKER_PASSWORD
-              value: {{ .Values.ezdBackend.rabbitmqConfig.auth.password }}
+              value: {{ .Values.global.rabbitmqConfig.auth.password }}
             - name: BROKER_PORT
               value: {{ .Values.rabbitExt.port | quote }}
             - name: BROKER_LOGIN
-              value: {{ .Values.ezdBackend.rabbitmqConfig.auth.username }}
+              value: {{ .Values.global.rabbitmqConfig.auth.username }}
           resources:
             limits:
               cpu: "1000m"
@@ -84,15 +84,15 @@ spec:
           - name: RABBIT_OCR_PORT
             value: {{ .Values.rabbitExt.port | quote }}
           - name: RABBIT_OCR_USERNAME
-            value: {{ .Values.ezdBackend.rabbitmqConfig.auth.username }}
+            value: {{ .Values.global.rabbitmqConfig.auth.username }}
           - name: RABBIT_OCR_PASSWORD
-            value: {{ .Values.ezdBackend.rabbitmqConfig.auth.password | quote }}
+            value: {{ .Values.global.rabbitmqConfig.auth.password | quote }}
           - name: REDIS_SERVER_PATH
             value: {{ .Values.ezdBackend.redisConfig.fullnameOverride }}
           - name: REDIS_SERVER_PORT
             value: {{ .Values.redisExt.port | quote }}
           - name: REDIS_PASSWORD
-            value: {{ .Values.ezdBackend.redisConfig.auth.password | quote }}
+            value: {{ .Values.global.redisConfig.auth.password | quote }}
           imagePullPolicy: IfNotPresent
           livenessProbe:
             failureThreshold: 4
