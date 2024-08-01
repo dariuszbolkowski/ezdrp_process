@@ -1,0 +1,259 @@
+{{- if .Values.kuipApi.active }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.kuipApi.moduleName }}
+  labels:
+    app: {{ .Release.Name }}-{{ .Values.kuipApi.moduleName }}
+    role: backend
+    environment: {{ .Values.environment }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-{{ .Values.kuipApi.moduleName }}
+      role: backend
+      environment: {{ .Values.environment }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-{{ .Values.kuipApi.moduleName }}
+        role: backend
+        environment: {{ .Values.environment }}
+    spec:
+      {{- if and (.Values.affinity.nodeAffinitySelector.name) (.Values.affinity.nodeAffinitySelector.value) }}
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: {{ .Values.affinity.nodeAffinitySelector.name }}
+                    operator: In
+                    values:
+                      - {{ .Values.affinity.nodeAffinitySelector.value | quote }}
+      {{- end }}
+              
+      containers:
+        - image: {{ .Values.imageCredentials.registryDomain }}/{{ .Values.kuipApi.image.name }}:{{ .Values.kuipApi.image.version }}
+          env:
+          - name: ICE_CLOUD_ADMIN_URL
+            value: "http://{{ .Values.cloudadmin.moduleName }}:{{ .Values.cloudadmin.port }}"
+          - name: ICE_CONFIG
+            value: {{ .Values.kuipApi.cloudadmin.configname }}
+          - name: ice-logging-Serilog__Properties__SeqLogger
+            value: {{ .Values.ezd.logging_serilog_seq_logger | quote }}
+          - name: ice-logging-Serilog__Properties__ConsoleLogger
+            value: {{ .Values.ezd.logging_serilog_console_logger | quote }}
+          - name: KUIP_ROOT_RESET_PASSWORD
+            value: {{ .Values.global.ezd.rootPassword | quote }}
+
+          imagePullPolicy: IfNotPresent
+          readinessProbe:
+            failureThreshold: 2
+            initialDelaySeconds: {{ .Values.kuipApi.redinessDelay }}
+            periodSeconds: 10
+            successThreshold: 1
+            tcpSocket:
+              port: {{ .Values.kuipApi.port }}
+            timeoutSeconds: 1
+          livenessProbe:
+            failureThreshold: 4
+            initialDelaySeconds: {{ .Values.kuipApi.livenessDelay }}
+            periodSeconds: 10
+            successThreshold: 1
+            tcpSocket:
+              port: {{ .Values.kuipApi.port }}
+            timeoutSeconds: 1
+          name: {{ .Values.kuipApi.moduleName }}
+          startupProbe:
+            failureThreshold: 50
+            initialDelaySeconds: {{ .Values.kuipApi.startupDelay }}
+            periodSeconds: 5
+            successThreshold: 1
+            tcpSocket:
+              port: {{ .Values.kuipApi.port }}
+            timeoutSeconds: 1
+          {{- if or (.Values.kuipApi.resources.limits.cpu) (.Values.kuipApi.resources.limits.memory) (.Values.kuipApi.resources.requests.cpu) (.Values.kuipApi.resources.requests.memory) }}
+          resources:
+            {{- if or (.Values.kuipApi.resources.limits.cpu) (.Values.kuipApi.resources.limits.memory) }}
+            limits:
+              {{- if .Values.kuipApi.resources.limits.cpu }}
+              cpu: {{ .Values.kuipApi.resources.limits.cpu }}
+              {{- end }}
+              {{- if .Values.kuipApi.resources.limits.memory }}
+              memory: {{ .Values.kuipApi.resources.limits.memory }}
+              {{- end }}
+            {{- end }}
+            {{- if or (.Values.kuipApi.resources.requests.cpu) (.Values.kuipApi.resources.requests.memory) }}
+            requests:
+              {{- if .Values.kuipApi.resources.requests.cpu }}
+              cpu: {{ .Values.kuipApi.resources.requests.cpu }}
+              {{- end }}
+              {{- if .Values.kuipApi.resources.requests.memory }}
+              memory: {{ .Values.kuipApi.resources.requests.memory }}
+              {{- end }}
+            {{- end }}
+          {{- end }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities: {}
+            privileged: false
+            readOnlyRootFilesystem: false
+            runAsNonRoot: false
+          stdin: true
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          tty: true
+      dnsConfig: {}
+      dnsPolicy: ClusterFirst
+      initContainers:
+              
+        - name: {{ .Values.ezdrpApi.moduleName }}-createdb-kuip
+      {{- if (eq "ORACLE" .Values.cloudadmin.relationaldb.connectiontype.kuip) }}
+          image: "{{ .Values.job.relationalDB.oracleconnector.registry }}/{{ .Values.job.relationalDB.oracleconnector.imageName }}:{{ .Values.job.relationalDB.oracleconnector.imageTag }}"
+      {{- else }}
+          image: "{{ .Values.job.relationalDB.universalconnector.registry }}/{{ .Values.job.relationalDB.universalconnector.imageName }}:{{ .Values.job.relationalDB.universalconnector.imageTag }}"
+      {{- end -}}
+
+      {{- if (eq "POSTGRESQL" .Values.cloudadmin.relationaldb.connectiontype.kuip) }}
+          command:
+            - bash
+            - -c
+            - >
+              echo -n "check for {{ .Values.cloudadmin.relationaldb.connectiontype.kuip }} connection ";
+              while [[ $( PGPASSWORD=${DBPASSWORD} psql -U ${DBUSER} -h "${DBHOST}" -p "${DBPORT}" -d postgres -tAc "SELECT 1 FROM pg_roles WHERE rolname='${DBUSER}'") -ne '1' ]]; do
+                echo -n  ".";
+                sleep 1;
+              done
+               echo ".. CONNECTED to {{ .Values.cloudadmin.relationaldb.connectiontype.kuip }} (${DBHOST})";
+              if [[ $( PGPASSWORD=${DBPASSWORD} psql -U "${DBUSER}" -h "${DBHOST}" -p "${DBPORT}" -d "$DBNAME" -tAc "SELECT 1 FROM pg_database WHERE datname='$DBNAME'") = '1' ]]; then
+                echo "db ${DBNAME} is exist - skip";
+              else
+                echo "db ${DBNAME} is doesnt exist";
+                 if $( PGPASSWORD=${DBPASSWORD} createdb -h "${DBHOST}" -p "${DBPORT}" -U "${DBUSER}" "${DBNAME}") ; then
+                    echo "i just created it";
+                  else
+                    echo "i have problem with creating ${DBNAME} db";
+                  fi
+              fi
+      {{- end -}}
+      {{- if (eq "MYSQL" .Values.cloudadmin.relationaldb.connectiontype.kuip) }}
+          command:
+            - bash
+            - -c
+            - >
+              echo -n "check for {{ .Values.cloudadmin.relationaldb.connectiontype.kuip }} connection ";
+              while ! mysql -h ${DBHOST} -u ${DBUSER} -p${DBPASSWORD}  -e ";" > /dev/null 2>&1; do
+                echo -n  ".";
+                sleep 1;
+              done
+              echo ".. CONNECTED to {{ .Values.cloudadmin.relationaldb.connectiontype.kuip }} (some-mysql)";
+              if  mysql -h ${DBHOST} -u ${DBUSER} -p$DBPASSWORD "${DBNAME}" -e exit > /dev/null 2>&1; then
+                echo "Exists"
+              else
+                echo "Not exists - creating"
+                mysql -h ${DBHOST} -u ${DBUSER} -p$DBPASSWORD  -e "create database ${DBNAME};"
+              fi
+              if $(mysql -h ${DBHOST} -u ${DBUSER} -p$DBPASSWORD -N -e "select user,host from mysql.user where user='${DBUSER}';" |grep '%' | wc-l) -eq 1  then
+                mysql -h ${DBHOST} -u ${DBUSER} -p$DBPASSWORD  -e "GRANT ALL PRIVILEGES ON ${DBNAME}.* TO '${DBUSER}'@'%';"
+              fi
+              if $(mysql -h ${DBHOST} -u ${DBUSER} -p$DBPASSWORD -N -e "select user,host from mysql.user where user='${DBUSER}';" |grep 'localhost' | wc-l) -eq 1  then
+                mysql -h ${DBHOST} -u ${DBUSER} -p$DBPASSWORD  -e "GRANT ALL PRIVILEGES ON ${DBNAME}.* TO '${DBUSER}'@'localhost';"
+              fi
+                mysql -h ${DBHOST} -u ${DBUSER} -p$DBPASSWORD  -e "FLUSH PRIVILEGES;"
+              done
+      {{- end -}}
+      {{- if (eq "SQLSERVER" .Values.cloudadmin.relationaldb.connectiontype.kuip) }}
+          command:
+            - bash
+            - -c
+            - >
+              echo -n "check for {{ .Values.cloudadmin.relationaldb.connectiontype.kuip }} connection ";
+              while ! sqlcmd -S tcp:${DBHOST},${DBPORT} -U ${DBUSER} -P ${DBPASSWORD} -q "exit" -l 2 > /dev/null 2>&1; do
+                echo -n  ".";
+                sleep 1;
+              done;
+              echo ".. CONNECTED to {{ .Values.cloudadmin.relationaldb.connectiontype.kuip }} - ${DBHOST}";
+              sqlcmd -S tcp:${DBHOST},${DBPORT} -U ${DBUSER} -P ${DBPASSWORD} -Q "IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = '${DBNAME}')
+              BEGIN
+                PRINT 'i just creating DB !'
+                CREATE DATABASE ${DBNAME};
+              END;";
+              if [ $? != 0 ]; then
+                echo -e "\u2718 problem with creating DB ${DBNAME}";
+                exit 1;
+              else
+                echo -e "\u2714 DB ${DBNAME} exist !";
+              fi
+      {{- end -}}
+      {{- if (eq "ORACLE" .Values.cloudadmin.relationaldb.connectiontype.kuip) }}
+          command:
+            - bash
+            - -c
+            - >
+            echo -n "check for {{ .Values.cloudadmin.relationaldb.connectiontype.kuip }} connection ";
+            echo "check for ORACLE connection";
+      {{- end }}
+          env:
+            - name: DBNAME
+              value: {{ include "ezdrp.connstring.kuip.dbname" . | quote }}
+            - name: DBHOST
+              value: {{ include "ezdrp.connstring.kuip.host" . | quote }}
+            - name: DBPASSWORD
+              value: {{ include "ezdrp.connstring.kuip.password" . | quote }}
+            - name: DBPORT
+              value: {{ include "ezdrp.connstring.kuip.port" . | quote }}
+            - name: DBUSER
+              value: {{ include "ezdrp.connstring.kuip.username" . | quote }}
+          resources:
+            limits:
+              cpu: "1000m"
+              memory: "1Gi"
+            requests:
+              cpu: "100m"
+              memory: "50Mi"
+        - command:
+            - sh
+            - -c
+            - |
+              /docker-entrypoint.sh wait_for relationaldb:${relationalDbHost}:${relationalDbPort} rabbit:${rabbitHost}:${rabbitPort} cloudadmin:${CLOUDADMIN_HOST}:${CLOUDADMIN_PORT} ezdrpapi:${EZDRPAPI_HOST}:${EZDRPAPI_PORT}
+          env:
+            - name: relationalDbHost
+              value: {{ include "ezdrp.connstring.kuip.host" . | quote }}
+            - name: relationalDbPort
+              value: {{ include "ezdrp.connstring.kuip.port" . | quote }}
+            - name: EZDRPAPI_HOST
+              value: {{ .Values.ezdrpApi.moduleName }}
+            - name: EZDRPAPI_PORT
+              value: {{ .Values.ezdrpApi.port | quote }}
+            - name: CLOUDADMIN_HOST
+              value: {{ .Values.cloudadmin.moduleName }}
+            - name: CLOUDADMIN_PORT
+              value: {{ .Values.cloudadmin.port | quote }}
+            - name: rabbitPort
+              value: {{ .Values.rabbitExt.port | quote }}
+            - name: rabbitHost
+              value: {{ .Values.ezdBackend.rabbitmqConfig.fullnameOverride }}
+          image: {{ .Values.waitfor.image.registry }}/{{ .Values.waitfor.image.name }}:{{ .Values.waitfor.image.version }}
+          imagePullPolicy: IfNotPresent
+          name: waitfor
+          resources: {}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities: {}
+            privileged: false
+            readOnlyRootFilesystem: false
+            runAsNonRoot: false
+          stdin: true
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          tty: true
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      serviceAccount: ezdrp
+      serviceAccountName: ezdrp
+{{- end }}

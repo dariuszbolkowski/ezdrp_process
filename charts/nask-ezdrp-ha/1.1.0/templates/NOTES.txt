@@ -1,0 +1,17 @@
+Congratulations ! You installed application {{ .Chart.Name }} sucessfully.
+
+
+To learn more about the release, try:
+
+  $ helm status {{ .Release.Name }}
+  $ helm get all {{ .Release.Name }}
+
+
+
+You can access the application at the following url :
+   https://{{ .Values.ezdrpWeb.moduleName }}.{{ .Values.domainInfo.name }}
+
+Read root password
+  $ kubectl -n {{ .Release.Namespace }} set env deployment/kuip-api  --list | grep KUIP_ROOT_RESET_PASSWORD
+
+Have fun !

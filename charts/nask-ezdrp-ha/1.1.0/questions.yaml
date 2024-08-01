@@ -1,0 +1,765 @@
+labels:
+  io.cattle.role: cluster # options are cluster/project
+  io.rancher.app_min_version: 7.3.8
+
+questions:
+- variable: global.rabbitmq.deploy
+  default: "true"
+  label: Deploy RabbitMQ
+  type: boolean
+  group: "Components"
+  show_subquestion_if: true
+  subquestions:
+  - variable: global.rabbitmqConfig.auth.username
+    default: "ezdrpadmin"
+    label: Username
+    description: "RabbitMQ Username"
+    group: "Rabbit Database Configuration"
+    type: string
+    min: 6
+    required: true
+  - variable: global.rabbitmqConfig.auth.password
+    label: Password
+    description: "RabbitMQ Password"
+    group: "Rabbit Database Configuration"
+    type: password
+    min: 8
+    required: true
+  - variable: ezdBackend.rabbitmqConfig.customConfig.replicas
+    label: Replicas
+    description: "Amount of replicas rabbitmq. Min 3 replicas for ha"
+    group: "Rabbit Database Configuration"
+    type: int
+    default: 1
+  - variable: ezdBackend.rabbitmqConfig.customConfig.persistence.storageClassName
+    label: Storage Class for database data
+    description: "Select storage class for database data"
+    group: "Rabbit Database Configuration"
+    type: storageclass
+  - variable: ezdBackend.rabbitmqConfig.customConfig.persistence.storage
+    label: Database size
+    description: "Size database data"
+    group: "Rabbit Database Configuration"
+    type: string
+    default: "2Gi"
+  - variable: global.rabbitmq.custom.consumption
+    default: "false"
+    label: Modify resource consumption
+    group: "Rabbit Database Configuration"
+    type: boolean
+    show_subquestion_if: true
+    subquestions:
+    - variable: ezdBackend.rabbitmqConfig.customConfig.resources.limits.cpu
+      label: Milicore limit for rabbitmq instance
+      description: "1000 milicores = 1vCPU"
+      type: string
+      default: "2000m"
+    - variable: ezdBackend.rabbitmqConfig.customConfig.resources.requests.cpu
+      label: Milicore request for rabbitmq instance
+      description: "1000 milicores = 1vCPU, value must be <= milicore limit"
+      type: string
+      default: "2000m"
+    - variable: ezdBackend.rabbitmqConfig.customConfig.resources.limits.memory
+      label: Memory limit for rabbitmq instance
+      description: "Memory limit"
+      type: string
+      default: "2Gi"
+    - variable: ezdBackend.rabbitmqConfig.customConfig.resources.requests.memory
+      label: Memory request for rabbitmq instance
+      description: "Memory request, value must be <= memory limit"
+      type: string
+      default: "2Gi"
+  - variable: ezdBackend.rabbitmqConfig.ingress.enabled
+    default: "false"
+    label: Enable web console for RabbitMQ
+    group: "Rabbit Database Configuration"
+    type: boolean
+    show_subquestion_if: true
+    subquestions:
+    - variable: ezdBackend.rabbitmqConfig.ingress.hosts.host
+      label: URL
+      description: "Configure url for rabbitmq web-ui"
+      type: string
+      default: "rabbitmq.my.domain.internal"
+
+  #rabbit :
+- variable: useBuiltInRabbit.enabled
+  default: false
+  description: "Use internal builtin RabbitMQ"
+  label: Use builtin RabbitMQ container
+  type: boolean
+  group: "Rabbit Database Configuration"
+  show_if: "global.rabbitmq.deploy=false"
+- variable: rabbitExt.host
+  default: "127.0.0.1"
+  description: "Enter the external RabbitMQ address"
+  type: string
+  label: Hostname for external RabbitMQ
+  show_if: "useBuiltInRabbit.enabled=false&&global.rabbitmq.deploy=false"
+  group: "Rabbit Database Configuration"
+- variable: rabbitExt.port
+  default: "5672"
+  description: "Enter the port for external RabbitMQ"
+  type: string
+  label: Port for external RabbitMQ
+  show_if: "useBuiltInRabbit.enabled=false&&global.rabbitmq.deploy=false"
+  group: "Rabbit Database Configuration"
+- variable: rabbitExt.user
+  default: "ezdrpadmin"
+  description: "Type the username for external RabbitMQ"
+  type: string
+  label: Username for external RabbitMQ
+  show_if: "useBuiltInRabbit.enabled=false&&global.rabbitmq.deploy=false"
+  group: "Rabbit Database Configuration"
+- variable: rabbitExt.password
+  description: "Type the password for external RabbitMQ. Min. length is 30 characters. Do not use special character like : ';'"
+  type: password
+  min_length: 30
+  invalid_chars: ";"
+  label: Password for external RabbitMQ
+  show_if: "useBuiltInRabbit.enabled=false&&global.rabbitmq.deploy=false"
+  group: "Rabbit Database Configuration"
+- variable: rabbitInt.useExistingSecret
+  default: "rabbit-config"
+  description: "Use secret with existing config to RabbitMQ"
+  type: secret
+  required: true
+  label: Use existing secret
+  show_if: "useBuiltInRabbit.enabled=true&&global.rabbitmq.deploy=false"
+  group: "Rabbit Database Configuration"
+
+- variable: global.postgresql.deploy
+  default: "true"
+  label: Deploy Postgresql
+  type: boolean
+  group: "Components"
+  show_subquestion_if: true
+  subquestions:
+  - variable: global.postgresqlConfig.auth.admPassword
+    label: SuperUser Password
+    description: "Password for SuperUser role"
+    group: "Database Configuration"
+    type: password
+    min: 8
+    required: true
+  - variable: global.postgresqlConfig.auth.appPassword
+    label: Application Password
+    description: "Password for application role"
+    group: "Database Configuration"
+    type: password
+    min: 8
+    required: true
+  - variable: ezdBackend.postgresqlConfig.customConfig.instances
+    label: Replicas
+    description: "Amount of replicas postgresql. Min 3 replicas for ha"
+    group: "Database Configuration"
+    type: int
+    default: 1
+  - variable: ezdBackend.postgresqlConfig.customConfig.storage.storageClass
+    label: Storage Class for database data
+    description: "Select storage class for database data"
+    group: "Database Configuration"
+    type: storageclass
+  - variable: ezdBackend.postgresqlConfig.customConfig.storage.size
+    label: Database size
+    description: "Size database data"
+    group: "Database Configuration"
+    type: string
+    default: "2Gi"
+  - variable: ezdBackend.postgresqlConfig.customConfig.walStorage.storageClass
+    label: Storage Class for database WAL
+    description: "Select storage class for database WAL"
+    group: "Database Configuration"
+    type: storageclass
+  - variable: ezdBackend.postgresqlConfig.customConfig.walStorage.size
+    label: WAL Size
+    description: "Size database WAL"
+    group: "Database Configuration"
+    type: string
+    default: "2Gi"
+  - variable: ezdBackend.postgresql.custom.consumption
+    default: "false"
+    label: Modify resource consumption
+    group: "Database Configuration"
+    type: boolean
+    show_subquestion_if: true
+    subquestions:
+    - variable: ezdBackend.postgresqlConfig.customConfig.postgresql.parameters.resources.limits.cpu
+      label: Milicore limit for postgresql instance
+      description: "1000 milicores = 1vCPU"
+      type: string
+      default: "2000m"
+    - variable: ezdBackend.postgresqlConfig.customConfig.postgresql.parameters.resources.requests.cpu
+      label: Milicore request for postgresql instance
+      description: "1000 milicores = 1vCPU, value must be <= milicore limit"
+      type: string
+      default: "2000m"
+    - variable: ezdBackend.postgresqlConfig.customConfig.postgresql.parameters.resources.limits.memory
+      label: Memory limit for postgresql instance
+      description: "Memory limit"
+      type: string
+      default: "2Gi"
+    - variable: ezdBackend.postgresqlConfig.customConfig.postgresql.parameters.resources.requests.memory
+      label: Memory request for postgresql instance
+      description: "Memory request, value must be <= memory limit"
+      type: string
+      default: "2Gi"
+#relationaldb :
+- variable: cloudadmin.relationaldb.connectiontype.ezdrp
+  description: "Choose database for installation."
+  label: Select database type
+  type: enum
+  options: ["POSTGRESQL", "SQLSERVER"]
+  group: "Database Configuration"
+  show_if: "global.postgresql.deploy=false"
+- variable: cloudadmin.relationaldb.connectionstring.ezdrp
+  default: "Host=<EZDRP_DB_HOSTNAME>;Port=<EZDRP_DB_PORT>;Database=<EZDRP_DB_NAME>;Username=<EZDRP_DB_USER>;Password='<EZDRP_DB_PASSWORD>' "
+  description: "Set <EZDRP_DB_HOSTNAME> to your propper value (eq. your.domain.for.ezdrp.ezd.db.pl or server IP)"
+  type: string
+  label: External DB connectionstring
+  group: "Database Configuration"
+  show_if: "global.postgresql.deploy=false"
+- variable: cloudadmin.relationaldb.connectiontype.archiwum
+  description: "Choose database for ARCHIWUM."
+  label: Select ARCHIWUM database type
+  type: enum
+  options: ["POSTGRESQL", "SQLSERVER"]
+  group: "Database Configuration"
+  show_if: "global.postgresql.deploy=false"
+- variable: cloudadmin.relationaldb.connectionstring.archiwum
+  default: "Host=<ARCHIWUM_DB_HOSTNAME>;Port=<ARCHIWUM_DB_PORT>;Database=<ARCHIWUM_DB_NAME>;Username=<ARCHIWUM_DB_USER>;Password='<ARCHIWUM_DB_PASSWORD>' "
+  description: "Set <ARCHIWUM_DB_HOSTNAME> to your propper value (eq. your.domain.for.archiwum.ezd.db.pl or server IP)"
+  type: string
+  label: External DB connectionstring
+  group: "Database Configuration"
+  show_if: "global.postgresql.deploy=false"
+- variable: cloudadmin.relationaldb.connectiontype.kuip
+  description: "Choose database for KUIP."
+  label: Select KUIP database type
+  type: enum
+  options: ["POSTGRESQL", "SQLSERVER" ]
+  group: "Database Configuration"
+  show_if: "global.postgresql.deploy=false"
+- variable: cloudadmin.relationaldb.connectionstring.kuip
+  default: "Host=<KUIP_DB_HOSTNAME>;Port=<KUIP_DB_PORT>;Database=<KUIP_DB_NAME>;Username=<KUIP_DB_USER>;Password='<KUIP_DB_PASSWORD>' "
+  description: "Set <KUIP_DB_HOSTNAME> to your propper value (eq. your.domain.for.kuip.ezd.db.pl or server IP)"
+  type: string
+  label: External DB connectionstring
+  group: "Database Configuration"
+  show_if: "global.postgresql.deploy=false"
+- variable: cloudadmin.relationaldb.connectiontype.ezdrpodczyt
+  description: "Choose database for EZDRP_ODCZYT."
+  label: Select EZDRP_ODCZYT database type
+  type: enum
+  options: ["POSTGRESQL", "SQLSERVER" ]
+  group: "Database Configuration"
+  show_if: "global.postgresql.deploy=false"
+- variable: cloudadmin.relationaldb.connectionstring.ezdrpodczyt
+  default: "Host=<EZDRP_ODCZYT_DB_HOSTNAME>;Port=<EZDRP_ODCZYT_DB_PORT>;Database=<EZDRP_ODCZYT_DB_NAME>;Username=<EZDRP_ODCZYT_DB_USER>;Password='<EZDRP_ODCZYT_DB_PASSWORD>' "
+  description: "Set <EZDRP_ODCZYT_DB_HOSTNAME> to your propper value (eq. your.domain.for.odczyt.ezd.db.pl or server IP)"
+  type: string
+  label: External DB connectionstring
+  group: "Database Configuration"
+  show_if: "global.postgresql.deploy=false"
+      
+- variable: global.redis.deploy
+  default: "true"
+  label: Deploy Redis
+  type: boolean
+  group: "Components"
+  show_subquestion_if: true
+  subquestions:
+  - variable: global.redisConfig.auth.password
+    label: Password
+    description: "Redis Password"
+    group: "Redis Database Configuration"
+    type: password
+    min: 8
+    required: true
+  - variable: ezdBackend.redisConfig.customConfig.storage.volumeClaimTemplate.spec.storageClassName
+    label: Storage Class for database data
+    description: "Select storage class for database data"
+    group: "Redis Database Configuration"
+    type: storageclass
+  - variable: ezdBackend.redisConfig.customConfig.storage.volumeClaimTemplate.spec.resources.requests.storage
+    label: Database size
+    description: "Size database data"
+    group: "Redis Database Configuration"
+    type: string
+    default: "2Gi"
+  - variable: global.redis.custom.consumption
+    default: "false"
+    label: Modify resource consumption
+    group: "Redis Database Configuration"
+    type: boolean
+    show_subquestion_if: true
+    subquestions:
+    - variable: ezdBackend.redisConfig.customConfig.kubernetesConfig.resources.limits.cpu
+      label: Milicore limit for redis instance
+      description: "1000 milicores = 1vCPU"
+      type: string
+      default: "128m"
+    - variable: ezdBackend.redisConfig.customConfig.kubernetesConfig.resources.requests.cpu
+      label: Milicore request for redis instance
+      description: "1000 milicores = 1vCPU, value must be <= milicore limit"
+      type: string
+      default: "128m"
+    - variable: ezdBackend.redisConfig.customConfig.kubernetesConfig.resources.limits.memory
+      label: Memory limit for redis instance
+      description: "Memory limit"
+      type: string
+      default: "128Mi"
+    - variable: ezdBackend.redisConfig.customConfig.kubernetesConfig.resources.requests.memory
+      label: Memory request for redis instance
+      description: "Memory request, value must be <= memory limit"
+      type: string
+      default: "128Mi"
+
+  #redis :
+- variable: useBuiltInRedis.enabled
+  default: false
+  description: "Use internal builtin RedisDB"
+  label: Use RedisDB builtin container
+  type: boolean
+  group: "Redis Database Configuration"
+  show_if: "global.redis.deploy=false"
+- variable: redisExt.host
+  default: "127.0.0.1"
+  description: "Enter the external DB address (Redis)"
+  type: string
+  label: External RedisDB hostname
+  show_if: "useBuiltInRedis.enabled=false&&global.redis.deploy=false"
+  group: "Redis Database Configuration"
+- variable: redisExt.port
+  default: "6379"
+  description: "Enter the external port for RedisDB"
+  type: string
+  label: External RedisDB port
+  show_if: "useBuiltInRedis.enabled=false&&global.redis.deploy=false"
+  group: "Redis Database Configuration"
+- variable: redisExt.password
+  description: "Type the password for external RedisDB. Min. length is 30 chars"
+  type: password
+  min_length: 30
+  label: External RedisDB password
+  show_if: "useBuiltInRedis.enabled=false&&global.redis.deploy=false"
+  group: "Redis Database Configuration"
+- variable: redisExt.isCluster
+  default: "false"
+  description: "Check true if your instalation is in redis cluster"
+  type: boolean
+  label: Check if install cluster
+  show_if: "useBuiltInRedis.enabled=false&&global.redis.deploy=false"
+  group: "Redis Database Configuration"
+- variable: redisExt.serviceName
+  default: "mymaster"
+  description: "Enter the service name in this cluster"
+  type: string
+  label: Service name
+  show_if: "useBuiltInRedis.enabled=false&&redisExt.isCluster=true"
+  group: "Redis Database Configuration"
+  show_if: "global.redis.deploy=false"
+- variable: redisInt.useExistingSecret
+  default: "redis-config"
+  description: "Use secret with existing config to RedisDB"
+  type: secret
+  required: true
+  label: Existing secret
+  show_if: "useBuiltInRedis.enabled=true&&global.redis.deploy=false"
+  group: "Redis Database Configuration"
+
+  #redis-append :
+- variable: useBuiltInRedisAppend.enabled
+  default: false
+  description: "Use internal builtin RedisDB - append mode"
+  label: Use RedisDB - append mode builtin container
+  type: boolean
+  group: "Redis-append Database Configuration"
+  show_if: "global.redis.deploy=false"
+- variable: redisAppendExt.host
+  default: "127.0.0.1"
+  description: "Enter the external DB address (RedisDB - append mode)"
+  type: string
+  label: External hostname for RedisDB - append mode
+  show_if: "useBuiltInRedisAppend.enabled=false&&global.redis.deploy=false"
+  group: "Redis-append Database Configuration"
+- variable: redisAppendExt.port
+  default: "6380"
+  description: "Enter the port to external Redis-APPEND-DB"
+  type: string
+  label: External port for RedisDB - append mode
+  show_if: "useBuiltInRedisAppend.enabled=false&&global.redis.deploy=false"
+  group: "Redis-append Database Configuration"
+- variable: redisAppendExt.password
+  description: "Enter the password for external Redis-APPEND-DB. Min. length is 30 characters"
+  type: password
+  min_length: 30
+  label: External RedisDB - append mode password
+  show_if: "useBuiltInRedisAppend.enabled=false&&global.redis.deploy=false"
+  group: "Redis-append Database Configuration"
+- variable: redisAppendExt.isCluster
+  default: "false"
+  description: "Mark true if your instalation is in Redis cluster."
+  type: boolean
+  label: Check if install cluster
+  show_if: "useBuiltInRedisAppend.enabled=false&&global.redis.deploy=false"
+  group: "Redis-append Database Configuration"
+- variable: redisAppendExt.serviceName
+  default: "mymaster"
+  description: "Enter the service name in this cluster."
+  type: string
+  label: Service name
+  show_if: "useBuiltInRedisAppend.enabled=false&&redisAppendExt.isCluster=true&&global.redis.deploy=false"
+  group: "Redis-append Database Configuration"
+- variable: redisAppendInt.useExistingSecret
+  default: "redis-append-config"
+  description: "Use secret with existing config to RedisDB - append mode"
+  type: secret
+  required: true
+  label: Existing secret
+  show_if: "useBuiltInRedisAppend.enabled=true&&global.redis.deploy=false"
+  group: "Redis-append Database Configuration"
+
+
+- variable: global.s3.deploy
+  default: "false"
+  label: S3 object store integration
+  type: boolean
+  group: "Components"
+  show_subquestion_if: true
+  subquestions:
+  - variable: filerepository.persistence.s3.host
+    default: "https://api.obj0.dbo.test"
+    type: string
+    description: "Enter the host address for S3 storage"
+    label: S3 host
+    required: true
+    group: "Persistent Storage"
+  - variable: filerepository.persistence.s3.port
+    default: "9000"
+    type: string
+    description: "Enter the port for S3 storage"
+    label: S3 port
+    required: true
+    group: "Persistent Storage"
+  - variable: filerepository.persistence.s3.access_key
+    default: "minoiadmin"
+    type: string
+    description: "Enter the access_key for S3 storage"
+    label: S3 access_key
+    required: true
+    group: "Persistent Storage"
+  - variable: filerepository.persistence.s3.secret_key
+    default: "minoadmin"
+    type: string
+    description: "Enter the secret_key for S3 storage"
+    label: S3 secret_key
+    required: true
+    group: "Persistent Storage"
+  - variable: filerepository.persistence.s3.tls
+    default: false
+    type: boolean
+    description: "Check this options if connection is with TLS"
+    label: TLS
+    required: true
+    group: "Persistent Storage"
+  - variable: filerepository.persistence.s3.bucketname
+    default: "ezdrp2024"
+    type: string
+    description: "Enter the bucket name in S3 storage"
+    label: S3 bucket name
+    required: true
+    group: "Persistent Storage"
+  
+  - variable: filerepository.persistence.ezdpuwmigration.enabled
+    default: false
+    description: "Create volume for migration data - Yes (check) - No (uncheck)"
+    label: "EZD-PUW Migration"
+    type: boolean
+    group: "Persistent Storage"
+    show_subquestion_if: true
+    subquestions:
+      - variable: filerepository.persistence.ezdpuwmigration.dataPath
+        default: "/data/EZD_PUW/data"
+        description: "Write patch where is EZD_PUW data"
+        type: string
+        required: true
+        label: Insert EZD-PUW data patch
+      - variable: filerepository.persistence.ezdpuwmigration.storageClass
+        description: "EZD-PUW migration persistent storage class - class must be named NFS*"
+        type: storageclass
+        required: true
+        label: EZD-PUW Persistent Storage Class Name
+      - variable: filerepository.persistence.ezdpuwmigration.size
+        description: "EZD-PUW Migration Persistent Volume Size in Gi (gigabyte)"
+        type: int
+        required: true
+        label: EZD-PUW Persistent Storage Size
+  
+  
+  #persistent storage for other module
+  - variable: storage.enabled
+    default: true
+    description: Use Persistent Storage
+    label: Persistent Storage
+    type: boolean
+    group: "Persistent Storage"
+  
+  - variable: ezdrpApi.persistence.storageClass
+    description: "EZDRP-API persistent storage class"
+    type: storageclass
+    label: "EZDP-API Persistent Storage Class Name"
+    group: "Persistent Storage"
+    show_if: "storage.enabled=true"
+  - variable: ezdrpApi.persistence.size
+    description: "EZDRP-API Persistent Volume Size in Gi (gigabyte)"
+    type: int
+    label: "EZDRP-API Persistent Volume Size"
+    group: "Persistent Storage"
+    show_if: "storage.enabled=true"
+  
+  
+  - variable: ssoIdentityServer.persistence.storageClass
+    description: "SSO-IDP persistent storage class"
+    type: storageclass
+    label: "SSO-IDP Persistent Storage Class Name"
+    group: "Persistent Storage"
+    show_if: "storage.enabled=true"
+  - variable: ssoIdentityServer.persistence.size
+    description: "SSO-IDP Persistent Volume Size in Gi (gigabyte)"
+    label: "SSO-IDP Persistent Volume Size"
+    type: int
+    group: "Persistent Storage"
+    show_if: "storage.enabled=true"
+  
+  - variable: wpeRest.persistence.storageClass
+    description: "WPE-REST persistent storage class"
+    type: storageclass
+    label: "WPE-REST Persistent Storage Class Name"
+    group: "Persistent Storage"
+    show_if: "storage.enabled=true"
+  - variable: wpeRest.persistence.size
+    description: "WPE-REST Persistent Volume Size in Gi (gigabyte)"
+    label: "WPE-REST Persistent Volume Size"
+    type: int
+    group: "Persistent Storage"
+    show_if: "storage.enabled=true"
+
+#Storage type For Filerepository
+- variable: filerepository.persistence.filerepoStorageType
+  type: enum
+  options: ["S1", "S3"]
+  default: "S1"
+  description: "Choose: S1 for the Flat Storage (eq local path, NFS, etc.), S3 for S3 systems (eq MINIO, etc.)"
+  label: Choose Filerepository Storage Configuration
+  required: true
+  group: "Persistent Storage"
+  show_if: "global.s3.deploy=false"
+
+- variable: filerepository.persistence.s3.host
+  type: string
+  description: "Enter the host address for S3 storage"
+  label: S3 host
+  required: true
+  show_if: "filerepository.persistence.filerepoStorageType=S3&&global.s3.deploy=false"
+  group: "Persistent Storage"
+- variable: filerepository.persistence.s3.port
+  type: string
+  description: "Enter the port for S3 storage"
+  label: S3 port
+  required: true
+  show_if: "filerepository.persistence.filerepoStorageType=S3&&global.s3.deploy=false"
+  group: "Persistent Storage"
+- variable: filerepository.persistence.s3.access_key
+  type: string
+  description: "Enter the access_key for S3 storage"
+  label: S3 access_key
+  required: true
+  show_if: "filerepository.persistence.filerepoStorageType=S3&&global.s3.deploy=false"
+  group: "Persistent Storage"
+- variable: filerepository.persistence.s3.secret_key
+  type: string
+  description: "Enter the secret_key for S3 storage"
+  label: S3 secret_key
+  required: true
+  show_if: "filerepository.persistence.filerepoStorageType=S3&&global.s3.deploy=false"
+  group: "Persistent Storage"
+- variable: filerepository.persistence.s3.tls
+  default: false
+  type: boolean
+  description: "Check this options if connection is with TLS"
+  label: TLS
+  required: true
+  show_if: "filerepository.persistence.filerepoStorageType=S3&&global.s3.deploy=false"
+  group: "Persistent Storage"
+- variable: filerepository.persistence.s3.bucketname
+  type: string
+  description: "Enter the bucket name in S3 storage"
+  label: S3 bucket name
+  required: true
+  show_if: "filerepository.persistence.filerepoStorageType=S3&&global.s3.deploy=false"
+  group: "Persistent Storage"
+
+- variable: filerepository.persistence.ezdpuwmigration.enabled
+  default: false
+  description: "Create volume for migration data - Yes (check) - No (uncheck)"
+  label: "EZD-PUW Migration"
+  type: boolean
+  group: "Persistent Storage"
+  show_subquestion_if: true
+  show_if: "global.s3.deploy=false"
+  subquestions:
+    - variable: filerepository.persistence.ezdpuwmigration.dataPath
+      default: "/data/EZD_PUW/data"
+      description: "Write patch where is EZD_PUW data"
+      type: string
+      required: true
+      label: Insert EZD-PUW data patch
+    - variable: filerepository.persistence.ezdpuwmigration.storageClass
+      description: "EZD-PUW migration persistent storage class - class must be named NFS*"
+      type: storageclass
+      required: true
+      label: EZD-PUW Persistent Storage Class Name
+    - variable: filerepository.persistence.ezdpuwmigration.size
+      description: "EZD-PUW Migration Persistent Volume Size in Gi (gigabyte)"
+      type: int
+      required: true
+      label: EZD-PUW Persistent Storage Size
+
+
+#persistent storage for other module
+- variable: storage.enabled
+  default: true
+  description: Use Persistent Storage
+  label: Persistent Storage
+  type: boolean
+  group: "Persistent Storage"
+  show_if: "global.s3.deploy=false"
+
+- variable: ezdrpApi.persistence.storageClass
+  description: "EZDRP-API persistent storage class"
+  type: storageclass
+  label: "EZDP-API Persistent Storage Class Name"
+  group: "Persistent Storage"
+  show_if: "storage.enabled=true&&global.s3.deploy=false"
+- variable: ezdrpApi.persistence.size
+  description: "EZDRP-API Persistent Volume Size in Gi (gigabyte)"
+  type: int
+  label: "EZDRP-API Persistent Volume Size"
+  group: "Persistent Storage"
+  show_if: "storage.enabled=true&&global.s3.deploy=false"
+
+- variable: filerepository.persistence.storageClass
+  description: "Filerepository persistent storage class"
+  type: storageclass
+  label: "FileRepository Persistent Storage Class Name"
+  group: "Persistent Storage"
+  show_if: "storage.enabled=true&&filerepository.persistence.filerepoStorageType=S1&&global.s3.deploy=false"
+- variable: filerepository.persistence.size
+  description: "Filerepository Persistent Volume Size in Gi (gigabyte)"
+  label: "FileRepository Persistent Volume Size"
+  type: int
+  group: "Persistent Storage"
+  show_if: "storage.enabled=true&&filerepository.persistence.filerepoStorageType=S1&&global.s3.deploy=false"
+
+- variable: ssoIdentityServer.persistence.storageClass
+  description: "SSO-IDP persistent storage class"
+  type: storageclass
+  label: "SSO-IDP Persistent Storage Class Name"
+  group: "Persistent Storage"
+  show_if: "storage.enabled=true&&global.s3.deploy=false"
+- variable: ssoIdentityServer.persistence.size
+  description: "SSO-IDP Persistent Volume Size in Gi (gigabyte)"
+  label: "SSO-IDP Persistent Volume Size"
+  type: int
+  group: "Persistent Storage"
+  show_if: "storage.enabled=true&&global.s3.deploy=false"
+
+- variable: wpeRest.persistence.storageClass
+  description: "WPE-REST persistent storage class"
+  type: storageclass
+  label: "WPE-REST Persistent Storage Class Name"
+  group: "Persistent Storage"
+  show_if: "storage.enabled=true&&global.s3.deploy=false"
+- variable: wpeRest.persistence.size
+  description: "WPE-REST Persistent Volume Size in Gi (gigabyte)"
+  label: "WPE-REST Persistent Volume Size"
+  type: int
+  group: "Persistent Storage"
+  show_if: "storage.enabled=true&&global.s3.deploy=false"
+
+
+#domain info
+
+- variable: global.ezd.rootPassword
+  label: Password
+  description: "EZD RP Root password"
+  group: "EZD Configuration"
+  type: password
+  min: 8
+- variable: domainInfo.name
+  default: "project.domain.pl"
+  description: "Enter the hostname to your EZDRP installation"
+  type: hostname
+  required: true
+  label: Hostname
+  group: "EZD Configuration"
+- variable: domainInfo.cert_info
+  default: true
+  description: "If true - enter the name of these certificate in next step - if false - we create your self signed cert."
+  type: boolean
+  label: Domain certificate - wildcard - for EZD
+  group: "EZD Configuration"
+  show_subquestion_if: true
+  subquestions:
+    - variable: domainInfo.cert_name
+      default: "ezdrp-cert"
+      description: "Enter the domain certificate name from Kubernetes (wildcard only - must exist already)"
+      type: string
+      required: true
+      label: Enter the certificate name (wildcard)
+
+
+
+
+  #Email Configuration:
+- variable: email.active
+  default: false
+  description: "External email service only !"
+  label: Mail server for project
+  type: boolean
+  group: "Email Configuration"
+  show_subquestion_if: true
+  subquestions:
+    - variable: email.host
+      description: "Enter the hostname to connect with email server"
+      type: string
+      label: Email Host
+    - variable: email.port
+      description: "Enter the port to connect with email server"
+      type: enum
+      default: "587"
+      options: ["465", "587", "2525"]
+      label: Email Port
+    - variable: email.sendermail
+      description: "Enter the sendermail (email)"
+      type: string
+      label: Email sendermail
+    - variable: email.sendername
+      description: "Enter the sender name (email)"
+      type: string
+      label: Email sendername
+    - variable: email.password
+      description: "Type the password for email"
+      type: string
+      label: Email password
+
+
+
+#Procesowość		
+- variable: procesowosc.active		
+  label: Procesowość		
+  type: boolean		
+  default: false # Ustawienie domyślnej wartości na True		
+  description: "Czy włączyć procesowość?"		
+  group: "Procesowość"

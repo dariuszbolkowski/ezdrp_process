@@ -1,0 +1,58 @@
+{{- if .Values.ezdrpWeb.active }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "240"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "1200"
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+    nginx.ingress.kubernetes.io/proxy-http-version: "1.1"
+
+    nginx.ingress.kubernetes.io/server-snippet: |
+      proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header        Upgrade $http_upgrade;
+      proxy_set_header        Host $http_host;
+      proxy_set_header        X-Forwarded-Proto $scheme;
+      proxy_set_header        X-Forwarded-Protocol $scheme;
+      proxy_set_header        X-Real-IP $remote_addr;
+      proxy_set_header        X-Frame-Options SAMEORIGIN;
+      proxy_set_header        X-Url-Scheme $scheme;
+      proxy_set_header        X-Origin $http_origin;
+      proxy_set_header        X-Nginx-Proxy true;
+      proxy_redirect off;
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-methods: "PUT, GET, POST, OPTIONS"
+    nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      gzip on;
+      gzip_vary off;
+      gzip_proxied any;
+      gzip_comp_level 6;
+      gzip_types *;
+      more_set_headers "Access-Control-Allow-Origin: $http_origin";
+    nginx.ingress.kubernetes.io/cors-allow-headers: "DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,sso-context,sso-jwt,sso-pid,sso-uid,Authorization"
+    nginx.ingress.kubernetes.io/cors-max-age: "1728000"
+    ingress.kubernetes.io/config-backend: |
+      rspadd Access-Control-Expose-Headers: "Content-Length,Content-Range"
+  name: {{ .Values.ezdrpWeb.moduleName }}
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: {{ .Values.ezdrpWeb.moduleName }}.{{ .Values.domainInfo.name }}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ .Values.ezdrpWeb.moduleName }}
+            port:
+              number: {{ .Values.ezdrpWeb.port }}
+{{- if .Values.domainInfo.cert_info }}
+  tls:
+  - hosts:
+    - {{ .Values.ezdrpWeb.moduleName }}.{{ .Values.domainInfo.name }}
+    secretName: {{ .Values.domainInfo.cert_name }}
+{{- end }}
+{{- end }}
