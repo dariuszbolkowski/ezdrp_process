@@ -20,7 +20,7 @@ maintainers:
   name: NASK
 name: nask-ezdrp-ha
 type: application
-version: 19.7.666
+version: 19.7.18
 
 annotations:
   catalog.cattle.io/auto-install: ezd-crd=1.5.1
