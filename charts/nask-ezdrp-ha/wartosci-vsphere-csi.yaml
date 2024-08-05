@@ -14,6 +14,23 @@ global:
     auth:
       password: "postgrespostgres"
 
+ezdBackend:
+  rabbitmqConfig:
+      persistence:
+        storageClassName: vsphere-csi
+  redisConfig:
+      customConfig:
+        storage:
+          volumeClaimTemplate:
+            spec:
+              storageClassName: vsphere-csi
+  postgresqlConfig:
+    customConfig:
+      storage:
+        storageClass: vsphere-csi
+      walStorage:
+        storageClass: vsphere-csi
+
 #nask-ezdrp-ha:
 cloudadmin:
   relationaldb:
@@ -30,10 +47,10 @@ email:
   active: false
 ezdrpApi:
   persistence:
-    storageClass: longhorn
+    storageClass: vsphere-csi
 filerepository:
   persistence:
-    storageClass: longhorn
+    storageClass: vsphere-csi
     filerepoStorageType: "S1"
     s3:
       host: "https://api.obj0.dbo.test"
@@ -57,7 +74,7 @@ redisExt:
   port: 6379
 ssoIdentityServer:
   persistence:
-    storageClass: longhorn
+    storageClass: vsphere-csi
 wpeRest:
   persistence:
-    storageClass: longhorn
+    storageClass: vsphere-csi

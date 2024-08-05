@@ -14,6 +14,23 @@ global:
     auth:
       password: "postgrespostgres"
 
+ezdBackend:
+  rabbitmqConfig:
+      persistence:
+        storageClassName: longhorn
+  redisConfig:
+      customConfig:
+        storage:
+          volumeClaimTemplate:
+            spec:
+              storageClassName: longhorn
+  postgresqlConfig:
+    customConfig:
+      storage:
+        storageClass: longhorn
+      walStorage:
+        storageClass: longhorn
+
 #nask-ezdrp-ha:
 cloudadmin:
   relationaldb:
@@ -25,7 +42,7 @@ cloudadmin:
 domainInfo:
   cert_info: true
   cert_name: ezdrp-cert
-  name: ezd.dbo.test
+  name: apps.dev0.lab.linuxpolska.pl
 email:
   active: false
 ezdrpApi:
@@ -33,6 +50,7 @@ ezdrpApi:
     storageClass: longhorn
 filerepository:
   persistence:
+    storageClass: longhorn
     filerepoStorageType: "S1"
     s3:
       host: "https://api.obj0.dbo.test"
