@@ -1,0 +1,18 @@
+{{- if .Values.kuipApi.active }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.kuipApi.moduleName }}
+  labels:
+    run: {{ .Values.kuipApi.moduleName }}
+spec:
+  type: {{ .Values.kuipApi.service.type }}
+  ports:
+    - name: {{ .Values.kuipApi.moduleName }}
+      port: {{ .Values.kuipApi.port }}
+      targetPort: {{ .Values.kuipApi.port }}
+      protocol: TCP
+  selector:
+    app: {{ .Release.Name }}-{{ .Values.kuipApi.moduleName }}
+  sessionAffinity: None
+{{ end }}

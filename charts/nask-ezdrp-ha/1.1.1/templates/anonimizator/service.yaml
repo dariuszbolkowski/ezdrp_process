@@ -1,0 +1,18 @@
+{{- if .Values.anonimizator.active }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.anonimizator.moduleName }}
+  labels:
+    run: {{ .Values.anonimizator.moduleName }}
+spec:
+  type: {{ .Values.anonimizator.service.type }}
+  ports:
+    - name: {{ .Values.anonimizator.moduleName }}
+      port: {{ .Values.anonimizator.port }}
+      targetPort: {{ .Values.anonimizator.port }}
+      protocol: TCP
+  selector:
+    app: {{ .Release.Name }}-{{ .Values.anonimizator.moduleName }}
+  sessionAffinity: None
+{{ end }}

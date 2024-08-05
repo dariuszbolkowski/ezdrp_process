@@ -1,0 +1,109 @@
+{{- if .Values.razor.active }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.razor.moduleName }}
+  labels:
+    app: {{ .Release.Name }}-{{ .Values.razor.moduleName }}
+    role: backend
+    environment: {{ .Values.environment }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-{{ .Values.razor.moduleName }}
+      role: backend
+      environment: {{ .Values.environment }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-{{ .Values.razor.moduleName }}
+        role: backend
+        environment: {{ .Values.environment }}
+    spec:
+      {{- if and (.Values.affinity.nodeAffinitySelector.name) (.Values.affinity.nodeAffinitySelector.value) }}
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: {{ .Values.affinity.nodeAffinitySelector.name }}
+                    operator: In
+                    values:
+                      - {{ .Values.affinity.nodeAffinitySelector.value | quote }}
+      {{- end }}
+      containers:
+        - image: {{ .Values.imageCredentials.registryDomain }}/{{ .Values.razor.image.name }}:{{ .Values.razor.image.version }}
+          env:
+            - name: Serilog__MinimumLevel__Default
+              value: {{ .Values.ezd.minimum_log_level | quote }}
+            - name: Serilog__WriteTo__1__Args__serverUrl
+              value: http://seq.seq.svc.cluster.local
+            - name: Serilog__WriteTo__2__Args__uri
+              value: http://loki.loki.svc.cluster.local:3100
+            - name: Serilog__WriteTo__2__Args__labels__1__value
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: Serilog__Properties__InstanceName
+              value: {{ .Values.domainInfo.name }}
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 4
+            initialDelaySeconds: {{ .Values.razor.livenessDelay }}
+            periodSeconds: 10
+            successThreshold: 1
+            tcpSocket:
+              port: {{ .Values.razor.port }}
+            timeoutSeconds: 1
+          name: {{ .Values.razor.moduleName }}
+          readinessProbe:
+            failureThreshold: 2
+            initialDelaySeconds: {{ .Values.razor.redinessDelay }}
+            periodSeconds: 10
+            successThreshold: 1
+            tcpSocket:
+              port: {{ .Values.razor.port }}
+            timeoutSeconds: 1
+          {{- if or (.Values.razor.resources.limits.cpu) (.Values.razor.resources.limits.memory) (.Values.razor.resources.requests.cpu) (.Values.razor.resources.requests.memory) }}
+          resources:
+            {{- if or (.Values.razor.resources.limits.cpu) (.Values.razor.resources.limits.memory) }}
+            limits:
+              {{- if .Values.razor.resources.limits.cpu }}
+              cpu: {{ .Values.razor.resources.limits.cpu }}
+              {{- end }}
+              {{- if .Values.razor.resources.limits.memory }}
+              memory: {{ .Values.razor.resources.limits.memory }}
+              {{- end }}
+            {{- end }}
+            {{- if or (.Values.razor.resources.requests.cpu) (.Values.razor.resources.requests.memory) }}
+            requests:
+              {{- if .Values.razor.resources.requests.cpu }}
+              cpu: {{ .Values.razor.resources.requests.cpu }}
+              {{- end }}
+              {{- if .Values.razor.resources.requests.memory }}
+              memory: {{ .Values.razor.resources.requests.memory }}
+              {{- end }}
+            {{- end }}
+          {{- end }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities: {}
+            privileged: false
+            readOnlyRootFilesystem: false
+            runAsNonRoot: false
+          stdin: true
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          tty: true
+      dnsConfig: {}
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      serviceAccount: ezdrp
+      serviceAccountName: ezdrp
+{{ end }}

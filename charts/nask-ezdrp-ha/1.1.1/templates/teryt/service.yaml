@@ -1,0 +1,18 @@
+{{- if .Values.teryt.active }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.teryt.moduleName }}
+  labels:
+    run: {{ .Values.teryt.moduleName }}
+spec:
+  type: {{ .Values.teryt.service.type }}
+  ports:
+    - name: {{ .Values.teryt.moduleName }}
+      port: {{ .Values.teryt.port }}
+      targetPort: {{ .Values.teryt.port }}
+      protocol: TCP
+  selector:
+    app: {{ .Release.Name }}-{{ .Values.teryt.moduleName }}
+  sessionAffinity: None
+{{ end }}

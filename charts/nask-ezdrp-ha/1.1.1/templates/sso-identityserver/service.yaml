@@ -1,0 +1,18 @@
+{{- if .Values.ssoIdentityServer.active }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.ssoIdentityServer.moduleName }}
+  labels:
+    run: {{ .Values.ssoIdentityServer.moduleName }}
+spec:
+  type: {{ .Values.ssoIdentityServer.service.type }}
+  ports:
+    - name: {{ .Values.ssoIdentityServer.moduleName }}
+      port: {{ .Values.ssoIdentityServer.port }}
+      targetPort: {{ .Values.ssoIdentityServer.port }}
+      protocol: TCP
+  selector:
+    app: {{ .Release.Name }}-{{ .Values.ssoIdentityServer.moduleName }}
+  sessionAffinity: None
+{{ end }}

@@ -1,0 +1,18 @@
+{{- if .Values.filerepository.active }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.filerepository.moduleName }}
+  labels:
+    run: {{ .Values.filerepository.moduleName }}
+spec:
+  type: {{ .Values.filerepository.service.type }}
+  ports:
+    - name: {{ .Values.filerepository.moduleName }}
+      port: {{ .Values.filerepository.port }}
+      targetPort: {{ .Values.filerepository.port }}
+      protocol: TCP
+  selector:
+    app: {{ .Release.Name }}-{{ .Values.filerepository.moduleName }}
+  sessionAffinity: None
+{{ end }}

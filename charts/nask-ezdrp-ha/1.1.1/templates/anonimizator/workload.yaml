@@ -1,0 +1,149 @@
+{{- if .Values.anonimizator.active }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.anonimizator.moduleName }}
+  labels:
+    app: {{ .Release.Name }}-{{ .Values.anonimizator.moduleName }}
+    role: backend
+    environment: {{ .Values.environment }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-{{ .Values.anonimizator.moduleName }}
+      role: backend
+      environment: {{ .Values.environment }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-{{ .Values.anonimizator.moduleName }}
+        role: backend
+        environment: {{ .Values.environment }}
+    spec:
+      {{- if and (.Values.affinity.nodeAffinitySelector.name) (.Values.affinity.nodeAffinitySelector.value) }}
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: {{ .Values.affinity.nodeAffinitySelector.name }}
+                    operator: In
+                    values:
+                      - {{ .Values.affinity.nodeAffinitySelector.value | quote }}
+      {{- end }}
+      initContainers:
+        - name: {{ .Values.ezdrpApi.moduleName }}-create-anonimizator-vhost
+          image: "{{ .Values.job.rabbit.registry }}/{{ .Values.job.rabbit.imageName }}:{{ .Values.job.rabbit.imageTag }}"
+          command:
+            - sh
+            - -c
+            - >
+              apt update;
+              DEBIAN_FRONTEND=noninteractive apt install -y curl;
+              while ! rabbitmqadmin -H ${BROKER_SERVER_HOST} -u ${BROKER_LOGIN} -p ${BROKER_PASSWORD} --vhost=/ list queues; do sleep 1; done;
+              if ! rabbitmqadmin -H ${BROKER_SERVER_HOST} -u ${BROKER_LOGIN} -p ${BROKER_PASSWORD} --vhost=${BROKER_VHOST} list queues ; then
+                echo "vhost ${BROKER_VHOST} is doesnt exist";
+                if curl --fail -u ${BROKER_LOGIN}:${BROKER_PASSWORD} -X PUT http://${BROKER_SERVER_HOST}:15672/api/vhosts/${BROKER_VHOST} ; then
+                  echo "i just created it";
+                else
+                  echo "i have problem with creating ${BROKER_VHOST} vhost";
+                fi
+              else
+                echo "vhost ${BROKER_VHOST} is exist - skip";
+              fi
+          env:
+            - name: BROKER_VHOST
+              value: {{ .Values.anonimizator.rabbitmq.vhostanonimizator }}
+            - name: BROKER_SERVER_HOST
+              value: {{ .Values.ezdBackend.rabbitmqConfig.fullnameOverride }}
+            - name: BROKER_PASSWORD
+              value: {{ .Values.global.rabbitmqConfig.auth.password }}
+            - name: BROKER_PORT
+              value: {{ .Values.rabbitExt.port | quote }}
+            - name: BROKER_LOGIN
+              value: {{ .Values.global.rabbitmqConfig.auth.username }}
+          resources:
+            limits:
+              cpu: "1000m"
+              memory: "1Gi"
+            requests:
+              cpu: "100m"
+              memory: "50Mi"
+      containers:
+        - image: {{ .Values.imageCredentials.registryDomain }}/{{ .Values.anonimizator.image.name }}:{{ .Values.anonimizator.image.version }}
+          env:
+          - name: DJANGO_DEBUG
+            value: {{ .Values.anonimizator.debug | quote }}
+          - name: DJANGO_SECRET_KEY
+            value: {{ .Values.anonimizator.secret_key }}
+          - name: BROKER_VHOST
+            value: {{ .Values.anonimizator.rabbitmq.vhostanonimizator }}
+          - name: BROKER_SERVER_HOST
+            value: {{ .Values.ezdBackend.rabbitmqConfig.fullnameOverride }}
+          - name: BROKER_PASSWORD
+            value: {{ .Values.global.rabbitmqConfig.auth.password }}
+          - name: BROKER_PORT
+            value: {{ .Values.rabbitExt.port | quote }}
+          - name: BROKER_LOGIN
+            value: {{ .Values.global.rabbitmqConfig.auth.username }}
+
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 4
+            initialDelaySeconds: {{ .Values.anonimizator.livenessDelay }}
+            periodSeconds: 10
+            successThreshold: 1
+            tcpSocket:
+              port: {{ .Values.anonimizator.port }}
+            timeoutSeconds: 1
+          name: {{ .Values.anonimizator.moduleName }}
+          readinessProbe:
+            failureThreshold: 2
+            initialDelaySeconds: {{ .Values.anonimizator.redinessDelay }}
+            periodSeconds: 10
+            successThreshold: 1
+            tcpSocket:
+              port: {{ .Values.anonimizator.port }}
+            timeoutSeconds: 1
+          {{- if or (.Values.anonimizator.resources.limits.cpu) (.Values.anonimizator.resources.limits.memory) (.Values.anonimizator.resources.requests.cpu) (.Values.anonimizator.resources.requests.memory) }}
+          resources:
+            {{- if or (.Values.anonimizator.resources.limits.cpu) (.Values.anonimizator.resources.limits.memory) }}
+            limits:
+              {{- if .Values.anonimizator.resources.limits.cpu }}
+              cpu: {{ .Values.anonimizator.resources.limits.cpu }}
+              {{- end }}
+              {{- if .Values.anonimizator.resources.limits.memory }}
+              memory: {{ .Values.anonimizator.resources.limits.memory }}
+              {{- end }}
+            {{- end }}
+            {{- if or (.Values.anonimizator.resources.requests.cpu) (.Values.anonimizator.resources.requests.memory) }}
+            requests:
+              {{- if .Values.anonimizator.resources.requests.cpu }}
+              cpu: {{ .Values.anonimizator.resources.requests.cpu }}
+              {{- end }}
+              {{- if .Values.anonimizator.resources.requests.memory }}
+              memory: {{ .Values.anonimizator.resources.requests.memory }}
+              {{- end }}
+            {{- end }}
+          {{- end }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities: {}
+            privileged: false
+            readOnlyRootFilesystem: false
+            runAsNonRoot: false
+          stdin: true
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          tty: true
+      dnsConfig: {}
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      terminationGracePeriodSeconds: 30
+      serviceAccount: ezdrp
+      serviceAccountName: ezdrp
+{{ end }}

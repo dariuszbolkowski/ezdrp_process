@@ -25,15 +25,14 @@ cloudadmin:
 domainInfo:
   cert_info: true
   cert_name: ezdrp-cert
-  name: apps.dev0.lab.linuxpolska.pl
+  name: ezd.dbo.test
 email:
   active: false
 ezdrpApi:
   persistence:
-    storageClass: vsphere-csi
+    storageClass: longhorn
 filerepository:
   persistence:
-    storageClass: vsphere-csi
     filerepoStorageType: "S1"
     s3:
       host: "https://api.obj0.dbo.test"
@@ -57,7 +56,7 @@ redisExt:
   port: 6379
 ssoIdentityServer:
   persistence:
-    storageClass: vsphere-csi
+    storageClass: longhorn
 wpeRest:
   persistence:
-    storageClass: vsphere-csi
+    storageClass: longhorn

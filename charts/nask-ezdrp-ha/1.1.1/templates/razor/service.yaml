@@ -1,0 +1,18 @@
+{{- if .Values.razor.active }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.razor.moduleName }}
+  labels:
+    run: {{ .Values.razor.moduleName }}
+spec:
+  type: {{ .Values.razor.service.type }}
+  ports:
+    - name: {{ .Values.razor.moduleName }}
+      port: {{ .Values.razor.port }}
+      targetPort: {{ .Values.razor.port }}
+      protocol: TCP
+  selector:
+    app: {{ .Release.Name }}-{{ .Values.razor.moduleName }}
+  sessionAffinity: None
+{{ end }}
