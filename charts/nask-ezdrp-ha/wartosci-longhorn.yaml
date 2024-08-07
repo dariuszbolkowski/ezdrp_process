@@ -42,7 +42,7 @@ cloudadmin:
 domainInfo:
   cert_info: true
   cert_name: ezdrp-cert
-  name: apps.dev0.lab.linuxpolska.pl
+  name: ezd.dbo.test
 email:
   active: false
 ezdrpApi:
@@ -55,8 +55,8 @@ filerepository:
     s3:
       host: "https://api.obj0.dbo.test"
       port: "9000"
-      access_key: "minoiadmin"
-      secret_key: "minoadmin"
+      access_key: "minioadmin"
+      secret_key: "minioadmin"
       tls: "true"
       bucketname: "ezdrp2024"
     ezdpuwmigration:

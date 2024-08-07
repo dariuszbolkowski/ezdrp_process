@@ -1,0 +1,99 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: ezdrp-role
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "-2"
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - pods
+  - services
+  - persistentvolumes
+  - persistentvolumeclaims
+  - configmaps
+  - secrets
+  verbs:
+  - delete
+  - get
+  - list
+  - patch
+  - create
+  - update
+  - watch
+- apiGroups:
+  - apps
+  resources:
+  - daemonsets
+  - deployments
+  - replicasets
+  - statefulsets
+  verbs:
+  - delete
+  - get
+  - list
+  - patch
+  - create
+  - update
+  - watch
+- apiGroups:
+  - helm.cattle.io
+  resources:
+  - helmcharts
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - batch
+  - extensions
+  resources:
+  - jobs
+  verbs:
+  - delete
+  - get
+  - list
+  - patch
+  - create
+  - update
+  - watch
+- apiGroups:
+  - networking.k8s.io
+  resources:
+  - ingresses
+  - networkpolicies
+  verbs:
+  - delete
+  - get
+  - list
+  - patch
+  - create
+  - update
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - ingresses
+  - networkpolicies
+  verbs:
+  - delete
+  - get
+  - list
+  - patch
+  - create
+  - update
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - horizontalpodautoscalers
+  verbs:
+  - delete
+  - get
+  - list
+  - patch
+  - create
+  - update
+  - watch
