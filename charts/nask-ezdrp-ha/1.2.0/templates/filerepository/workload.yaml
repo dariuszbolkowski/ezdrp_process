@@ -73,13 +73,13 @@ spec:
             value: {{ .Values.filerepository.persistence.ezdpuw.metaPath | quote }}
 {{- end }}
           - name: REDIS_HOST
-            value: {{ .Values.redisExt.host }}
+            value: {{ .Values.ezdBackend.redisConfig.fullnameOverride }}
           - name: REDIS_PORT
             value: {{ .Values.redisExt.port | quote  }}
           - name: REDIS_SERVICENAME
             value: {{ .Values.redisExt.user }}
           - name: REDIS_PASSWORD
-            value: {{ .Values.redisExt.password }}
+            value: {{ .Values.global.redisConfig.auth.password }}
           - name: Serilog__MinimumLevel__Default
             value: {{ .Values.ezd.minimum_log_level | quote }}
           - name: Serilog__WriteTo__1__Args__serverUrl
