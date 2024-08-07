@@ -51,7 +51,7 @@ ezdrpApi:
 filerepository:
   persistence:
     storageClass: longhorn
-    filerepoStorageType: "S1"
+    filerepoStorageType: "S3"
     s3:
       host: "https://api.obj0.dbo.test"
       port: "9000"
