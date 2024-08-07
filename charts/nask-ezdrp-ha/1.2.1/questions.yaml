@@ -420,56 +420,6 @@ questions:
   show_if: "useBuiltInRedisAppend.enabled=true&&global.redis.deploy=false"
   group: "Redis-append Database Configuration"
 
-
-#- variable: global.s3.deploy
-#  default: "false"
-#  label: S3 object store integration
-#  type: boolean
-#  group: "Components"
-#  show_subquestion_if: true
-#  subquestions:
-#  - variable: filerepository.persistence.s3.host
-#    default: "https://api.obj0.dbo.test"
-#    type: string
-#    description: "Enter the host address for S3 storage"
-#    label: S3 host
-#    required: true
-#    group: "Persistent Storage"
-#  - variable: filerepository.persistence.s3.port
-#    default: "9000"
-#    type: string
-#    description: "Enter the port for S3 storage"
-#    label: S3 port
-#    required: true
-#    group: "Persistent Storage"
-#  - variable: filerepository.persistence.s3.access_key
-#    default: "minoiadmin"
-#    type: string
-#    description: "Enter the access_key for S3 storage"
-#    label: S3 access_key
-#    required: true
-#    group: "Persistent Storage"
-#  - variable: filerepository.persistence.s3.secret_key
-#    default: "minoadmin"
-#    type: string
-#    description: "Enter the secret_key for S3 storage"
-#    label: S3 secret_key
-#    required: true
-#    group: "Persistent Storage"
-#  - variable: filerepository.persistence.s3.tls
-#    default: false
-#    type: boolean
-#    description: "Check this options if connection is with TLS"
-#    label: TLS
-#    required: true
-#    group: "Persistent Storage"
-#  - variable: filerepository.persistence.s3.bucketname
-#    default: "ezdrp2024"
-#    type: string
-#    description: "Enter the bucket name in S3 storage"
-#    label: S3 bucket name
-#    required: true
-#    group: "Persistent Storage"
   
   - variable: filerepository.persistence.ezdpuwmigration.enabled
     default: false
@@ -563,54 +513,54 @@ questions:
   group: "Components"
   show_subquestion_if: true
   subquestions:
-  - variable: filerepository.persistence.s3.host
-    type: string
-    default: "https://api.obj0.dbo.test"
-    description: "Enter the host address for S3 storage"
-    label: S3 host
-    required: true
-    show_if: "filerepository.persistence.filerepoStorageType=S3&&global.s3.deploy=false"
-    group: "Persistent Storage"
-  - variable: filerepository.persistence.s3.port
-    type: string
-    default: "9000"
-    description: "Enter the port for S3 storage"
-    label: S3 port
-    required: true
-    show_if: "filerepository.persistence.filerepoStorageType=S3&&global.s3.deploy=false"
-    group: "Persistent Storage"
-  - variable: filerepository.persistence.s3.access_key
-    type: string
-    default: "minoiadmin"
-    description: "Enter the access_key for S3 storage"
-    label: S3 access_key
-    required: true
-    show_if: "filerepository.persistence.filerepoStorageType=S3&&global.s3.deploy=false"
-    group: "Persistent Storage"
-  - variable: filerepository.persistence.s3.secret_key
-    type: string
-    default: "minoiadmin"
-    description: "Enter the secret_key for S3 storage"
-    label: S3 secret_key
-    required: true
-    show_if: "filerepository.persistence.filerepoStorageType=S3&&global.s3.deploy=false"
-    group: "Persistent Storage"
-  - variable: filerepository.persistence.s3.tls
-    default: false
-    type: boolean
-    description: "Check this options if connection is with TLS"
-    label: TLS
-    required: true
-    show_if: "filerepository.persistence.filerepoStorageType=S3&&global.s3.deploy=false"
-    group: "Persistent Storage"
-  - variable: filerepository.persistence.s3.bucketname
-    type: string
-    default: "ezdrp2024"
-    description: "Enter the bucket name in S3 storage"
-    label: S3 bucket name
-    required: true
-    show_if: "filerepository.persistence.filerepoStorageType=S3&&global.s3.deploy=false"
-    group: "Persistent Storage"
+    - variable: filerepository.persistence.s3.host
+      type: string
+      default: "https://api.obj0.dbo.test"
+      description: "Enter the host address for S3 storage"
+      label: S3 host
+      required: true
+      show_if: "filerepository.persistence.filerepoStorageType=S3&&global.s3.deploy=false"
+      group: "Persistent Storage"
+    - variable: filerepository.persistence.s3.port
+      type: string
+      default: "9000"
+      description: "Enter the port for S3 storage"
+      label: S3 port
+      required: true
+      show_if: "filerepository.persistence.filerepoStorageType=S3&&global.s3.deploy=false"
+      group: "Persistent Storage"
+    - variable: filerepository.persistence.s3.access_key
+      type: string
+      default: "minoiadmin"
+      description: "Enter the access_key for S3 storage"
+      label: S3 access_key
+      required: true
+      show_if: "filerepository.persistence.filerepoStorageType=S3&&global.s3.deploy=false"
+      group: "Persistent Storage"
+    - variable: filerepository.persistence.s3.secret_key
+      type: string
+      default: "minoiadmin"
+      description: "Enter the secret_key for S3 storage"
+      label: S3 secret_key
+      required: true
+      show_if: "filerepository.persistence.filerepoStorageType=S3&&global.s3.deploy=false"
+      group: "Persistent Storage"
+    - variable: filerepository.persistence.s3.tls
+      default: false
+      type: boolean
+      description: "Check this options if connection is with TLS"
+      label: TLS
+      required: true
+      show_if: "filerepository.persistence.filerepoStorageType=S3&&global.s3.deploy=false"
+      group: "Persistent Storage"
+    - variable: filerepository.persistence.s3.bucketname
+      type: string
+      default: "ezdrp2024"
+      description: "Enter the bucket name in S3 storage"
+      label: S3 bucket name
+      required: true
+      show_if: "filerepository.persistence.filerepoStorageType=S3&&global.s3.deploy=false"
+      group: "Persistent Storage"
 
 - variable: filerepository.persistence.ezdpuwmigration.enabled
   default: false
