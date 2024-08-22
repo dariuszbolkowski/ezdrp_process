@@ -163,13 +163,13 @@ questions:
       default: "false"
       description: "Secret which contains s3 ca bundle"
       type: string
-    - variable: postgresqlConfig.customConfig.backup.barmanObjectStore.s3Credentials.accessKeyId
+    - variable: postgresqlConfig.customConfig.backup.barmanObjectStore.s3Credentials.accessKeyId.name
       default: "false"
-      description: "Provide access key id for s3 object storage"
+      description: "Provide secret name with s3 credentials"
       type: string
-    - variable: postgresqlConfig.customConfig.backup.barmanObjectStore.s3Credentials.secretAccessKey
+    - variable: postgresqlConfig.customConfig.backup.barmanObjectStore.s3Credentials.secretAccessKey.name
       default: "false"
-      description: "Provide secret access key for s3 object storage"
+      description: "Provide secret name with s3 credentials"
       type: string
   - variable: global.postgresql.custom.consumption
     default: "false"
