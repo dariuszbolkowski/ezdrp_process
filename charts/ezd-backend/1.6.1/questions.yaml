@@ -128,18 +128,6 @@ questions:
     group: "Postgresql Settings"
     type: string
     default: "2Gi"
-  - variable: postgresqlConfig.customConfig.bootstrap.initdb.database
-    default: "false"
-    description: "Name of database"
-    type: string
-  - variable: postgresqlConfig.customConfig.bootstrap.initdb.owner
-    default: "false"
-    description: "Owner of database"
-    type: string
-  - variable: postgresqlConfig.customConfig.bootstrap.initdb.secret.name
-    default: "false"
-    description: "Secret name with credentials"
-    type: string
   - variable: postgresqlConfig.customConfig.backup.enabled
     label: backup
     description: "Enable postgresql backup?"
@@ -147,28 +135,33 @@ questions:
     type: boolean
     show_subquestion_if: true
     subquestions:
+    - variable: postgresqlConfig.customConfig.bootstrap.initdb.database
+      description: "Name of database"
+      type: string
+    - variable: postgresqlConfig.customConfig.bootstrap.initdb.owner
+      description: "Owner of database"
+      type: string
+    - variable: postgresqlConfig.customConfig.bootstrap.initdb.secret.name
+      description: "Secret name with credentials"
+      type: string
     - variable: postgresqlConfig.customConfig.backup.barmanObjectStore.destinationPath
-      default: "false"
+      default: "s3://${PATH_S3_BUKCET}/"
       description: "Path to folder in s3 bucket"
       type: string
     - variable: postgresqlConfig.customConfig.backup.barmanObjectStore.endpointURL
-      default: "false"
+      default: "https://${HOSTNAME}:9000"
       description: "endpoint for s3 object store with port number" 
       type: string
     - variable: postgresqlConfig.customConfig.backup.barmanObjectStore.endpointCA.name
-      default: "false"
       description: "Secret which contains s3 ca bundle"
       type: string
     - variable: postgresqlConfig.customConfig.backup.barmanObjectStore.endpointCA.key
-      default: "false"
       description: "Secret which contains s3 ca bundle"
       type: string
     - variable: postgresqlConfig.customConfig.backup.barmanObjectStore.s3Credentials.accessKeyId.name
-      default: "false"
       description: "Provide secret name with s3 credentials"
       type: string
     - variable: postgresqlConfig.customConfig.backup.barmanObjectStore.s3Credentials.secretAccessKey.name
-      default: "false"
       description: "Provide secret name with s3 credentials"
       type: string
   - variable: global.postgresql.custom.consumption
