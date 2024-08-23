@@ -8,9 +8,9 @@ entries:
       catalog.cattle.io/release-name: ezd-backend
     apiVersion: v2
     appVersion: 1.2024-19.7.45
-    created: "2024-08-22T13:41:58.932068385+02:00"
+    created: "2024-08-23T08:36:42.30769618+02:00"
     description: Services necessary to run EZD RP app
-    digest: 1922429b92901453ad4ee4529f3113a4336bf3700933d6b3eb8ae4b4d5aa05e0
+    digest: 19b5820c6e187910f3d23768904ad00ad396549bafa9c206293179784acc58dc
     home: https://linuxpolska.com
     icon: https://linuxpolska.com/logo/LinuxPolska-icon.png
     keywords:
@@ -34,7 +34,7 @@ entries:
       catalog.cattle.io/release-name: ezd-backend
     apiVersion: v2
     appVersion: 1.2024-19.7
-    created: "2024-08-22T13:41:58.929111723+02:00"
+    created: "2024-08-23T08:36:42.304324893+02:00"
     description: Services necessary to run EZD RP app
     digest: e889436fceace468b990d394759e86c8e2996979b2a46502e95f0c78cfc692d8
     home: https://linuxpolska.com
@@ -61,7 +61,7 @@ entries:
       catalog.cattle.io/release-name: ezd-crd
     apiVersion: v2
     appVersion: 1.2024-19.7.45
-    created: "2024-08-22T13:41:58.969847674+02:00"
+    created: "2024-08-23T08:36:42.349134729+02:00"
     dependencies:
     - alias: rabbitmq-operator
       condition: global.rabbitmq.deploy
@@ -105,7 +105,7 @@ entries:
       catalog.cattle.io/release-name: ezd-crd
     apiVersion: v2
     appVersion: 1.2024-19.7.45
-    created: "2024-08-22T13:41:59.032735494+02:00"
+    created: "2024-08-23T08:36:42.420674902+02:00"
     dependencies:
     - alias: rabbitmq-operator
       condition: global.rabbitmq.deploy
@@ -149,7 +149,7 @@ entries:
       catalog.cattle.io/release-name: ezd-crd
     apiVersion: v2
     appVersion: 1.2024-19.7
-    created: "2024-08-22T13:41:58.996822839+02:00"
+    created: "2024-08-23T08:36:42.37907263+02:00"
     dependencies:
     - condition: global.rabbitmq.deploy
       name: rabbitmq-operator
@@ -192,7 +192,7 @@ entries:
       catalog.cattle.io/release-name: monitoring-stack-app
     apiVersion: v2
     appVersion: 1.2024-1.0.0
-    created: "2024-08-22T13:41:59.070245969+02:00"
+    created: "2024-08-23T08:36:42.464386408+02:00"
     dependencies:
     - condition: global.elastic.enabled
       name: elastic
@@ -235,7 +235,7 @@ entries:
       catalog.cattle.io/release-name: monitoring-stack-crd
     apiVersion: v2
     appVersion: 1.2024-1.0.0
-    created: "2024-08-22T13:41:59.093812778+02:00"
+    created: "2024-08-23T08:36:42.483528217+02:00"
     dependencies:
     - condition: global.eck-operator-crds.enabled
       name: eck-operator-crds
@@ -280,7 +280,7 @@ entries:
       catalog.cattle.io/release-name: security-stack-crd
     apiVersion: v2
     appVersion: 1.2024-1.0.0
-    created: "2024-08-22T13:41:59.223065384+02:00"
+    created: "2024-08-23T08:36:42.620241713+02:00"
     dependencies:
     - alias: neuvector-crds
       condition: global.neuvector-crd.enabled
@@ -335,7 +335,7 @@ entries:
       catalog.cattle.io/release-name: ezdrp
     apiVersion: v2
     appVersion: 1.2024-19.7
-    created: "2024-08-22T13:41:59.167834886+02:00"
+    created: "2024-08-23T08:36:42.557296343+02:00"
     dependencies:
     - alias: ezdBackend
       name: ezd-backend
@@ -367,7 +367,7 @@ entries:
       catalog.cattle.io/release-name: ezdrp
     apiVersion: v2
     appVersion: 1.2024-19.7
-    created: "2024-08-22T13:41:59.159413746+02:00"
+    created: "2024-08-23T08:36:42.550857566+02:00"
     dependencies:
     - alias: ezdBackend
       name: ezd-backend
@@ -399,7 +399,7 @@ entries:
       catalog.cattle.io/release-name: ezdrp
     apiVersion: v2
     appVersion: 1.2024-19.7
-    created: "2024-08-22T13:41:59.152072717+02:00"
+    created: "2024-08-23T08:36:42.545190704+02:00"
     dependencies:
     - alias: ezdBackend
       name: ezd-backend
@@ -431,7 +431,7 @@ entries:
       catalog.cattle.io/release-name: ezdrp
     apiVersion: v2
     appVersion: 1.2024-19.7
-    created: "2024-08-22T13:41:59.145946476+02:00"
+    created: "2024-08-23T08:36:42.536010611+02:00"
     dependencies:
     - alias: ezdBackend
       name: ezd-backend
@@ -462,7 +462,7 @@ entries:
       catalog.cattle.io/release-name: ezdrp
     apiVersion: v2
     appVersion: 1.2024-19.7
-    created: "2024-08-22T13:41:59.13987442+02:00"
+    created: "2024-08-23T08:36:42.523402663+02:00"
     dependencies:
     - condition: global.ezd-backend.deploy
       name: ezd-backend
@@ -489,7 +489,7 @@ entries:
     version: 19.7.16
   - apiVersion: v2
     appVersion: 1.2024-19.7
-    created: "2024-08-22T13:41:59.130232216+02:00"
+    created: "2024-08-23T08:36:42.517395033+02:00"
     dependencies:
     - condition: global.ezd-crd.deploy
       name: ezd-crd
@@ -526,7 +526,7 @@ entries:
       catalog.cattle.io/release-name: security-stack-app
     apiVersion: v2
     appVersion: 1.2024-1.0.0
-    created: "2024-08-22T13:41:59.205903854+02:00"
+    created: "2024-08-23T08:36:42.599471806+02:00"
     dependencies:
     - condition: global.conjur-oss.enabled
       name: conjur-oss
@@ -587,7 +587,7 @@ entries:
       catalog.cattle.io/release-name: security-stack-crd
     apiVersion: v2
     appVersion: 1.2024-1.0.0
-    created: "2024-08-22T13:41:59.243388643+02:00"
+    created: "2024-08-23T08:36:42.640734448+02:00"
     dependencies:
     - alias: neuvector-crds
       condition: global.neuvector-crd.enabled
@@ -634,4 +634,4 @@ entries:
     urls:
     - security-stack-crd/security-stack-crd-1.0.0.tgz
     version: 1.0.0
-generated: "2024-08-22T13:41:58.926194782+02:00"
+generated: "2024-08-23T08:36:42.301235212+02:00"
